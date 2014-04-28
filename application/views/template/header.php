@@ -33,4 +33,8 @@
 	<img src="<?= base_url('assets/img/img_dgtic.jpg')?>"/>
 </div>
 
+<div class="topinterna">
+	<img src="<?= base_url('assets/img/titulo.jpg')?>">
+</div>
+
 <!-- termina encabezado -->

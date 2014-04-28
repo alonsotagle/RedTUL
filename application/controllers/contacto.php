@@ -16,7 +16,15 @@ class contacto extends CI_Controller {
 
     public function index() {
     	$this->load->view('template/header');
+        $this->load->view('template/menu');
         $this->load->view('contacto');
+        $this->load->view('template/footer');
+    }
+
+    public function nuevo() {
+        $this->load->view('template/header');
+        $this->load->view('template/menu');
+        $this->load->view('nuevo_contacto');
         $this->load->view('template/footer');
     }
 }

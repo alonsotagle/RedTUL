@@ -5,6 +5,7 @@
 body {
 	background-color:#f2f8fe;
 	margin-top: 0px;
+	font-family: sans-serif;
 }
 
 /* Contenedor general */
@@ -18,15 +19,76 @@ body {
 	float: left;
 }
 
+/* Contenido principal */
+#contenido{
+	background-color: white;
+	border: 1px solid #cfcfcf;
+	overflow: auto;
+}
+
+/* Menú */
+#navegacion{
+	width: 152px;
+	float: left;
+	font-size: 15px;
+	margin-top: 15px;
+}
+
+#lista_menu{
+	background: #fff;
+	list-style: none;
+	padding: 0px;
+}
+
+.elemento_menu{
+	border-left: 3px solid #d7d8da;
+}
+
+.elemento_menu:hover{
+	border-left: 3px solid #1b5799;
+	background: #d7d8da;
+}
+
+.elemento_menu:hover > a{
+	color: #1b5799;
+}
+
+.elemento_menu a{
+	color: #848889;
+	text-decoration: none;
+	padding: 4px;
+	display: block;
+}
+
+.seleccion_menu{
+	border-left: 3px solid #1b5799;
+}
+
+.seleccion_menu a{
+	background: #1b5799;
+}
+
+.seleccion_menu a span{
+	color: white;
+}
+
+.seleccion_menu:hover{
+	border-left: 3px solid #1b5799;
+	background: #1b5799;
+}
+
 /* Migajas de pan */
 #migaDePan{
 	margin: 6px auto 15px 10px;
+	font-size: 12px;
 }
 
-/* Contenido principal*/
-.contenido {
-	background-color: white;
-    border:1px solid #cfcfcf;
+/* Contenido dinamico*/
+.contenido_dinamico {
+    float: left;
+    width: 806px;
+	padding: 10px 0px 40px 20px;
+	font-size: 13px;
 }
 
 /* Pie de página */
@@ -132,25 +194,107 @@ body {
 	z-index: 11;
 }
 
-
 /*** Terminan estilos de las plantillas ***/
 
 
-/* Inicia contacto */
+/* Inicia CONTACTO */
+
+/* Vista contacto.php */
 
 #frm_buscar_contacto{
 	border: 1px solid black;
-	height: 150px;
+	height: 140px;
+	margin-bottom: 30px;
 	padding: 15px;
-	width: 410px;
+	width: 320px;
 }
 
-#frm_buscar_contacto label, #frm_buscar_contacto input{
+#frm_buscar_contacto label{
 	float: left;
-	width: 49%;
+	width: 35%;
 }
-
 
 .buscar_contacto_textInput{
+	float: left;
+	margin-bottom: 7px;
 	text-align: center;
+	width: 63%;
+}
+
+#btn_buscar_contacto{
+	float: right;
+}
+
+ /* Tablas */
+
+.tables{
+	-moz-border-radius: 5px;
+	-moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+	-webkit-border-radius: 5px;
+	-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+	background: #fefefe;
+	border-collapse: collapse;
+	border-radius: 5px;
+	border: 1px solid #d3d3d3;
+	font: 12px/15px "Helvetica Neue",Arial, Helvetica, sans-serif;
+	margin: 0 auto 5%;
+	overflow: hidden;
+	width: 83%;
+}
+
+.tables caption{
+	color: #494949;
+	font-family: Verdana, Arial;
+	font-size: 1.4em;
+	font-weight: bold;
+	margin-bottom: .8em;
+	margin-top: 2.2em;
+	text-align: center;
+}
+
+.tables th, .tables td{
+	color: #555;
+	padding: 10px 23px 10px;
+	text-align: center;
+}
+
+.tables th{
+
+	background: -moz-linear-gradient(100% 20% 90deg, #e8eaeb, #ededed);
+	background: -webkit-gradient(linear, 0% 0%, 0% 20%, from(#ededed), to(#e8eaeb));
+}
+
+.tables td{
+	border-right: 1px solid #e0e0e0;
+	border-top: 1px solid #e0e0e0;
+}
+
+.tables tr:first-child {
+	font-weight: bold;
+}
+
+.tables tr:nth-child(odd) {
+	background: #f6f6f6;
+}
+
+.tables tr:hover td {
+	background: #f2f2f2;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
+	background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);	
+}
+
+#btn_nuevo_contacto{
+	float: right;
+	margin-right: 30px;
+}
+
+/* Vista nuevo_contacto.php */
+#frm_nuevo_contacto{
+	border: 1px solid black;
+	padding: 20px;
+}
+
+.encabezado_form_nuevo_contacto{
+	font-weight: bold;
+	font-size: 20px;
 }

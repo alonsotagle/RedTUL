@@ -1,6 +1,6 @@
-  
+<!--  termina contenido principal -->
+ </div>
 <!--inicia pie banners y pie derechos-->
-
 
 <div class="pie-banners">
 	<img src="<?= base_url('assets/img/bg-pie.jpg')?>">

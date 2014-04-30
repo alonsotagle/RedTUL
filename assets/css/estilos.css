@@ -194,38 +194,7 @@ body {
 	z-index: 11;
 }
 
-/*** Terminan estilos de las plantillas ***/
-
-
-/* Inicia CONTACTO */
-
-/* Vista contacto.php */
-
-#frm_buscar_contacto{
-	border: 1px solid black;
-	height: 140px;
-	margin-bottom: 30px;
-	padding: 15px;
-	width: 320px;
-}
-
-#frm_buscar_contacto label{
-	float: left;
-	width: 35%;
-}
-
-.buscar_contacto_textInput{
-	float: left;
-	margin-bottom: 7px;
-	text-align: center;
-	width: 63%;
-}
-
-#btn_buscar_contacto{
-	float: right;
-}
-
- /* Tablas */
+/* Tablas */
 
 .tables{
 	-moz-border-radius: 5px;
@@ -279,8 +248,39 @@ body {
 
 .tables tr:hover td {
 	background: #f2f2f2;
-	background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
 	background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);	
+	background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
+}
+
+/*** Terminan estilos de las plantillas ***/
+
+
+/* Inicia CONTACTO */
+
+/* Vista contacto.php */
+
+#frm_buscar_contacto{
+	border: 1px solid black;
+	height: 140px;
+	margin-bottom: 30px;
+	padding: 15px;
+	width: 320px;
+}
+
+#frm_buscar_contacto label{
+	float: left;
+	width: 35%;
+}
+
+.buscar_contacto_textInput{
+	float: left;
+	margin-bottom: 7px;
+	text-align: center;
+	width: 63%;
+}
+
+#btn_buscar_contacto{
+	float: right;
 }
 
 #btn_nuevo_contacto{
@@ -291,10 +291,100 @@ body {
 /* Vista nuevo_contacto.php */
 #frm_nuevo_contacto{
 	border: 1px solid black;
+	overflow: auto;
 	padding: 20px;
 }
 
 .encabezado_form_nuevo_contacto{
-	font-weight: bold;
 	font-size: 20px;
+	font-weight: bold;
+	margin-top: 35px;
+}
+
+.contenedor_seccion_formulario{
+	margin-bottom: 25px;
+}
+
+#contacto_imagen{
+	background-image: url('../img/avatar.png');
+	background-repeat: no-repeat;
+	height: 192px;
+	margin-bottom: 5px;
+	width: 192px;
+}
+
+#contenedor_imagen{
+	float: right;
+	position: relative;
+	text-align: center;
+	top: -40px;
+}
+
+#contenedor_comunicacion{
+	float: right;
+	position: relative;
+	top: -50px;
+	width: 300px;
+}
+
+#botones_envio{
+	float: right;
+}
+
+.etiqueta_frm_nuevo{
+	float: left;
+	width: 70px;
+}
+
+.input_frm_nuevo{
+	float: left;
+	margin-right: 30px;
+}
+
+#label_funciones{
+	vertical-align: top;
+}
+
+#etiqueta_ext{
+	float: left;
+	width: 40px;
+}
+
+/* Inicia CURSO */
+
+/* Vista curso.php */
+
+#frm_buscar_curso{
+	border: 1px solid black;
+	height: 205px;
+	margin-bottom: 30px;
+	padding: 15px;
+	width: 330px;
+}
+
+#frm_buscar_curso label{
+	float: left;
+	width: 38%;
+}
+
+.buscar_curso_textInput{
+	float: left;
+	margin-bottom: 7px;
+	text-align: center;
+	width: 60%;
+}
+
+#btn_nuevo_curso{
+	float: right;
+	margin-right: 30px;
+}
+
+.buscar_curso_fechas{
+	margin-bottom: 7px;
+	text-align: center;
+	width: 55%;
+}
+
+.ui-datepicker {
+	font-size:64%;
 }

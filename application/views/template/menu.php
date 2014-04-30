@@ -4,27 +4,27 @@
 <div id="navegacion">
 	<ul id="lista_menu">
 		<li id="menu_contactos" class="elemento_menu">
-			<a href="">
+			<a href="<?= base_url('index.php/contactos')?>">
 				<span>Administrar contactos</span>
 			</a>
 		</li>
 		<li id="menu_cursos" class="elemento_menu">
-			<a href="">
+			<a href="<?= base_url('index.php/cursos')?>">
 				<span>Administrar cursos</span>
 			</a>
 		</li>
 		<li id="menu_instancia" class="elemento_menu">
-			<a href="">
-				<span>Administrar instancia</span>
+			<a href="<?= base_url('index.php/instancias')?>">
+				<span>Administrar instancias</span>
 			</a>
 		</li>
 		<li id="menu_recursos" class="elemento_menu">
-			<a href="">
+			<a href="<?= base_url('index.php/recursos')?>">
 				<span>Administrar recursos</span>
 			</a>
 		</li>
 		<li id="menu_mensajeria" class="elemento_menu">
-			<a href="">
+			<a href="<?= base_url('index.php/mensajeria')?>">
 				<span>Servicio de mensajería</span>
 			</a>
 		</li>

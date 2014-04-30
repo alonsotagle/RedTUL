@@ -43,7 +43,7 @@
 		</tr>
 	</table>
 
-	<a href="<?= base_url('index.php/contacto/nuevo')?>">
+	<a href="<?= base_url('index.php/contactos/nuevo')?>">
 		<input type="button" id="btn_nuevo_contacto" value="Nuevo contacto"/>
 	</a>
 

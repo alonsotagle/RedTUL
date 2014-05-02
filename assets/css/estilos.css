@@ -388,3 +388,8 @@ body {
 .ui-datepicker {
 	font-size:64%;
 }
+
+.ui-autocomplete.ui-widget {
+  font-family: Verdana,Arial,sans-serif;
+  font-size: 10px;
+}

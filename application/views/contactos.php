@@ -1,6 +1,42 @@
 <script>
     $(document).ready(function(){
-        $("#frm_buscar_contacto").validationEngine({promptPosition: "centerRight"});
+
+		$.ajax("<?= site_url('contactos/consulta_contactos')?>", {
+		dataType: 'json',
+		type: 'post',
+		success: function(resultado)
+		{
+			if (resultado != null) {
+				$('#despliega_contactos').html("<table class='tables'>\
+					<tr>\
+						<td>Nombre completo</td>\
+						<td>Tipo de contacto</td>\
+						<td>Estatus</td>\
+						<td>Instancia</td>\
+						<td>Correo institucional</td>\
+						<td>Correo personal</td>\
+						<td>Editar</td>\
+						<td>Borrar</td>\
+					</tr>\
+				</table>");
+
+				$.each(resultado, function( index, value ) {
+					$('#despliega_contactos table tbody').append('<tr>\
+						<td>'+value['contacto_nombre']+' '+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+'</td>\
+						<td>'+value['tipo_contacto_descripcion']+'</td>\
+						<td>'+value['contacto_estatus']+'</td>\
+						<td>'+value['instancia_nombre']+'</td>\
+						<td>'+value['contacto_correo_inst']+'</td>\
+						<td>'+value['contacto_correo_per']+'</td>\
+						<td>'+value['id_contacto']+'</td>\
+						<td>'+value['id_contacto']+'</td>\
+					</tr>');
+				});
+			}
+		}
+		});
+
+        $("#frm_buscar_contacto").validationEngine({promptPosition: "centerRight", scroll: false});
 
         $("#menu_contactos").addClass("seleccion_menu");
 
@@ -30,20 +66,9 @@
 			<input type="submit" id="btn_buscar_contacto" value="Buscar"/>
 	</form>
 
-	<table class="tables">
-		<tr>
-			<td>Nombre completo</td>
-			<td>Tipo de contacto</td>
-			<td>Estatus</td>
-			<td>Instancia</td>
-			<td>Correo institucional</td>
-			<td>Correo personal</td>
-			<td>Editar</td>
-			<td>Borrar</td>
-		</tr>
-	</table>
+	<div id="despliega_contactos">No hay contactos registrados</div>
 
-	<a href="<?= base_url('index.php/contactos/nuevo')?>">
+	<a href="<?= site_url('contactos/nuevo')?>">
 		<input type="button" id="btn_nuevo_contacto" value="Nuevo contacto"/>
 	</a>
 

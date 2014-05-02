@@ -4,16 +4,46 @@
 
         $("#menu_contactos").addClass("seleccion_menu");
 
+        $.ajax("<?= site_url('contactos/consulta_instancias')?>", {
+		dataType: 'json',
+		type: 'post',
+		success: function(resultado)
+		{
+			if (resultado != null) {
+
+				var instancias = [];
+
+				$.each(resultado, function( index, value ) {
+					instancias.push({
+						label : value['instancia_nombre'],
+						value : value['id_instancia']
+					});
+
+				});
+
+				$('#instancias').autocomplete({
+					source: instancias,
+					select: function( event, ui ) {
+					$("#instancias").val( ui.item.label );
+					$("#id_instancia").val( ui.item.value );
+
+					return false;
+					}
+				});
+			}
+		}
+		});
+
     });
 </script>
 <!-- inicia contenido -->
 <div class="contenido_dinamico">
 	<div id="migaDePan">
 		<a href="<?= base_url()?>">Inicio</a> > 
-		<a href="<?= base_url('index.php/contactos')?>">Administrar Contactos</a> > Nuevo contacto
+		<a href="<?= site_url('contactos')?>">Administrar Contactos</a> > Nuevo contacto
 	</div>
 
-	<form id="frm_nuevo_contacto" action="<?= base_url()?>" method="POST">
+	<form id="frm_nuevo_contacto" action="<?= site_url('contactos/registrar_contacto')?>" method="POST">
 			<div class="contenedor_seccion_formulario">
 				<label class="etiqueta_frm_nuevo">Estatus</label>
 				<input type="radio" name="estatus_contacto" value="1" id="estatus_activo" checked>
@@ -26,7 +56,7 @@
 				<input type="button" id="btn_examinar" value="Examinar">
 			</div>
 			<div class="contenedor_seccion_formulario">
-				<label>Tipo de contacto</label>
+				<label>* Tipo de contacto</label>
 				<br>
 				<input type="radio" name="tipo_contacto" value="1" id="tipo_web" class="validate[required]">
 				<label for="tipo_web">Webmaster</label>
@@ -49,17 +79,18 @@
 			<label for="instructor_no">No</label>
 			<br>
 			<p class="encabezado_form_nuevo_contacto">Datos Generales</p>
-			<label class="etiqueta_frm_nuevo">Nombre</label>
+			<label class="etiqueta_frm_nuevo">* Nombre</label>
 			<input type="text" maxlength="50" name="contacto_nombre" class="validate[required]">
 			<br>
-			<label class="etiqueta_frm_nuevo">Apellido paterno</label>
+			<label class="etiqueta_frm_nuevo">* Apellido paterno</label>
 			<input type="text" maxlength="50" name="contacto_apaterno" class="input_frm_nuevo validate[required]">
-			<label class="etiqueta_frm_nuevo">Apellido materno</label>
+			<label class="etiqueta_frm_nuevo">* Apellido materno</label>
 			<input type="text" maxlength="50" name="contacto_amaterno" class="validate[required]">
 			<br>
 			<p class="encabezado_form_nuevo_contacto">Datos laborales</p>
-			<label class="etiqueta_frm_nuevo">Instancia</label>
-			<input type="text" name="contacto_instancia" class="input_frm_nuevo validate[required]">
+			<label class="etiqueta_frm_nuevo">* Instancia</label>
+			<input type="text" id="instancias" class="input_frm_nuevo validate[required]">
+			<input type="hidden" name="contacto_instancia" id="id_instancia" class="input_frm_nuevo validate[required]">
 			<label class="etiqueta_frm_nuevo">&Aacute;rea de adscripci&oacute;n</label>
 			<input type="text" maxlength="255" name="contacto_adscripcion">
 			<br><br><br>
@@ -69,14 +100,14 @@
 			<p class="encabezado_form_nuevo_contacto">Datos de Contacto</p>
 
 			<div class="contenedor_seccion_formulario">
-				<label class="etiqueta_frm_nuevo">T&eacute;lefono</label>
-				<input type="text" name="contacto_telefono" size="10" class="input_frm_nuevo validate[required,custom[telefono]]">
+				<label class="etiqueta_frm_nuevo">* T&eacute;lefono</label>
+				<input type="text" name="contacto_telefono" size="10" maxlength="10" class="input_frm_nuevo validate[required,custom[telefono]]">
 				<label id="etiqueta_ext">ext.</label>
-				<input type="text" name="contacto_extension" size="5" class="validate[custom[telefono]]">
+				<input type="text" name="contacto_extension" size="5" maxlength="5" class="validate[custom[telefono]]">
 			</div>
 
 			<div id="contenedor_comunicacion">
-				<label>Medio de comunicaci&oacute;n preferente</label>
+				<label>* Medio de comunicaci&oacute;n preferente</label>
 				<br><br>
 				<input type="radio" name="comunicacion_contacto" value="0" id="comunicacion_tel" class="validate[required]">
 				<label for="comunicacion_tel">V&iacute;a telef&oacute;nica</label>

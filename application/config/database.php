@@ -48,10 +48,10 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = '';
-$db['default']['database'] = 'red_tul';
+$db['default']['hostname'] = '132.248.63.203';
+$db['default']['username'] = 'unamlineawm';
+$db['default']['password'] = 'FSDKLWTttjt54erjkhs9334';
+$db['default']['database'] = 'unamlineawm';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;

@@ -275,7 +275,6 @@ body {
 .buscar_contacto_textInput{
 	float: left;
 	margin-bottom: 7px;
-	text-align: center;
 	width: 63%;
 }
 
@@ -385,11 +384,33 @@ body {
 	width: 55%;
 }
 
-.ui-datepicker {
+.ui-datepicker{
 	font-size:64%;
 }
 
-.ui-autocomplete.ui-widget {
+.ui-autocomplete.ui-widget{
   font-family: Verdana,Arial,sans-serif;
   font-size: 10px;
+}
+
+/* Vista curso.php */
+#conf_contacto_leyenda{
+	border-radius: 5px;
+	padding: 5px;
+	text-align: center;
+	background-color: #54DF0E;
+	color: white;
+	font-style: italic;
+	font-size: 16px;
+}
+
+.conf_contacto_campos{
+	margin: 0px 0px -10px 20px;
+	font-size: medium;
+	font-weight: bold;
+}
+
+.conf_contacto_valores{
+	margin-left: 100px;
+	margin-bottom: 25px;
 }

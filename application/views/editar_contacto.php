@@ -1,8 +1,33 @@
 <script>
     $(document).ready(function(){
-        $("#frm_nuevo_contacto").validationEngine({promptPosition: "centerRight"});
+        $("#frm_editar_contacto").validationEngine({promptPosition: "centerRight"});
 
         $("#menu_contactos").addClass("seleccion_menu");
+
+        $.ajax("<?= site_url('contactos/consulta_contacto').'/'.$id_contacto?>", {
+			dataType: 'json',
+			type: 'post',
+			success: function(resultado)
+			{
+				if (resultado != null) {
+					$('#editar_nombre').val(resultado[0]['contacto_nombre']);
+					$('#editar_paterno').val(resultado[0]['contacto_ap_paterno']);
+					$('#editar_materno').val(resultado[0]['contacto_ap_materno']);
+					$('#editar_adscripcion').val(resultado[0]['contacto_adscripcion']);
+					$('#editar_funciones').val(resultado[0]['contacto_funciones']);
+					$('#editar_correoinst').val(resultado[0]['contacto_correo_inst']);
+					$('#editar_correoper').val(resultado[0]['contacto_correo_per']);
+					$('#editar_telefono').val(resultado[0]['contacto_telefono']);
+					$('#editar_extension').val(resultado[0]['contacto_extension']);
+					$('#instanciasgit').val(resultado[0]['instancia_nombre']);
+					$('#id_instancia').val(resultado[0]['contacto_instancia']);
+					$("input[name=estatus_contacto][value="+resultado[0]['contacto_estatus']+"]").prop('checked', true);
+					$("input[name=tipo_contacto][value="+resultado[0]['contacto_tipo']+"]").prop('checked', true);
+					$("input[name=instructor_candidato][value="+resultado[0]['contacto_instructor']+"]").prop('checked', true);
+					$("input[name=comunicacion_contacto][value="+resultado[0]['contacto_comunicacion']+"]").prop('checked', true);
+				}
+			}
+		});
 
         $.ajax("<?= site_url('contactos/consulta_instancias')?>", {
 			dataType: 'json',
@@ -18,11 +43,11 @@
 							label : value['instancia_nombre'],
 							value : value['id_instancia']
 						});
-
 					});
 
 					$('#instancias').autocomplete({
 						source: instancias,
+						autoFocus: false,
 						change: function(event, ui) {
 							if(!ui.item){
 								$("#instancias").val("");
@@ -48,13 +73,13 @@
 <div class="contenido_dinamico">
 	<div id="migaDePan">
 		<a href="<?= base_url()?>">Inicio</a> > 
-		<a href="<?= site_url('contactos')?>">Administrar Contactos</a> > Nuevo contacto
+		<a href="<?= site_url('contactos')?>">Administrar Contactos</a> > Editar contacto
 	</div>
 
-	<form id="frm_nuevo_contacto" action="<?= site_url('contactos/registrar_contacto')?>" method="POST">
+	<form id="frm_editar_contacto" action="<?= site_url('contactos/editar').'/'.$id_contacto?>" method="POST">
 			<div class="contenedor_seccion_formulario">
 				<label class="etiqueta_frm_nuevo">Estatus</label>
-				<input type="radio" name="estatus_contacto" value="1" id="estatus_activo" checked>
+				<input type="radio" name="estatus_contacto" value="1" id="estatus_activo">
 				<label for="estatus_activo">Activo</label>
 				<input type="radio" name="estatus_contacto" value="0" id="estatus_inactivo">
 				<label for="estatus_inactivo">Inactivo</label>
@@ -88,30 +113,30 @@
 			<br>
 			<p class="encabezado_form_nuevo_contacto">Datos Generales</p>
 			<label class="etiqueta_frm_nuevo">* Nombre</label>
-			<input type="text" maxlength="50" name="contacto_nombre" class="validate[required]">
+			<input type="text" maxlength="50" id="editar_nombre" name="contacto_nombre" class="validate[required]">
 			<br>
 			<label class="etiqueta_frm_nuevo">* Apellido paterno</label>
-			<input type="text" maxlength="50" name="contacto_apaterno" class="input_frm_nuevo validate[required]">
+			<input type="text" maxlength="50" id="editar_paterno" name="contacto_apaterno" class="input_frm_nuevo validate[required]">
 			<label class="etiqueta_frm_nuevo">* Apellido materno</label>
-			<input type="text" maxlength="50" name="contacto_amaterno" class="validate[required]">
+			<input type="text" maxlength="50" id="editar_materno" name="contacto_amaterno" class="validate[required]">
 			<br>
 			<p class="encabezado_form_nuevo_contacto">Datos laborales</p>
 			<label class="etiqueta_frm_nuevo">* Instancia</label>
 			<input type="text" name="contacto_instancia_nombre" id="instancias" class="input_frm_nuevo validate[required]">
 			<input type="hidden" name="contacto_instancia" id="id_instancia" class="input_frm_nuevo validate[required]">
 			<label class="etiqueta_frm_nuevo">&Aacute;rea de adscripci&oacute;n</label>
-			<input type="text" maxlength="255" name="contacto_adscripcion">
+			<input type="text" maxlength="255" id="editar_adscripcion" name="contacto_adscripcion">
 			<br><br><br>
 			<label id="label_funciones">Descripci&oacute;n de funciones</label>
-			<textarea name="contacto_funciones" maxlength="255"></textarea>
+			<textarea name="contacto_funciones" id="editar_funciones" maxlength="255"></textarea>
 			<br>
 			<p class="encabezado_form_nuevo_contacto">Datos de Contacto</p>
 
 			<div class="contenedor_seccion_formulario">
 				<label class="etiqueta_frm_nuevo">* T&eacute;lefono</label>
-				<input type="text" name="contacto_telefono" size="10" maxlength="10" class="input_frm_nuevo validate[required,custom[telefono]]">
+				<input type="text" id="editar_telefono" name="contacto_telefono" size="10" maxlength="10" class="input_frm_nuevo validate[required,custom[telefono]]">
 				<label id="etiqueta_ext">ext.</label>
-				<input type="text" name="contacto_extension" size="5" maxlength="5" class="validate[custom[telefono]]">
+				<input type="text" id="editar_extension" name="contacto_extension" size="5" maxlength="5" class="validate[custom[telefono]]">
 			</div>
 
 			<div id="contenedor_comunicacion">
@@ -125,14 +150,13 @@
 			</div>
 			<br>
 			<label class="etiqueta_frm_nuevo">Correo institucional</label>
-			<input type="text" maxlength="100" name="contacto_correoinst" class="custom[email], validate[groupRequired[correo]]">
+			<input type="text" maxlength="100" id="editar_correoinst" name="contacto_correoinst" class="custom[email], validate[groupRequired[correo]]">
 			<br><br>
 			<label class="etiqueta_frm_nuevo">Correo personal</label>
-			<input type="text" maxlength="100" name="contacto_correopers" class="validate[groupRequired[correo],custom[email]]">
+			<input type="text" maxlength="100" id="editar_correoper" name="contacto_correopers" class="validate[groupRequired[correo],custom[email]]">
 			<br><br><br>
 			<div id="botones_envio">
 				<input type="submit" id="btn_guardar" value="Guardar">
-				<input type="submit" id="btn_guardarynuevo" value="Guardar y nuevo contacto">
 			</div>
 	</form>
 

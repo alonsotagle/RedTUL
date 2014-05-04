@@ -30,6 +30,9 @@ class contacto_model extends CI_Model{
     						instancia.instancia_nombre,
     						contacto.contacto_correo_inst,
     						contacto.contacto_correo_per');
+        $this->db->order_by('contacto.contacto_nombre','ASC');
+        $this->db->order_by('contacto.contacto_ap_paterno','ASC');
+        $this->db->order_by('contacto.contacto_ap_materno','ASC');
 		$this->db->from('contacto');
 		$this->db->join('tipo_contacto', 'contacto.contacto_tipo = tipo_contacto.id_tipo_contacto');
 		$this->db->join('instancia', 'contacto.contacto_instancia = instancia.id_instancia');
@@ -46,9 +49,8 @@ class contacto_model extends CI_Model{
 
     public function consulta_instancias()
     {
-		$this->db->from('instancia');
 
-		$query = $this->db->get();
+		$query = $this->db->get('instancia');
 
 		if ($query -> num_rows() > 0)
 		{
@@ -56,6 +58,35 @@ class contacto_model extends CI_Model{
         } else {
             return null;
         }
+    }
+
+    public function eliminar($id_contacto)
+    {
+        $this->db->delete('contacto', array('id_contacto' => $id_contacto));
+    }
+
+    public function consulta_contacto($id_contacto)
+    {
+        $this->db->where('contacto.id_contacto', $id_contacto);
+        $this->db->from('contacto');
+        $this->db->join('instancia', 'contacto.contacto_instancia = instancia.id_instancia');
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function editar_contacto($contacto)
+    {
+        $this->db->where('id_contacto', $contacto['id_contacto']);
+        unset($contacto['id_contacto']);
+
+        $this->db->update('contacto', $contacto);
     }
 
 }

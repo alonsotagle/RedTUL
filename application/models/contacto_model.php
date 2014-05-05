@@ -89,4 +89,50 @@ class contacto_model extends CI_Model{
         $this->db->update('contacto', $contacto);
     }
 
+    public function buscar($data_buscar)
+    {
+        $this->db->select('contacto.id_contacto,
+                            contacto.contacto_nombre,
+                            contacto.contacto_ap_paterno,
+                            contacto.contacto_ap_materno,
+                            tipo_contacto.tipo_contacto_descripcion,
+                            contacto.contacto_estatus,
+                            instancia.instancia_nombre,
+                            contacto.contacto_correo_inst,
+                            contacto.contacto_correo_per');
+        $this->db->order_by('contacto.contacto_nombre','ASC');
+        $this->db->order_by('contacto.contacto_ap_paterno','ASC');
+        $this->db->order_by('contacto.contacto_ap_materno','ASC');
+        $this->db->from('contacto');
+        $this->db->join('tipo_contacto', 'contacto.contacto_tipo = tipo_contacto.id_tipo_contacto');
+        $this->db->join('instancia', 'contacto.contacto_instancia = instancia.id_instancia');
+
+        if ($data_buscar['nombre_contacto'] != "") {
+            $this->db->like('contacto.contacto_nombre', $data_buscar['nombre_contacto']);
+        }
+
+        if ($data_buscar['correo_contacto'] != "") {
+            $this->db->like('contacto.contacto_correo_inst', $data_buscar['correo_contacto']);
+            $this->db->or_like('contacto.contacto_correo_per', $data_buscar['correo_contacto']);
+        }
+
+        if (isset($data_buscar['tipo_contacto'])) {
+            $this->db->where('contacto.contacto_tipo', $data_buscar['tipo_contacto']);
+        }
+
+        if ($data_buscar['instancia_contacto'] != "") {
+            $this->db->like('instancia.instancia_nombre', $data_buscar['instancia_contacto']);
+        }
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+
+    }
+
 }

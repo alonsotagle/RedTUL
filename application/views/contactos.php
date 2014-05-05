@@ -58,7 +58,7 @@
 		<a href="<?= base_url()?>">Inicio</a> > Administrar Contactos
 	</div>
 
-	<form id="frm_buscar_contacto" action="<?= base_url()?>" method="POST">
+	<form id="frm_buscar_contacto" action="<?= site_url('contactos/buscar')?>" method="POST">
 			<label for="nombre_contacto">Nombre</label>
 			<input type="text" id="nombre_contacto" maxlength="50" name="nombre_contacto" class="buscar_contacto_textInput validate[groupRequired[buscar_contacto]]"/>
 			<label for="correo_contacto">Correo electr&oacute;nico</label>

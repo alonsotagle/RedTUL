@@ -199,6 +199,7 @@ class contactos extends CI_Controller {
 
             if (!$this->upload->do_upload('contacto_avatar'))
             {
+                echo $this->upload->display_errors();
                 return "error";
             }else{
                 $datos = $this->upload->data();
@@ -208,4 +209,30 @@ class contactos extends CI_Controller {
             return $this->input->post('contacto_avatar_old');
         }
     }
+
+    function buscar()
+    {
+        if (!empty($_POST)) {
+            $data_buscar = $_POST;
+
+            $resultado_busqueda['resultado'] = $this->contacto_model->buscar($data_buscar);
+
+            foreach($resultado_busqueda['resultado'] as $llave => &$contacto)
+            {
+                if ($contacto['contacto_estatus'] == '1')
+                {
+                    $contacto['contacto_estatus'] = 'Activo';
+                }else{
+                    $contacto['contacto_estatus'] = 'Inactivo';
+                }
+            }
+
+            $this->load->view('template/header');
+            $this->load->view('template/menu');
+            $this->load->view('buscar_contacto',$resultado_busqueda);
+            $this->load->view('template/footer');
+
+        }
+    }
+
 }

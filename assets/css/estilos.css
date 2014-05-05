@@ -305,11 +305,10 @@ body {
 }
 
 #contacto_imagen{
-	background-image: url('../img/avatar.png');
-	background-repeat: no-repeat;
 	height: 192px;
 	margin-bottom: 5px;
 	width: 192px;
+	display: block;
 }
 
 #contenedor_imagen{
@@ -330,23 +329,32 @@ body {
 	float: right;
 }
 
-.etiqueta_frm_nuevo{
+.etiqueta_frm{
+	width: 120px;
 	float: left;
-	width: 70px;
 }
 
 .input_frm_nuevo{
-	float: left;
 	margin-right: 30px;
 }
 
-#label_funciones{
+.label_funciones{
 	vertical-align: top;
 }
 
 #etiqueta_ext{
-	float: left;
 	width: 40px;
+}
+
+.icon_tooltip{
+	margin-right: 30px;
+}
+
+#contacto_instancias{
+	background: url('../img/icono_buscar.png') no-repeat;
+	background-position: left center;
+	background-size: 20px;
+	padding-left: 15px;
 }
 
 /* Inicia CURSO */

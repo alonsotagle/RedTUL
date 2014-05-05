@@ -29,71 +29,74 @@ class contactos extends CI_Controller {
 
     function registrar_contacto(){
         if (!empty($_POST)) {
-            $nuevo_contacto = array(
-                'contacto_estatus' => $this->input->post('estatus_contacto'),
-                'contacto_tipo' => $this->input->post('tipo_contacto'),
-                'contacto_instructor' => $this->input->post('instructor_candidato'),
-                'contacto_nombre' => $this->input->post('contacto_nombre'),
-                'contacto_ap_paterno' => $this->input->post('contacto_apaterno'),
-                'contacto_ap_materno' => $this->input->post('contacto_amaterno'),
-                'contacto_instancia' => $this->input->post('contacto_instancia'),
-                'contacto_adscripcion' => $this->input->post('contacto_adscripcion'),
-                'contacto_funciones' => $this->input->post('contacto_funciones'),
-                'contacto_telefono' => $this->input->post('contacto_telefono'),
-                'contacto_extension' => $this->input->post('contacto_extension'),
-                'contacto_correo_inst' => $this->input->post('contacto_correoinst'),
-                'contacto_correo_per' => $this->input->post('contacto_correopers'),
-                'contacto_avatar' => "/",
-                'contacto_comunicacion' => $this->input->post('comunicacion_contacto'),
-            );
-            $this->contacto_model->registrar_contacto($nuevo_contacto);
-            $this->confirmacion_contacto();
+
+            $respuesta_avatar = $this->subir_avatar();
+            if ($respuesta_avatar != FALSE) {
+                $nuevo_contacto = array(
+                    'contacto_estatus' => $this->input->post('estatus_contacto'),
+                    'contacto_tipo' => $this->input->post('tipo_contacto'),
+                    'contacto_instructor' => $this->input->post('instructor_candidato'),
+                    'contacto_nombre' => $this->input->post('contacto_nombre'),
+                    'contacto_ap_paterno' => $this->input->post('contacto_apaterno'),
+                    'contacto_ap_materno' => $this->input->post('contacto_amaterno'),
+                    'contacto_instancia' => $this->input->post('contacto_instancia'),
+                    'contacto_adscripcion' => $this->input->post('contacto_adscripcion'),
+                    'contacto_funciones' => $this->input->post('contacto_funciones'),
+                    'contacto_telefono' => $this->input->post('contacto_telefono'),
+                    'contacto_extension' => $this->input->post('contacto_extension'),
+                    'contacto_correo_inst' => $this->input->post('contacto_correoinst'),
+                    'contacto_correo_per' => $this->input->post('contacto_correopers'),
+                    'contacto_avatar' => $respuesta_avatar,
+                    'contacto_comunicacion' => $this->input->post('comunicacion_contacto'),
+                );
+                $this->contacto_model->registrar_contacto($nuevo_contacto);
+
+                $nuevo_contacto['contacto_instancia_nombre'] = $this->input->post('contacto_instancia_nombre');
+
+                $this->confirmacion_contacto($nuevo_contacto);
+            }
         }
     }
 
-    function confirmacion_contacto(){
-            $contacto = array(
-                'nombre' => $this->input->post('contacto_nombre'),
-                'paterno' => $this->input->post('contacto_apaterno'),
-                'materno' => $this->input->post('contacto_amaterno'),
-                'instancia' => $this->input->post('contacto_instancia_nombre'),
-                'adscripcion' => $this->input->post('contacto_adscripcion'),
-                'funciones' => $this->input->post('contacto_funciones'),
-                'telefono' => $this->input->post('contacto_telefono'),
-                'correoinst' => $this->input->post('contacto_correoinst'),
-                'correopers' => $this->input->post('contacto_correopers')
-                );
+    function confirmacion_contacto($contacto){
 
-            if ($this->input->post('estatus_contacto') == 0) {
-                $contacto['estatus'] = "Inactivo";
+            if ($contacto['contacto_estatus'] == 0) {
+                $contacto['contacto_estatus'] = "Inactivo";
             }else{
-                $contacto['estatus'] = "Activo";
+                $contacto['contacto_estatus'] = "Activo";
             }
 
-            switch ($this->input->post('tipo_contacto')) {
+            switch ($contacto['contacto_tipo']) {
                 case 1:
-                    $contacto['tipo'] = "Webmaster";
+                    $contacto['contacto_tipo'] = "Webmaster";
                     break;
                 case 2:
-                    $contacto['tipo'] = "Responsable de comunicación";
+                    $contacto['contacto_tipo'] = "Responsable de comunicación";
                     break;
                 case 3:
-                    $contacto['tipo'] = "Responsable de técnico";
+                    $contacto['contacto_tipo'] = "Responsable de técnico";
                     break;
                 case 4:
-                    $contacto['tipo'] = "Otros";
+                    $contacto['contacto_tipo'] = "Otros";
                     break;
                 
                 default:
                     break;
             }
 
-            if (!is_null($this->input->post('comunicacion_contacto'))) {
-                if ($this->input->post('comunicacion_contacto') == 0) {
-                    $contacto['comunicacion'] = "Vía telefónica";
+            if (!is_null($contacto['contacto_comunicacion'])) {
+                if ($contacto['contacto_comunicacion'] == 0) {
+                    $contacto['contacto_comunicacion'] = "Vía telefónica";
                 }else{
-                    $contacto['comunicacion'] = "Vía e-mail";
+                    $contacto['contacto_comunicacion'] = "Vía e-mail";
                 }
+            }
+
+            if (($contacto['contacto_avatar']) != "") {
+                $tag_img = "<img src=".base_url('assets/img_avatar/')."/".$contacto['contacto_avatar']." width='200px' height='200px'>";
+                $contacto['contacto_avatar'] = $tag_img;
+            }else{
+                $contacto['contacto_avatar'] = "";
             }
             
 
@@ -138,33 +141,42 @@ class contactos extends CI_Controller {
     {
         if (empty($_POST)) {
 
-            $variables = array('id_contacto' => $id_contacto);
+            $var_id = array('id_contacto' => $id_contacto);
 
             $this->load->view('template/header');
             $this->load->view('template/menu');
-            $this->load->view('editar_contacto', $variables);
+            $this->load->view('editar_contacto', $var_id);
             $this->load->view('template/footer');
         }else{
-            $contacto = array(
-                'contacto_estatus' => $this->input->post('estatus_contacto'),
-                'contacto_tipo' => $this->input->post('tipo_contacto'),
-                'contacto_instructor' => $this->input->post('instructor_candidato'),
-                'contacto_nombre' => $this->input->post('contacto_nombre'),
-                'contacto_ap_paterno' => $this->input->post('contacto_apaterno'),
-                'contacto_ap_materno' => $this->input->post('contacto_amaterno'),
-                'contacto_instancia' => $this->input->post('contacto_instancia'),
-                'contacto_adscripcion' => $this->input->post('contacto_adscripcion'),
-                'contacto_funciones' => $this->input->post('contacto_funciones'),
-                'contacto_telefono' => $this->input->post('contacto_telefono'),
-                'contacto_extension' => $this->input->post('contacto_extension'),
-                'contacto_correo_inst' => $this->input->post('contacto_correoinst'),
-                'contacto_correo_per' => $this->input->post('contacto_correopers'),
-                'contacto_avatar' => "/",
-                'contacto_comunicacion' => $this->input->post('comunicacion_contacto'),
-            );
-            $contacto['id_contacto'] = $id_contacto;
-            $this->contacto_model->editar_contacto($contacto);
-            $this->confirmacion_contacto();
+            $respuesta_avatar = $this->subir_avatar();
+            if ($respuesta_avatar != "error") {
+                $editar_contacto = array(
+                    'contacto_estatus' => $this->input->post('estatus_contacto'),
+                    'contacto_tipo' => $this->input->post('tipo_contacto'),
+                    'contacto_instructor' => $this->input->post('instructor_candidato'),
+                    'contacto_nombre' => $this->input->post('contacto_nombre'),
+                    'contacto_ap_paterno' => $this->input->post('contacto_apaterno'),
+                    'contacto_ap_materno' => $this->input->post('contacto_amaterno'),
+                    'contacto_instancia' => $this->input->post('contacto_instancia'),
+                    'contacto_adscripcion' => $this->input->post('contacto_adscripcion'),
+                    'contacto_funciones' => $this->input->post('contacto_funciones'),
+                    'contacto_telefono' => $this->input->post('contacto_telefono'),
+                    'contacto_extension' => $this->input->post('contacto_extension'),
+                    'contacto_correo_inst' => $this->input->post('contacto_correoinst'),
+                    'contacto_correo_per' => $this->input->post('contacto_correopers'),
+                    'contacto_avatar' => $respuesta_avatar,
+                    'contacto_comunicacion' => $this->input->post('comunicacion_contacto'),
+                );
+                $editar_contacto['id_contacto'] = $id_contacto;
+
+                $this->contacto_model->editar_contacto($editar_contacto);
+
+                $editar_contacto['contacto_instancia_nombre'] = $this->input->post('contacto_instancia_nombre');
+
+                $this->confirmacion_contacto($editar_contacto);
+            }else{
+                echo "Error en la imagen subida";
+            }
         }
     }
 
@@ -173,5 +185,27 @@ class contactos extends CI_Controller {
         $contacto = $this->contacto_model->consulta_contacto($id_contacto);
 
         print_r(json_encode($contacto));
+    }
+
+    function subir_avatar()
+    {
+        if ($_FILES['contacto_avatar']['size'] != 0) {
+            $config['upload_path'] = './assets/img_avatar/';
+            $config['allowed_types'] = 'gif|jpg';
+            $config['max_size'] = '2097152';
+            $config['encrypt_name'] = TRUE;
+
+            $this->load->library('upload', $config);
+
+            if (!$this->upload->do_upload('contacto_avatar'))
+            {
+                return "error";
+            }else{
+                $datos = $this->upload->data();
+                return $datos["file_name"];
+            }
+        }else{
+            return $this->input->post('contacto_avatar_old');
+        }
     }
 }

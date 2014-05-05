@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"data",
+				"data_buscar"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"e",
+				"easter_days"
+			],
+			[
 				"id",
 				"id_instancia"
 			],
@@ -116,10 +128,6 @@
 				"is_null"
 			],
 			[
-				"e",
-				"easter_date"
-			],
-			[
 				"gett",
 				"gettype"
 			],
@@ -228,26 +236,26 @@
 			}
 		},
 		{
-			"file": "application/models/contacto_model.php",
-			"settings":
-			{
-				"buffer_size": 2487,
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "application/controllers/contactos.php",
 			"settings":
 			{
-				"buffer_size": 8105,
+				"buffer_size": 8933,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "application/views/nuevo_contacto.php",
+			"file": "application/models/contacto_model.php",
 			"settings":
 			{
-				"buffer_size": 7304,
+				"buffer_size": 4391,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "application/views/buscar_contacto.php",
+			"settings":
+			{
+				"buffer_size": 2630,
 				"line_ending": "Windows"
 			}
 		},
@@ -255,7 +263,7 @@
 			"file": "application/views/contactos.php",
 			"settings":
 			{
-				"buffer_size": 3248,
+				"buffer_size": 3266,
 				"line_ending": "Windows"
 			}
 		}
@@ -284,6 +292,7 @@
 	},
 	"file_history":
 	[
+		"/C/xampp/htdocs/RedTUL/application/views/nuevo_contacto.php",
 		"/C/Users/Alonso/Desktop/SQL/tablas.sql",
 		"/C/Users/Alonso/Desktop/SQL/INSERT_tipo_contacto.sql",
 		"/C/Users/Alonso/Desktop/SQL/INSERT_estatus_curso.sql",
@@ -307,7 +316,6 @@
 		"/C/xampp/htdocs/RedTUL/application/controllers/curso.php",
 		"/C/xampp/htdocs/RedTUL/application/controllers/contacto.php",
 		"/C/xampp/htdocs/RedTUL/application/controllers/login.php",
-		"/C/xampp/htdocs/RedTUL/application/views/nuevo_contacto.php",
 		"/C/xampp/htdocs/PROYECTO_DGTIC/application/views/administrador/ad_RegistroHallazgo.php",
 		"/C/xampp/htdocs/RedTUL/application/models/curso_model.php",
 		"/C/xampp/htdocs/RedTUL/application/views/contacto.php",
@@ -413,6 +421,26 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"\\",
+			"site_url",
+			"base_url",
+			"site_url",
+			"value",
+			"src=",
+			"$",
+			"</td>",
+			"<td>\"",
+			"<td>",
+			"td",
+			"<td>",
+			"$",
+			"'+value['",
+			"']+'",
+			"?>",
+			"<?=",
+			"+",
+			"nombre_contacto",
+			"despliega_contactos",
 			"instancias",
 			"contactos",
 			"$contacto",
@@ -520,27 +548,7 @@
 			"7550",
 			"117810",
 			",false",
-			",'",
-			"VALUES (",
-			" (",
-			"ent_id`,`ent_nombre`,`ent_checked",
-			"entidad",
-			"cont_recursos",
-			"entidad",
-			"conexion",
-			"conexion_alo",
-			"rec_id",
-			"temp",
-			"tabla",
-			"p",
-			"tr",
-			"conexion_alo",
-			"recurso",
-			"POST",
-			"db",
-			");",
-			"ent_web",
-			");"
+			",'"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -558,7 +566,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -583,25 +591,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 6165.0,
+						"translation.y": 6565.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "application/models/contacto_model.php",
+					"file": "application/controllers/contactos.php",
 					"settings":
 					{
-						"buffer_size": 2487,
+						"buffer_size": 8933,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								7939,
+								7870
 							]
 						],
 						"settings":
@@ -611,25 +619,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 374.0,
+						"translation.y": 2070.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "application/controllers/contactos.php",
+					"file": "application/models/contacto_model.php",
 					"settings":
 					{
-						"buffer_size": 8105,
+						"buffer_size": 4391,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								4152,
+								4152
 							]
 						],
 						"settings":
@@ -639,25 +647,89 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 749.0,
+						"translation.y": 1591.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "application/views/nuevo_contacto.php",
+					"file": "application/views/buscar_contacto.php",
 					"settings":
 					{
-						"buffer_size": 7304,
+						"buffer_size": 2630,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1853,
+								1853
+							],
+							[
+								1964,
+								1964
+							],
+							[
+								2017,
+								2017
+							],
+							[
+								2061,
+								2061
+							],
+							[
+								2105,
+								2105
+							],
+							[
+								2153,
+								2153
+							],
+							[
+								2200,
+								2200
+							],
+							[
+								2209,
+								2209
+							],
+							[
+								2282,
+								2282
+							],
+							[
+								2342,
+								2342
+							],
+							[
+								2352,
+								2352
+							],
+							[
+								2362,
+								2362
+							],
+							[
+								2371,
+								2371
+							],
+							[
+								2446,
+								2446
+							],
+							[
+								2506,
+								2506
+							],
+							[
+								2516,
+								2516
+							],
+							[
+								2526,
+								2526
 							]
 						],
 						"settings":
@@ -665,8 +737,8 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 33.0,
-						"translation.y": 1005.0,
+						"translation.x": 0.0,
+						"translation.y": 630.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -676,15 +748,15 @@
 					"file": "application/views/contactos.php",
 					"settings":
 					{
-						"buffer_size": 3248,
+						"buffer_size": 3266,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1895,
+								1901
 							]
 						],
 						"settings":
@@ -693,7 +765,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 675.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

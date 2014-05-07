@@ -30,8 +30,13 @@ class contactos extends CI_Controller {
     function registrar_contacto(){
         if (!empty($_POST)) {
 
-            $respuesta_avatar = $this->subir_avatar();
-            if ($respuesta_avatar != FALSE) {
+            if ($_FILES['contacto_avatar']['size'] == 0) {
+                $respuesta_avatar = "";
+            }else{
+                $respuesta_avatar = $this->subir_avatar();
+            }
+
+            if ($respuesta_avatar != "error_imagen") {
                 $nuevo_contacto = array(
                     'contacto_estatus' => $this->input->post('estatus_contacto'),
                     'contacto_tipo' => $this->input->post('tipo_contacto'),
@@ -54,6 +59,8 @@ class contactos extends CI_Controller {
                 $nuevo_contacto['contacto_instancia_nombre'] = $this->input->post('contacto_instancia_nombre');
 
                 $this->confirmacion_contacto($nuevo_contacto);
+            }else{
+                echo "Error en la imagen subida";
             }
         }
     }
@@ -148,8 +155,14 @@ class contactos extends CI_Controller {
             $this->load->view('editar_contacto', $var_id);
             $this->load->view('template/footer');
         }else{
-            $respuesta_avatar = $this->subir_avatar();
-            if ($respuesta_avatar != "error") {
+
+            if ($_FILES['contacto_avatar']['size'] == 0) {
+                $respuesta_avatar = $this->input->post('contacto_avatar_old');;
+            }else{
+                $respuesta_avatar = $this->subir_avatar();
+            }
+
+            if ($respuesta_avatar != "error_imagen") {
                 $editar_contacto = array(
                     'contacto_estatus' => $this->input->post('estatus_contacto'),
                     'contacto_tipo' => $this->input->post('tipo_contacto'),
@@ -189,24 +202,21 @@ class contactos extends CI_Controller {
 
     function subir_avatar()
     {
-        if ($_FILES['contacto_avatar']['size'] != 0) {
-            $config['upload_path'] = './assets/img_avatar/';
-            $config['allowed_types'] = 'gif|jpg';
-            $config['max_size'] = '2097152';
-            $config['encrypt_name'] = TRUE;
 
-            $this->load->library('upload', $config);
+        $config['upload_path'] = './assets/img_avatar/';
+        $config['allowed_types'] = 'gif|jpg';
+        $config['max_size'] = '2097152';
+        $config['encrypt_name'] = TRUE;
 
-            if (!$this->upload->do_upload('contacto_avatar'))
-            {
-                echo $this->upload->display_errors();
-                return "error";
-            }else{
-                $datos = $this->upload->data();
-                return $datos["file_name"];
-            }
+        $this->load->library('upload', $config);
+
+        if (!$this->upload->do_upload('contacto_avatar'))
+        {
+            echo $this->upload->display_errors();
+            return "error_imagen";
         }else{
-            return $this->input->post('contacto_avatar_old');
+            $datos = $this->upload->data();
+            return $datos["file_name"];
         }
     }
 
@@ -217,13 +227,15 @@ class contactos extends CI_Controller {
 
             $resultado_busqueda['resultado'] = $this->contacto_model->buscar($data_buscar);
 
-            foreach($resultado_busqueda['resultado'] as $llave => &$contacto)
-            {
-                if ($contacto['contacto_estatus'] == '1')
+            if (!is_null($resultado_busqueda['resultado'])) {
+                foreach($resultado_busqueda['resultado'] as $llave => &$contacto)
                 {
-                    $contacto['contacto_estatus'] = 'Activo';
-                }else{
-                    $contacto['contacto_estatus'] = 'Inactivo';
+                    if ($contacto['contacto_estatus'] == '1')
+                    {
+                        $contacto['contacto_estatus'] = 'Activo';
+                    }else{
+                        $contacto['contacto_estatus'] = 'Inactivo';
+                    }
                 }
             }
 

@@ -63,7 +63,7 @@
 				<label for="estatus_inactivo">Inactivo</label>
 			</div>
 			<div id="contenedor_imagen">
-				<img src="<?= base_url('assets/img/avatar.png') ?>" id="contacto_imagen">
+				<img src="<?= base_url('assets/img/avatar.jpg') ?>" id="contacto_imagen">
 				<input type="file" id="contacto_avatar" name="contacto_avatar">
 			</div>
 			<div class="contenedor_seccion_formulario">
@@ -134,7 +134,7 @@
 			<br>
 			<label for="contacto_correoinst">Correo institucional</label>
 			<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Correo electrónico institucional con la que cuenta el usuario.">
-			<input type="text" maxlength="100" id="contacto_correoinst" name="contacto_correoinst" class="custom[email], validate[groupRequired[correo]]">
+			<input type="text" maxlength="100" id="contacto_correoinst" name="contacto_correoinst" class="validate[groupRequired[correo],custom[email]]">
 			<br><br>
 			<label for="contacto_correopers">Correo personal</label>
 			<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Es un correo electrónico alterno al institucional.">
@@ -142,7 +142,6 @@
 			<br><br><br>
 			<div id="botones_envio">
 				<input type="submit" id="btn_guardar" value="Guardar">
-				<input type="submit" id="btn_guardarynuevo" value="Guardar y nuevo contacto">
 			</div>
 	</form>
 

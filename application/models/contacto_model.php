@@ -30,9 +30,7 @@ class contacto_model extends CI_Model{
     						instancia.instancia_nombre,
     						contacto.contacto_correo_inst,
     						contacto.contacto_correo_per');
-        $this->db->order_by('contacto.contacto_nombre','ASC');
-        $this->db->order_by('contacto.contacto_ap_paterno','ASC');
-        $this->db->order_by('contacto.contacto_ap_materno','ASC');
+        $this->db->order_by('contacto.id_contacto','ASC');
 		$this->db->from('contacto');
 		$this->db->join('tipo_contacto', 'contacto.contacto_tipo = tipo_contacto.id_tipo_contacto');
 		$this->db->join('instancia', 'contacto.contacto_instancia = instancia.id_instancia');
@@ -107,12 +105,14 @@ class contacto_model extends CI_Model{
         $this->db->join('tipo_contacto', 'contacto.contacto_tipo = tipo_contacto.id_tipo_contacto');
         $this->db->join('instancia', 'contacto.contacto_instancia = instancia.id_instancia');
 
+        $parametros = array();
+
         if ($data_buscar['nombre_contacto'] != "") {
-            $this->db->like('contacto.contacto_nombre', $data_buscar['nombre_contacto']);
+            $parametros['contacto.contacto_nombre'] = $data_buscar['nombre_contacto'];
         }
 
         if ($data_buscar['correo_contacto'] != "") {
-            $this->db->like('contacto.contacto_correo_inst', $data_buscar['correo_contacto']);
+            $parametros['contacto.contacto_correo_inst'] = $data_buscar['nombre_contacto'];
             $this->db->or_like('contacto.contacto_correo_per', $data_buscar['correo_contacto']);
         }
 
@@ -121,9 +121,10 @@ class contacto_model extends CI_Model{
         }
 
         if ($data_buscar['instancia_contacto'] != "") {
-            $this->db->like('instancia.instancia_nombre', $data_buscar['instancia_contacto']);
+            $parametros['instancia.instancia_nombre'] = $data_buscar['nombre_contacto'];
         }
 
+        $this->db->like($parametros);
         $query = $this->db->get();
 
         if ($query -> num_rows() > 0)

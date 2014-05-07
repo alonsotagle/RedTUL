@@ -5,30 +5,30 @@
         $("#menu_cursos").addClass("seleccion_menu");
 
         $( "#inicio_curso" ).datepicker({
-      changeMonth: true,
-      numberOfMonths: 2,
-      minDate: 0,
-      showOn: "both",
-      buttonImage: "<?= base_url('assets/img/calendar.gif')?>",
-      buttonImageOnly: true,
-      onClose: function( selectedDate ) {
-      	if (selectedDate != ""){
-        	$( "#fin_curso" ).datepicker( "option", "minDate", selectedDate );
-        }
-        $( "#fin_curso" ).datepicker( "option", "defaultDate", selectedDate );
-      }
-    });
-    $( "#fin_curso" ).datepicker({
-      changeMonth: true,
-      numberOfMonths: 2,
-      minDate: 0,
-      showOn: "both",
-      buttonImage: "<?= base_url('assets/img/calendar.gif')?>",
-      buttonImageOnly: true,
-      onClose: function( selectedDate ) {
-        $( "#inicio_curso" ).datepicker( "option", "maxDate", selectedDate );
-      }
-    });
+			changeMonth: true,
+			numberOfMonths: 2,
+			minDate: 0,
+			showOn: "both",
+			buttonImage: "<?= base_url('assets/img/calendar.gif')?>",
+			buttonImageOnly: true,
+			onClose: function( selectedDate ) {
+			if (selectedDate != ""){
+				$( "#fin_curso" ).datepicker( "option", "minDate", selectedDate );
+			}
+				$( "#fin_curso" ).datepicker( "option", "defaultDate", selectedDate );
+			}
+		});
+		$( "#fin_curso" ).datepicker({
+			changeMonth: true,
+			numberOfMonths: 2,
+			minDate: 0,
+			showOn: "both",
+			buttonImage: "<?= base_url('assets/img/calendar.gif')?>",
+			buttonImageOnly: true,
+			onClose: function( selectedDate ) {
+				$( "#inicio_curso" ).datepicker( "option", "maxDate", selectedDate );
+			}
+		});
 
     }); 
 </script>
@@ -78,7 +78,7 @@
 		</tr>
 	</table>
 
-	<a href="<?= base_url('index.php/curso/nuevo')?>">
+	<a href="<?= base_url('index.php/cursos/nuevo')?>">
 		<input type="button" id="btn_nuevo_curso" value="Nuevo curso"/>
 	</a>
 

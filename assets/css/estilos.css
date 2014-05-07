@@ -422,3 +422,15 @@ body {
 	margin-left: 100px;
 	margin-bottom: 25px;
 }
+
+/* Vista nuevo_curso.php */
+.encabezado_form_nuevo_curso{
+	font-size: 20px;
+	font-weight: bold;
+	margin-top: 35px;
+}
+
+.label_nuevo_curso{
+	display: inline-block;
+	width: 200px;
+}

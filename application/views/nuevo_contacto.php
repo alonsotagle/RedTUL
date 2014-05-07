@@ -116,9 +116,9 @@
 
 			<div class="contenedor_seccion_formulario">
 				<label for="contacto_telefono">* T&eacute;lefono</label>
-				<input type="text" id="contacto_telefono" name="contacto_telefono" size="10" maxlength="10" class="input_frm_nuevo validate[required,custom[telefono]]">
-				<label for="contacto_ext" id="etiqueta_ext">ext.</label>
-				<input type="text" id="contacto_ext" name="contacto_extension" size="5" maxlength="5" class="validate[custom[telefono]]">
+				<input type="text" id="contacto_telefono" name="contacto_telefono" size="10" maxlength="10" class="input_frm_nuevo validate[required,custom[numero]]">
+				<label for="contacto_extension" id="etiqueta_ext">ext.</label>
+				<input type="text" id="contacto_extension" name="contacto_extension" size="5" maxlength="5" class="validate[custom[numero]]">
 			</div>
 
 			<div id="contenedor_comunicacion">

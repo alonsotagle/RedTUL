@@ -64,7 +64,7 @@
 			</div>
 			<div id="contenedor_imagen">
 				<img src="<?= base_url('assets/img/avatar.jpg') ?>" id="contacto_imagen">
-				<input type="file" id="contacto_avatar" name="contacto_avatar">
+				<input type="file" id="contacto_avatar" name="contacto_avatar" class="validate[checkFileType[jpg|jpeg|gif]]">
 			</div>
 			<div class="contenedor_seccion_formulario">
 				<label>* Tipo de contacto</label>

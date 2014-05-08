@@ -669,6 +669,9 @@
 							required = true;
 						}
 						break;
+					case "checkFileType":
+						errorMsg = methods._checkFileType(field, rules, i, options);
+					break;
 
 					default:
 				}
@@ -1951,6 +1954,19 @@
 				}
 			}
 		},
+
+		_checkFileType: function (field, rules, i, options) {
+	        var uploadedFile = $(field);
+	        if (uploadedFile) {
+	            var extensions = rules[i + 1];               
+	            var mimeFilter = new RegExp(extensions);
+	            if (!mimeFilter.test($(uploadedFile).val().split('.').reverse()[0])) {
+	                return options.allrules.checkFileType.alertText;
+	            }
+	        } else {
+	            return true;
+	        }            
+    	},
 
 	    _submitButtonClick: function(event) {
 	        var button = $(this);

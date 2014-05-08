@@ -275,6 +275,7 @@ body {
 .buscar_contacto_textInput{
 	float: left;
 	margin-bottom: 7px;
+	text-align: center;
 	width: 63%;
 }
 
@@ -433,4 +434,16 @@ body {
 .label_nuevo_curso{
 	display: inline-block;
 	width: 200px;
+}
+
+.label_nuevo_curso_textarea{
+	vertical-align: top;
+}
+
+#curso_instructores{
+	background: url('../img/icono_buscar.png') no-repeat;
+	background-color: white;
+	background-position: left center;
+	background-size: 20px;
+	padding-left: 15px;
 }

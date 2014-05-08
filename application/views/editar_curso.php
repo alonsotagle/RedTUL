@@ -1,15 +1,38 @@
 <script>
     $(document).ready(function(){
-    	
-        $("#frm_nuevo_curso").validationEngine({promptPosition: "centerRight"});
+
+        $("#frm_editar_curso").validationEngine({promptPosition: "centerRight"});
 
         $("#menu_cursos").addClass("seleccion_menu");
-
-        $(document).tooltip();
 
 		$(function() {
 		    $( "#tabs" ).tabs();
 		});
+
+		$.ajax("<?= site_url('cursos/consulta_curso').'/'.$id_curso?>", {
+			dataType: 'json',
+			type: 'post',
+			success: function(resultado)
+			{
+				if (resultado != null) {
+					$('#curso_titulo').val(resultado[0]['curso_titulo']);
+					$("#curso_tipo option[value="+resultado[0]['curso_tipo']+"]").prop('selected', true);
+					$('#curso_descripcion').val(resultado[0]['curso_descripcion']);
+					$('#curso_objetivos').val(resultado[0]['curso_objetivos']);
+					$('#curso_fecha_inicio').val(resultado[0]['curso_fecha_inicio']);
+					$('#curso_fecha_fin').val(resultado[0]['curso_fecha_fin']);
+					$('#curso_hora_inicio').val(resultado[0]['curso_hora_inicio']);
+					$('#curso_hora_fin').val(resultado[0]['curso_hora_fin']);
+					$('#curso_cupo').val(resultado[0]['curso_cupo']);
+					$('#curso_ubicacion').val(resultado[0]['curso_ubicacion']);
+					$('#curso_url_ubicacion').val(resultado[0]['curso_mapa_url']);
+					$('#curso_telefono').val(resultado[0]['curso_telefono']);
+					$('#curso_telefono_extension').val(resultado[0]['curso_telefono_extension']);
+		}
+			}
+		});
+
+		$(document).tooltip();
 
 		$( "#curso_fecha_inicio" ).datepicker({
 			changeMonth: true,
@@ -26,7 +49,6 @@
 				$( "#curso_fecha_fin" ).datepicker( "option", "defaultDate", selectedDate );
 			}
 		});
-
 		$( "#curso_fecha_fin" ).datepicker({
 			changeMonth: true,
 			numberOfMonths: 2,
@@ -40,24 +62,13 @@
 			}
 		});
 
-		$.ajax("<?= site_url('cursos/consulta_instructores')?>", {
-			dataType: 'json',
-			type: 'post',
-			success: function(resultado){
-				if (resultado != null)
-					$.each(resultado, function(index, value ){
-						$("#curso_instructor").append("<option value='"+value['id_contacto']+"'>"+value['contacto_nombre']+" "+value['contacto_ap_paterno']+" "+ value['contacto_ap_materno']+"</option>");
-					});
-			}
-		});
-
     });
 </script>
 <!-- inicia contenido -->
 <div class="contenido_dinamico">
 	<div id="migaDePan">
 		<a href="<?= base_url()?>">Inicio</a> > 
-		<a href="<?= site_url('cursos')?>">Administrar Cursos</a> > Nuevo curso
+		<a href="<?= site_url('cursos')?>">Administrar Cursos</a> > Editar curso
 	</div>
 
 	<div id="tabs">
@@ -67,7 +78,7 @@
 			<li><a href="#tabs-3">Configuración Registro en L&iacute;nea</a></li>
 		</ul>
 		<div id="tabs-1">
-			<form id="frm_nuevo_curso" action="<?= site_url('cursos/registrar_curso')?>" method="POST" enctype="multipart/form-data">
+			<form id="frm_editar_curso" action="<?= site_url('cursos/editar').'/'.$id_curso?>" method="POST" enctype="multipart/form-data">
 				<p class="encabezado_form_nuevo_curso">Datos Generales</p>
 				<label for="curso_titulo" class="label_nuevo_curso">* T&iacute;tulo del curso</label>
 				<input type="text" maxlength="255" id="curso_titulo" name="curso_titulo" class="validate[required]">
@@ -111,11 +122,7 @@
 				<label for="contacto_instancias" class="label_nuevo_curso">* Profesor
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Señala el o los instructores que estarán asignados para impartir dicho curso.">
 				</label>
-
-				<select name="curso_instructor" id="curso_instructor" class="validate[required]">
-					<option value="" disabled selected>- Seleccione una opción -</option>
-				</select>  
-				<!-- <input type="search" name="curso_instructor_nombre" id="curso_instructores" class="validate[required]"> -->
+				<input type="search" name="curso_instructor_nombre" id="curso_instructores" class="validate[required]">
 				<!-- <input type="hidden" name="curso_instructor" id="id_instructor" class="validate[required]"> -->
 				<br>
 				<label for="curso_ubicacion" class="label_nuevo_curso">Ubicaci&oacute;n
@@ -135,6 +142,9 @@
 					<input type="submit" id="btn_guardar" value="Guardar">
 				</div>
 			</form>
+			<a href="<?= site_url('cursos') ?>">
+				<button>Cancelar</button>
+			</a>
 		</div>
 		<div id="tabs-2">
 			<p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>

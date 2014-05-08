@@ -223,9 +223,8 @@ class contactos extends CI_Controller {
     function buscar()
     {
         if (!empty($_POST)) {
-            $data_buscar = $_POST;
 
-            $resultado_busqueda['resultado'] = $this->contacto_model->buscar($data_buscar);
+            $resultado_busqueda['resultado'] = $this->contacto_model->buscar($_POST);
 
             if (!is_null($resultado_busqueda['resultado'])) {
                 foreach($resultado_busqueda['resultado'] as $llave => &$contacto)

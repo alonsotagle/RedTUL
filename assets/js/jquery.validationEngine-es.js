@@ -130,6 +130,14 @@
                 "numero": {
                     "regex": /^[0-9]+$/,
                     "alertText": "* Este campo únicamente admite valores numéricos"
+                },
+                "checkFileType": {
+                    "regex": "none",
+                    "alertText": "* Tipo de archivo inválido"                    
+                },
+                "hora": {
+                    "regex": /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/,
+                    "alertText": "* Hora inválida, por favor utilize el formato HH:MM"                    
                 }
             };
             

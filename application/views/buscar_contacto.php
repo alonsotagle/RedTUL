@@ -51,7 +51,5 @@
 		?>
 	</table>
 
-	<div id="despliega_contactos"></div>
-
 </div>
 <!-- termina contenido -->

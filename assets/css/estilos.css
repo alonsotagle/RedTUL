@@ -290,7 +290,6 @@ body {
 
 /* Vista nuevo_contacto.php */
 #frm_nuevo_contacto{
-	border: 1px solid black;
 	overflow: auto;
 	padding: 20px;
 }
@@ -438,6 +437,20 @@ body {
 
 .label_nuevo_curso_textarea{
 	vertical-align: top;
+}
+
+.input_nuevo_curso_centrado{
+	text-align: center;
+}
+
+.input_nuevo_curso_cupo{
+	max-width: 30px;
+	text-align: center;
+}
+
+.label_nuevo_curso_hora{
+	text-align: center;
+	max-width: 66px;
 }
 
 #curso_instructores{

@@ -8,7 +8,7 @@
         $(document).tooltip();
 
 		$(function() {
-		    $( "#tabs" ).tabs();
+		    $( "#tabs" ).tabs({ disabled: [ 1, 2 ] });
 		});
 
 		$( "#curso_fecha_inicio" ).datepicker({
@@ -68,6 +68,8 @@
 		</ul>
 		<div id="tabs-1">
 			<form id="frm_nuevo_curso" action="<?= site_url('cursos/registrar_curso')?>" method="POST" enctype="multipart/form-data">
+				<fieldset>
+				<legend>Nuevo curso</legend>
 				<p class="encabezado_form_nuevo_curso">Datos Generales</p>
 				<label for="curso_titulo" class="label_nuevo_curso">* T&iacute;tulo del curso</label>
 				<input type="text" maxlength="255" id="curso_titulo" name="curso_titulo" class="validate[required]">
@@ -94,19 +96,19 @@
 				<p class="encabezado_form_nuevo_curso">Datos del evento</p>
 
 				<label for="curso_fecha_inicio" class="label_nuevo_curso">* Inicio de curso</label>
-				<input type="text" id="curso_fecha_inicio" name="curso_fecha_inicio" class="validate[required]"/>
+				<input type="text" id="curso_fecha_inicio" name="curso_fecha_inicio" class="input_nuevo_curso_centrado validate[required]"/>
 				<br>
 				<label for="curso_fecha_fin" class="label_nuevo_curso">* Fin de curso</label>
-				<input type="text" id="curso_fecha_fin" name="curso_fecha_fin" class="validate[required]"/>
+				<input type="text" id="curso_fecha_fin" name="curso_fecha_fin" class="input_nuevo_curso_centrado validate[required]"/>
 				<br>
 				<label for="curso_hora_inicio" class="label_nuevo_curso">* Horario</label>
-				<input type="text" id="curso_hora_inicio" name="curso_hora_inicio" class="validate[required,custom[hora]]"> a
-				<input type="text" id="curso_hora_fin" name="curso_hora_fin" class="validate[required,custom[hora]]">
+				<input type="text" id="curso_hora_inicio" name="curso_hora_inicio" class="label_nuevo_curso_hora validate[required,custom[hora]]"> a
+				<input type="text" id="curso_hora_fin" name="curso_hora_fin" class="label_nuevo_curso_hora validate[required,custom[hora]]">
 				<br>
 				<label for="curso_cupo" class="label_nuevo_curso">Cupo total
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Se determina el número máximo de participantes en un curso, sólo permite valores numéricos.">
 				</label>
-				<input type="text" id="curso_cupo" name="curso_cupo" class="validate[custom[numero]]">
+				<input type="text" id="curso_cupo" name="curso_cupo" class="input_nuevo_curso_cupo validate[custom[numero]]">
 				<br>
 				<label for="contacto_instancias" class="label_nuevo_curso">* Profesor
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Señala el o los instructores que estarán asignados para impartir dicho curso.">
@@ -130,18 +132,17 @@
 				<input type="text" id="curso_telefono" name="curso_telefono" size="10" maxlength="10" class="input_frm_nuevo validate[custom[numero]]">
 				<label for="curso_telefono_extension">ext.</label>
 				<input type="text" id="curso_telefono_extension" name="curso_telefono_extension" size="5" maxlength="5" class="validate[custom[numero]]">
-
 				<div id="botones_envio">
 					<input type="submit" id="btn_guardar" value="Guardar">
 				</div>
+				</fieldset>
 			</form>
 		</div>
 		<div id="tabs-2">
-			<p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
+
 		</div>
 		<div id="tabs-3">
-			<p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
-			<p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
+		
 		</div>
 	</div>
 

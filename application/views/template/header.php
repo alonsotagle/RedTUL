@@ -18,6 +18,7 @@
 <script type="text/javascript" src="<?= base_url('assets/js/jquery-ui-1.10.3.custom.js')?>" ></script>
 <script type="text/javascript" src="<?= base_url('assets/js/jquery.validationEngine.js') ?>"></script>
 <script type="text/javascript" src="<?= base_url('assets/js/jquery.validationEngine-es.js') ?>" charset="utf-8"> </script>
+<script type="text/javascript" src="<?= base_url('assets/js/jquery.blockUI.js') ?>"></script>
 </head>
 <body>
 

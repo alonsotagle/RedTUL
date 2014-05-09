@@ -94,9 +94,9 @@
 				<option value="3">Finalizado</option>
 			</select>
 			<label for="inicio_curso">Inicio de curso</label>
-			<input type="text" id="inicio_curso" name="inicio_curso" class="buscar_curso_fechas validate[groupRequired[buscar_curso]]"/>
+			<input type="text" id="inicio_curso" name="inicio_curso" class="buscar_curso_fechas validate[groupRequired[buscar_curso]] datepicker"/>
 			<label for="fin_curso">Fin de curso</label>
-			<input type="text" id="fin_curso" name="fin_curso" class="buscar_curso_fechas validate[groupRequired[buscar_curso]]"/>
+			<input type="text" id="fin_curso" name="fin_curso" class="buscar_curso_fechas validate[groupRequired[buscar_curso]] datepicker"/>
 
 			<input type="submit" id="btn_buscar_contacto" value="Buscar"/>
 	</form>

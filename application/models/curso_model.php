@@ -138,4 +138,12 @@ class curso_model extends CI_Model{
         }
     }
 
+    public function recuperar_id()
+    {
+        $this->db->select_max("id_curso");
+        $query=$this->db->get("curso");
+        return $query->row_array();
+    }
+
+
 }

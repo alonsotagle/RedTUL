@@ -12,8 +12,7 @@
 		$.ajax("<?= site_url('cursos/consulta_curso').'/'.$id_curso?>", {
 			dataType: 'json',
 			type: 'post',
-			success: function(resultado)
-			{
+			success: function(resultado) {
 				if (resultado != null) {
 					$('#curso_titulo').val(resultado[0]['curso_titulo']);
 					$("#curso_tipo option[value="+resultado[0]['curso_tipo']+"]").prop('selected', true);
@@ -28,7 +27,7 @@
 					$('#curso_url_ubicacion').val(resultado[0]['curso_mapa_url']);
 					$('#curso_telefono').val(resultado[0]['curso_telefono']);
 					$('#curso_telefono_extension').val(resultado[0]['curso_telefono_extension']);
-		}
+				}
 			}
 		});
 
@@ -61,6 +60,20 @@
 			$( "#curso_fecha_inicio" ).datepicker( "option", "maxDate", selectedDate );
 			}
 		});
+
+		if (<?= $nuevo ?>) {
+			$.blockUI({ 
+				message: "<h3>Guardado correctamente</h3>",
+				css: { 
+					backgroundColor: '#54DF0E',
+					color: '#fff',
+					padding: 3,
+					border: 'none'
+				} 
+			}); 
+ 
+        	setTimeout($.unblockUI, 2000);
+		}
 
     });
 </script>
@@ -95,10 +108,10 @@
 				</select>
 				<br>
 				<label for="curso_descripcion" class="label_nuevo_curso label_nuevo_curso_textarea">* Descripci&oacute;n del curso</label>
-				<textarea id="curso_descripcion" name="curso_descripcion" cols="40" rows="4" maxlength="255" placeholder="Ingrese una breve descripción de dicho curso." class="validate[required]"></textarea>
+				<textarea id="curso_descripcion" name="curso_descripcion" cols="40" rows="4" maxlength="500" placeholder="Ingrese una breve descripción de dicho curso." class="validate[required]"></textarea>
 				<br>
 				<label for="curso_objetivos" class="label_nuevo_curso label_nuevo_curso_textarea">* Objetivos</label>
-				<textarea id="curso_objetivos" name="curso_objetivos" cols="40" rows="4" maxlength="255" placeholder="Ingrese el fin al que se desea llegar, la meta que se pretende lograr con la impartición de dicho curso." class="validate[required]"></textarea>
+				<textarea id="curso_objetivos" name="curso_objetivos" cols="40" rows="4" maxlength="250" placeholder="Ingrese el fin al que se desea llegar, la meta que se pretende lograr con la impartición de dicho curso." class="validate[required]"></textarea>
 				<br>
 				<label for="curso_temario" class="label_nuevo_curso">* Temario</label>
 				<input type="file" id="curso_temario" name="curso_temario" /> <!-- class="validate[required, checkFileType[pdf]]" -->
@@ -107,19 +120,19 @@
 				<p class="encabezado_form_nuevo_curso">Datos del evento</p>
 
 				<label for="curso_fecha_inicio" class="label_nuevo_curso">* Inicio de curso</label>
-				<input type="text" id="curso_fecha_inicio" name="curso_fecha_inicio" class="validate[required]"/>
+				<input type="text" id="curso_fecha_inicio" name="curso_fecha_inicio" class="validate[required] datepicker"/>
 				<br>
 				<label for="curso_fecha_fin" class="label_nuevo_curso">* Fin de curso</label>
-				<input type="text" id="curso_fecha_fin" name="curso_fecha_fin" class="validate[required]"/>
+				<input type="text" id="curso_fecha_fin" name="curso_fecha_fin" class="validate[required] datepicker"/>
 				<br>
 				<label for="curso_hora_inicio" class="label_nuevo_curso">* Horario</label>
-				<input type="text" id="curso_hora_inicio" name="curso_hora_inicio" class="validate[required,custom[hora]]"> a
-				<input type="text" id="curso_hora_fin" name="curso_hora_fin" class="validate[required,custom[hora]]">
+				<input type="text" id="curso_hora_inicio" name="curso_hora_inicio" maxlength="5" class="label_nuevo_curso_hora validate[required,custom[hora]]"> a
+				<input type="text" id="curso_hora_fin" name="curso_hora_fin" maxlength="5" class="label_nuevo_curso_hora validate[required,custom[hora]]">
 				<br>
 				<label for="curso_cupo" class="label_nuevo_curso">Cupo total
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Se determina el número máximo de participantes en un curso, sólo permite valores numéricos.">
 				</label>
-				<input type="text" id="curso_cupo" name="curso_cupo" class="validate[custom[numero]]">
+				<input type="text" id="curso_cupo" name="curso_cupo" maxlength="3" class="input_nuevo_curso_cupo validate[custom[numero]]">
 				<br>
 				<label for="contacto_instancias" class="label_nuevo_curso">* Profesor
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Señala el o los instructores que estarán asignados para impartir dicho curso.">
@@ -133,7 +146,7 @@
 				<input type="text" maxlength="250" id="curso_ubicacion" name="curso_ubicacion">
 				<br>
 				<label for="curso_url_ubicacion" class="label_nuevo_curso">URL de mapa de localizaci&oacute;n</label>
-				<input type="text" maxlength="250" id="curso_url_ubicacion" name="curso_url_ubicacion">
+				<input type="text" id="curso_url_ubicacion" name="curso_url_ubicacion">
 				<br>
 				<label for="curso_telefono" class="label_nuevo_curso">T&eacute;lefono</label>
 				<input type="text" id="curso_telefono" name="curso_telefono" size="10" maxlength="10" class="input_frm_nuevo validate[custom[numero]]">

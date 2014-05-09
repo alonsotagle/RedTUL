@@ -46,7 +46,7 @@ class cursos extends CI_Controller {
                 'curso_mapa_url' => $this->input->post('curso_url_ubicacion'),
                 'curso_telefono' => $this->input->post('curso_telefono'),
                 'curso_telefono_extension' => $this->input->post('curso_telefono_extension'),
-                'curso_estatus' => 2,
+                'curso_estatus' => 2
             );
 
             if ($nuevo_curso['curso_cupo'] == "") {
@@ -55,26 +55,12 @@ class cursos extends CI_Controller {
 
             $this->curso_model->registrar_curso($nuevo_curso);
 
-            $this->confirmacion_curso($nuevo_curso);
+            $_POST = array();
+
+            $resultado = $this->curso_model->recuperar_id();
+
+            $this->editar($resultado);
         }
-    }
-
-    function confirmacion_curso($curso){
-
-        if ($curso['curso_tipo'] == 0) {
-            $curso['curso_tipo'] = "Presencial";
-        }else{
-            $curso['curso_tipo'] = "En línea";
-        }
-
-        if ($curso['curso_cupo'] == 0) {
-            $curso['curso_cupo'] = "";
-        }
-
-        $this->load->view('template/header');
-        $this->load->view('template/menu');
-        $this->load->view('confirmacion_curso', $curso);
-        $this->load->view('template/footer');
     }
 
     function consulta_cursos()
@@ -135,7 +121,13 @@ class cursos extends CI_Controller {
     {
         if (empty($_POST)) {
 
-            $var_id = array('id_curso' => $id_curso);
+            if (is_array($id_curso)) {
+                $var_id = $id_curso;
+                $var_id["nuevo"] = 1;
+            }else{
+                $var_id = array('id_curso' => $id_curso,
+                                'nuevo' => 0);
+            }
 
             $this->load->view('template/header');
             $this->load->view('template/menu');
@@ -159,7 +151,7 @@ class cursos extends CI_Controller {
                 'curso_mapa_url' => $this->input->post('curso_url_ubicacion'),
                 'curso_telefono' => $this->input->post('curso_telefono'),
                 'curso_telefono_extension' => $this->input->post('curso_telefono_extension'),
-                'curso_estatus' => 2,
+                'curso_estatus' => 2
             );
 
             $editar_curso['id_curso'] = $id_curso;

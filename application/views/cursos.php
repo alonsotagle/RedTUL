@@ -58,13 +58,23 @@
 			showOn: "both",
 			buttonImage: "<?= base_url('assets/img/calendar.gif')?>",
 			buttonImageOnly: true,
+			onClose: function( selectedDate ) {
+			if (selectedDate != ""){
+				$( "#fin_curso" ).datepicker( "option", "minDate", selectedDate );
+			}
+				$( "#fin_curso" ).datepicker( "option", "defaultDate", selectedDate );
+			}
 		});
+
 		$( "#fin_curso" ).datepicker({
 			changeMonth: true,
 			numberOfMonths: 2,
 			showOn: "both",
 			buttonImage: "<?= base_url('assets/img/calendar.gif')?>",
-			buttonImageOnly: true
+			buttonImageOnly: true,
+			onClose: function( selectedDate ) {
+			$( "#inicio_curso" ).datepicker( "option", "maxDate", selectedDate );
+			}
 		});
 
     }); 
@@ -93,10 +103,10 @@
 				<option value="2">Pr&oacute;ximo</option>
 				<option value="3">Finalizado</option>
 			</select>
-			<label for="inicio_curso">Inicio de curso</label>
-			<input type="text" id="inicio_curso" name="inicio_curso" class="buscar_curso_fechas validate[groupRequired[buscar_curso]] datepicker"/>
-			<label for="fin_curso">Fin de curso</label>
-			<input type="text" id="fin_curso" name="fin_curso" class="buscar_curso_fechas validate[groupRequired[buscar_curso]] datepicker"/>
+			<label for="inicio_curso">Cursos impartidos entre</label>
+			<input type="text" id="inicio_curso" name="inicio_curso" size="11" class="buscar_curso_fechas validate[condRequired[fin_curso], groupRequired[buscar_curso]] datepicker"/>
+			y
+			<input type="text" id="fin_curso" name="fin_curso" size="11" class="buscar_curso_fechas validate[condRequired[inicio_curso], groupRequired[buscar_curso]] datepicker"/>
 
 			<input type="submit" id="btn_buscar_contacto" value="Buscar"/>
 	</form>

@@ -366,7 +366,7 @@ body {
 	height: 205px;
 	margin-bottom: 30px;
 	padding: 15px;
-	width: 330px;
+	width: 345px;
 }
 
 #frm_buscar_curso label{
@@ -389,7 +389,6 @@ body {
 .buscar_curso_fechas{
 	margin-bottom: 7px;
 	text-align: center;
-	width: 55%;
 }
 
 .ui-datepicker{
@@ -448,15 +447,16 @@ body {
 	text-align: center;
 }
 
-.label_nuevo_curso_hora{
-	text-align: center;
-	max-width: 66px;
-}
-
 #curso_instructores{
 	background: url('../img/icono_buscar.png') no-repeat;
 	background-color: white;
 	background-position: left center;
 	background-size: 20px;
 	padding-left: 15px;
+}
+
+/* Vista editar_curso.php */
+
+.checkbox_tipo_invitado{
+	margin: 20px 0px 20px 40px;
 }

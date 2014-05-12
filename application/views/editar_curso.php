@@ -126,8 +126,8 @@
 				<input type="text" id="curso_fecha_fin" name="curso_fecha_fin" class="validate[required] datepicker"/>
 				<br>
 				<label for="curso_hora_inicio" class="label_nuevo_curso">* Horario</label>
-				<input type="text" id="curso_hora_inicio" name="curso_hora_inicio" maxlength="5" class="label_nuevo_curso_hora validate[required,custom[hora]]"> a
-				<input type="text" id="curso_hora_fin" name="curso_hora_fin" maxlength="5" class="label_nuevo_curso_hora validate[required,custom[hora]]">
+				<input type="time" id="curso_hora_inicio" name="curso_hora_inicio" maxlength="5" class="validate[required,custom[hora]]"> a
+				<input type="time" id="curso_hora_fin" name="curso_hora_fin" maxlength="5" class="validate[required,custom[hora]]">
 				<br>
 				<label for="curso_cupo" class="label_nuevo_curso">Cupo total
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Se determina el número máximo de participantes en un curso, sólo permite valores numéricos.">
@@ -165,17 +165,30 @@
 		<div id="tabs-2">
 		<form>
 			<fieldset>
-				<legend>Añadir participantes por tipo de contacto</legend>
-				<input type="checkbox" name="anadir_tipo" value="1">Webmaster
-				<input type="checkbox" name="anadir_tipo" value="2">R. de comunicación
-				<input type="checkbox" name="anadir_tipo" value="3">R. Técnico
-				<input type="checkbox" name="anadir_tipo" value="4">Otros
+				<legend>Añadir participantes por tipo de contacto
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="?">
+				</legend>
+				<input type="checkbox" name="anadir_tipo" id="tipo_invitado_webmaster" class="checkbox_tipo_invitado" value="1">
+				<label for="tipo_invitado_webmaster">Webmaster</label>
+				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="?">
+				<input type="checkbox" name="anadir_tipo" id="tipo_invitado_comunicacion" class="checkbox_tipo_invitado" value="2">
+				<label for="tipo_invitado_comunicacion">R. de comunicación</label>
+				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="?">
+				<input type="checkbox" name="anadir_tipo" id="tipo_invitado_tecnico" class="checkbox_tipo_invitado" value="3">
+				<label for="tipo_invitado_tecnico">R. Técnico</label>
+				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="?">
+				<input type="checkbox" name="anadir_tipo" id="tipo_invitado_otros" class="checkbox_tipo_invitado" value="4">
+				<label for="tipo_invitado_otros">Otros</label>
+				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="?">
 			</fieldset>
-		</form>
 
-		<form>
 			<fieldset>
-				<legend>Añadir participantes por contacto</legend>
+				<legend>Añadir participantes por contacto
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="?">
+				</legend>
+
+				
+
 			</fieldset>
 		</form>
 		</div>

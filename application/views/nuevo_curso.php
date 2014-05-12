@@ -104,8 +104,8 @@
 				<input type="text" id="curso_fecha_fin" name="curso_fecha_fin" class="input_nuevo_curso_centrado validate[required] datepicker"/>
 				<br>
 				<label for="curso_hora_inicio" class="label_nuevo_curso">* Horario</label>
-				<input type="text" id="curso_hora_inicio" name="curso_hora_inicio" maxlength="5" class="label_nuevo_curso_hora validate[required,custom[hora]]"> a
-				<input type="text" id="curso_hora_fin" name="curso_hora_fin" maxlength="5" class="label_nuevo_curso_hora validate[required,custom[hora]]">
+				<input type="time" id="curso_hora_inicio" name="curso_hora_inicio" maxlength="5" class="validate[required,custom[hora]]"> a
+				<input type="time" id="curso_hora_fin" name="curso_hora_fin" maxlength="5" class="validate[required,custom[hora]]">
 				<br>
 				<label for="curso_cupo" class="label_nuevo_curso">Cupo total
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Se determina el número máximo de participantes en un curso, sólo permite valores numéricos.">
@@ -116,7 +116,7 @@
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Señala el o los instructores que estarán asignados para impartir dicho curso.">
 				</label>
 
-				<select name="curso_instructor" id="curso_instructor" class="validate[required]">
+				<select name="curso_instructor" id="curso_instructor" class="validate[required]" multiple>
 					<option value="" disabled selected>- Seleccione una opción -</option>
 				</select>  
 				<!-- <input type="search" name="curso_instructor_nombre" id="curso_instructores" class="validate[required]"> -->

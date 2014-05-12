@@ -27,7 +27,7 @@ class cursos extends CI_Controller {
         $this->load->view('template/footer');
     }
 
-    function registrar_curso(){
+    function registrar_curso() {
         if (!empty($_POST)) {
 
             $nuevo_curso = array(
@@ -158,7 +158,11 @@ class cursos extends CI_Controller {
 
             $this->curso_model->editar_curso($editar_curso);
 
-            $this->confirmacion_curso($editar_curso);
+            $_POST = array();
+
+            $enviar = array('id_curso' => $id_curso);
+            
+            $this->editar($enviar);
         }
     }
 

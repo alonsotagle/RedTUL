@@ -66,7 +66,7 @@ class curso_model extends CI_Model{
         $parametros = array();
 
         if ($parametros_busqueda['nombre_curso'] != "") {
-            $parametros['curso.curso_titulo'] = $parametros_busqueda['nombre_curso'];
+            $this->db->like('curso.curso_titulo', $parametros_busqueda['nombre_curso']);
         }
 
         if (isset($parametros_busqueda['tipo_curso'])) {
@@ -78,11 +78,8 @@ class curso_model extends CI_Model{
         }
 
         if ($parametros_busqueda['inicio_curso'] != "") {
-            $parametros['curso.curso_fecha_inicio'] = $parametros_busqueda['inicio_curso'];
-        }
-
-        if ($parametros_busqueda['fin_curso'] != "") {
-            $parametros['curso.curso_fecha_fin'] = $parametros_busqueda['fin_curso'];
+            $this->db->where('curso.curso_fecha_inicio >=', $parametros_busqueda['inicio_curso']);
+            $this->db->where('curso.curso_fecha_fin <=', $parametros_busqueda['fin_curso']);
         }
 
         $this->db->like($parametros);

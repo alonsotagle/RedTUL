@@ -44,6 +44,18 @@
 
 		$(document).tooltip();
 
+	    $("#contacto_avatar").change(function(){
+	        if (this.files && this.files[0]) {
+	            var reader = new FileReader();
+	            
+	            reader.onload = function (e) {
+	                $('#contacto_imagen').attr('src', e.target.result);
+	            }
+	            
+	            reader.readAsDataURL(this.files[0]);
+	        }
+	    });
+
     });
 </script>
 <!-- inicia contenido -->
@@ -131,7 +143,7 @@
 			<label for="comunicacion_tel">V&iacute;a telef&oacute;nica</label>
 			<br>
 			<input type="radio" name="comunicacion_contacto" value="1" id="comunicacion_email" class="validate[required]">
-			<label for="comunicacion_email">V&iacute;a e-mail</label>
+			<label for="comunicacion_email">V&iacute;a correo electr&oacute;nico</label>
 		</div>
 		<br>
 		<label for="contacto_correoinst">Correo institucional</label>

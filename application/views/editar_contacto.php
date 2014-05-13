@@ -53,19 +53,19 @@
 						});
 					});
 
-					$('#instancias').autocomplete({
+					$('#contacto_instancias').autocomplete({
 						source: instancias,
 						autoFocus: false,
 						change: function(event, ui) {
 							if(!ui.item){
-								$("#instancias").val("");
+								$("#contacto_instancias").val("");
 							}
 						},
 						focus: function(event, ui) {
 							return false;
 						},
 						select: function(event, ui) {
-							$("#instancias").val( ui.item.label );
+							$("#contacto_instancias").val( ui.item.label );
 							$("#id_instancia").val( ui.item.value );
 
 							return false;
@@ -76,6 +76,18 @@
 		});
 
 		$(document).tooltip();
+
+		$("#contacto_avatar").change(function(){
+	        if (this.files && this.files[0]) {
+	            var reader = new FileReader();
+	            
+	            reader.onload = function (e) {
+	                $('#contacto_imagen').attr('src', e.target.result);
+	            }
+	            
+	            reader.readAsDataURL(this.files[0]);
+	        }
+	    });
 
     });
 </script>
@@ -152,9 +164,9 @@
 
 		<div class="contenedor_seccion_formulario">
 			<label for="contacto_telefono">* T&eacute;lefono</label>
-			<input type="text" id="contacto_telefono" name="contacto_telefono" size="10" maxlength="10" class="input_frm_nuevo validate[required,custom[telefono]]">
+			<input type="text" id="contacto_telefono" name="contacto_telefono" size="10" maxlength="10" class="input_frm_nuevo validate[required,custom[numero]]">
 			<label for="contacto_ext" id="etiqueta_ext">ext.</label>
-			<input type="text" id="contacto_ext" name="contacto_extension" size="5" maxlength="5" class="validate[custom[telefono]]">
+			<input type="text" id="contacto_ext" name="contacto_extension" size="5" maxlength="5" class="validate[custom[numero]]">
 		</div>
 
 		<div id="contenedor_comunicacion">
@@ -165,7 +177,7 @@
 			<label for="comunicacion_tel">V&iacute;a telef&oacute;nica</label>
 			<br>
 			<input type="radio" name="comunicacion_contacto" value="1" id="comunicacion_email" class="validate[required]">
-			<label for="comunicacion_email">V&iacute;a e-mail</label>
+			<label for="comunicacion_email">V&iacute;a correo electr&oacute;nico</label>
 		</div>
 		<br>
 		<label for="contacto_correoinst">Correo institucional</label>

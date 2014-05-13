@@ -112,15 +112,13 @@
 				</label>
 				<input type="text" id="curso_cupo" name="curso_cupo" maxlength="3" class="input_nuevo_curso_cupo validate[custom[numero]]">
 				<br>
-				<label for="contacto_instancias" class="label_nuevo_curso">* Profesor
+				<label for="contacto_instancias" class="label_nuevo_curso_textarea label_nuevo_curso">* Profesor
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Señala el o los instructores que estarán asignados para impartir dicho curso.">
 				</label>
 
-				<select name="curso_instructor" id="curso_instructor" class="validate[required]" multiple>
-					<option value="" disabled selected>- Seleccione una opción -</option>
-				</select>  
-				<!-- <input type="search" name="curso_instructor_nombre" id="curso_instructores" class="validate[required]"> -->
-				<!-- <input type="hidden" name="curso_instructor" id="id_instructor" class="validate[required]"> -->
+				<select name="curso_instructor[]" id="curso_instructor" class="validate[required]" size=10 multiple>
+					<option value="" disabled>- Seleccione una opción -</option>
+				</select>
 				<br>
 				<label for="curso_ubicacion" class="label_nuevo_curso">Ubicaci&oacute;n
 				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica el lugar exacto en el que se llevará a cabo el curso, por ejemplo entidad, edificio, salón, etc.">

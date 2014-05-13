@@ -389,6 +389,7 @@ body {
 .buscar_curso_fechas{
 	margin-bottom: 7px;
 	text-align: center;
+	width: 78px;
 }
 
 .ui-datepicker{
@@ -412,14 +413,14 @@ body {
 }
 
 .conf_contacto_campos{
-	margin: 0px 0px -10px 20px;
 	font-size: medium;
 	font-weight: bold;
+	margin: 0px 0px -10px 20px;
 }
 
 .conf_contacto_valores{
-	margin-left: 100px;
 	margin-bottom: 25px;
+	margin-left: 100px;
 }
 
 /* Vista nuevo_curso.php */
@@ -459,4 +460,29 @@ body {
 
 .checkbox_tipo_invitado{
 	margin: 20px 0px 20px 40px;
+}
+
+.lbl_invitados_curso{
+	display: inline-block;
+	width: 135px;
+}
+
+.input_invitados_cuso{
+	text-align: center;
+}
+
+#btn_buscar_invitados{
+	float: right;
+}
+
+#btn_invitados_curso{
+	float: right;
+}
+
+#frm_buscar_invitados{
+	border: 1px solid #000;
+	height: 100px;
+	margin: 20px 0 10px 30px;
+	padding: 15px;
+	width: 295px;
 }

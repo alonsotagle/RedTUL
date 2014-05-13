@@ -55,11 +55,15 @@ class cursos extends CI_Controller {
 
             $this->curso_model->registrar_curso($nuevo_curso);
 
+            $id_curso_creado = $this->curso_model->recuperar_id();
+
+            foreach ($this->input->post('curso_instructor') as $key => $value) {
+                $this->curso_model->registrar_instructor_curso($id_curso_creado['id_curso'], $value);
+            }
+
             $_POST = array();
 
-            $resultado = $this->curso_model->recuperar_id();
-
-            $this->editar($resultado);
+            $this->editar($id_curso_creado);
         }
     }
 
@@ -126,7 +130,8 @@ class cursos extends CI_Controller {
                 $var_id["nuevo"] = 1;
             }else{
                 $var_id = array('id_curso' => $id_curso,
-                                'nuevo' => 0);
+                                'nuevo' => 0
+                );
             }
 
             $this->load->view('template/header');
@@ -158,10 +163,15 @@ class cursos extends CI_Controller {
 
             $this->curso_model->editar_curso($editar_curso);
 
+            $this->curso_model->borrar_instructor_curso($id_curso);
+            foreach ($this->input->post('curso_instructor') as $key => $value) {
+                $this->curso_model->registrar_instructor_curso($id_curso, $value);
+            }
+
             $_POST = array();
 
             $enviar = array('id_curso' => $id_curso);
-            
+
             $this->editar($enviar);
         }
     }
@@ -176,6 +186,60 @@ class cursos extends CI_Controller {
     function consulta_instructores()
     {
         $instructores = $this->curso_model->consulta_instructores();
+
+        print_r(json_encode($instructores));
+    }
+
+    function consulta_contactos()
+    {
+        $parametros = array(
+            'nombre' => $this->input->post('nombre'),
+            'correo' => $this->input->post('correo'),
+            'instancia' => $this->input->post('instancia')
+        );
+
+        $resultado = $this->curso_model->consulta_contactos($parametros);
+
+        print_r(json_encode($resultado));
+    }
+
+    function agrega_invitados()
+    {
+        $this->curso_model->borrar_invitado_tipo($this->input->post('id_curso'));
+
+        if ($this->input->post('webmaster')) {
+            $this->curso_model->registrar_invitado_tipo($this->input->post('id_curso'), 1);
+        }
+
+        if ($this->input->post('comunicacion')) {
+            $this->curso_model->registrar_invitado_tipo($this->input->post('id_curso'), 2);
+        }
+
+        if ($this->input->post('tecnico')) {
+            $this->curso_model->registrar_invitado_tipo($this->input->post('id_curso'), 3);
+        }
+
+        if ($this->input->post('otros')) {
+            $this->curso_model->registrar_invitado_tipo($this->input->post('id_curso'), 4);
+        }
+
+        if ($this->input->post('invitados')) {
+            foreach ($this->input->post('invitados') as $key => $value) {
+                $this->curso_model->registrar_invitado_contacto($this->input->post('id_curso'), $value);
+            }
+        }
+    }
+
+    function consulta_invitado_tipo($id_curso)
+    {
+        $resultado = $this->curso_model->consulta_invitado_tipo($id_curso);
+
+        print_r(json_encode($resultado));
+    }
+
+    function consulta_instructores_curso($id_curso)
+    {
+        $instructores = $this->curso_model->consulta_instructores_curso($id_curso);
 
         print_r(json_encode($instructores));
     }

@@ -63,8 +63,6 @@ class curso_model extends CI_Model{
 		$this->db->from('curso');
 		$this->db->join('estatus_curso', 'curso.curso_estatus = estatus_curso.id_estatus_curso');
 
-        $parametros = array();
-
         if ($parametros_busqueda['nombre_curso'] != "") {
             $this->db->like('curso.curso_titulo', $parametros_busqueda['nombre_curso']);
         }
@@ -82,7 +80,6 @@ class curso_model extends CI_Model{
             $this->db->where('curso.curso_fecha_fin <=', $parametros_busqueda['fin_curso']);
         }
 
-        $this->db->like($parametros);
         $query = $this->db->get();
 
         if ($query -> num_rows() > 0)
@@ -97,7 +94,6 @@ class curso_model extends CI_Model{
     {
         $this->db->where('curso.id_curso', $id_curso);
         $this->db->from('curso');
-		$this->db->join('estatus_curso', 'curso.curso_estatus = estatus_curso.id_estatus_curso');
 
         $query = $this->db->get();
 
@@ -142,5 +138,122 @@ class curso_model extends CI_Model{
         return $query->row_array();
     }
 
+    public function consulta_contactos($parametros)
+    {
+        $this->db->select('contacto.id_contacto,
+                            contacto.contacto_nombre,
+                            contacto.contacto_ap_paterno,
+                            contacto.contacto_ap_materno,
+                            contacto.contacto_correo_inst,
+                            contacto.contacto_correo_per,
+                            contacto.contacto_telefono,
+                            tipo_contacto.tipo_contacto_descripcion,
+                            instancia.instancia_nombre');
+        $this->db->from('contacto');
+        $this->db->join('tipo_contacto', 'contacto.contacto_tipo = tipo_contacto.id_tipo_contacto');
+        $this->db->join('instancia', 'contacto.contacto_instancia = instancia.id_instancia');
 
+        $parametros_busqueda = array();
+
+        if ($parametros['nombre'] != "") {
+            $this->db->like('contacto.contacto_nombre', $parametros['nombre']);
+            $this->db->or_like('contacto.contacto_ap_paterno', $parametros['nombre']);
+            $this->db->or_like('contacto.contacto_ap_materno', $parametros['nombre']);
+        }
+
+        if ($parametros['correo'] != "") {
+            $this->db->like('contacto.contacto_correo_inst', $parametros['correo']);
+            $this->db->or_like('contacto.contacto_correo_per', $parametros['correo']);
+        }
+
+        if ($parametros['instancia'] != "") {
+            $this->db->like('instacia.instancia_nombre', $parametros['instancia']);
+        }
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function registrar_invitado_tipo($curso_id, $tipo_invitado)
+    {
+        
+        $datos = array(
+            'curso_id'          => $curso_id,
+            'tipo_contacto_id'  => $tipo_invitado
+        );
+
+        $this->db->insert('curso_invitado_tipo', $datos);
+    }
+
+    public function registrar_invitado_contacto($curso_id, $invitado_id)
+    {
+        $datos = array(
+            'curso_id'      => $curso_id,
+            'invitado_id'   => $invitado_id
+        );
+
+        $this->db->delete('curso_invitado_contacto', $datos);
+        
+        $this->db->insert('curso_invitado_contacto', $datos);
+    }
+
+    public function consulta_invitado_tipo($id_curso)
+    {
+        $this->db->where('curso_invitado_tipo.curso_id', $id_curso);
+        $this->db->from('curso_invitado_tipo');
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function registrar_instructor_curso($id_curso, $id_instructor)
+    {
+        $datos = array(
+            'curso_id'      => $id_curso,
+            'instructor_id' => $id_instructor
+        );
+
+        $this->db->delete('curso_instructor', $datos);
+        
+        $this->db->insert('curso_instructor', $datos);
+    }
+
+    public function consulta_instructores_curso($id_curso)
+    {
+        $this->db->select('instructor_id');
+        $this->db->where('curso_id', $id_curso);
+
+        $query = $this->db->get('curso_instructor');
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function borrar_invitado_tipo($id_curso)
+    {
+        $datos = array('curso_id' => $id_curso);
+        $this->db->delete('curso_invitado_tipo', $datos);
+    }
+
+    public function borrar_instructor_curso($id_curso)
+    {
+        $datos = array('curso_id' => $id_curso);
+        $this->db->delete('curso_instructor', $datos);
+    }
 }

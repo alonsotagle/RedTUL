@@ -486,3 +486,41 @@ body {
 	padding: 15px;
 	width: 295px;
 }
+
+/* Inicia MENSAJERIA */
+
+/* Vista de mensajeria.php */
+#frm_buscar_correo{
+	border: 1px solid black;
+	height: 110px;
+	margin-bottom: 30px;
+	padding: 15px;
+	width: 320px;
+}
+
+#frm_buscar_correo label{
+	float: left;
+	width: 38%;
+}
+
+.input_buscar_correo{
+	float: left;
+	margin: 0px 0px 7px 0px;
+	text-align: center;
+	width: 60%;
+}
+
+#tabs_correo_cuerpo{
+
+}
+
+.textarea_cuerpo_correo{
+	height: 200px;
+	margin: -14px 0px -17px -19px;
+	width: 105%;
+}
+
+.label_nuevo_correo{
+	display: inline-block;
+	width: 120px;
+}

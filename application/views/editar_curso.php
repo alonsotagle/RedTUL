@@ -10,14 +10,16 @@ $(document).ready(function(){
 	});
 
 	$.ajax("<?= site_url('cursos/consulta_instructores')?>", {
-			dataType: 'json',
-			type: 'post',
-			success: function(resultado){
-				if (resultado != null)
-					$.each(resultado, function(index, value ){
-						$("#curso_instructor").append("<option value='"+value['id_contacto']+"'>"+value['contacto_nombre']+" "+value['contacto_ap_paterno']+" "+ value['contacto_ap_materno']+"</option>");
-					});
+		dataType: 'json',
+		type: 'post',
+		success: function(resultado){
+			if (resultado != null){
+				$.each(resultado, function(index, value ){
+					$("#curso_instructor").append("<option value='"+value['id_contacto']+"'>"+value['contacto_nombre']+" "+value['contacto_ap_paterno']+" "+ value['contacto_ap_materno']+"</option>");
+				});
+				seleccionar_invitados();
 			}
+		}
 	});
 
 	$.ajax("<?= site_url('cursos/consulta_curso').'/'.$id_curso?>", {
@@ -42,18 +44,20 @@ $(document).ready(function(){
 		}
 	});
 
-	$.ajax("<?= site_url('cursos/consulta_instructores_curso').'/'.$id_curso?>", {
-			dataType: 'json',
-			type: 'post',
-			success: function(resultado){
-				if (resultado != null){
-					$.each(resultado, function(index, value){
-						console.log(value['instructor_id']);
-						$('option[value='+value['instructor_id']+']').attr('selected', true);
-					});
+	function seleccionar_invitados(){
+		$.ajax("<?= site_url('cursos/consulta_instructores_curso').'/'.$id_curso?>", {
+				dataType: 'json',
+				type: 'post',
+				success: function(resultado){
+					if (resultado != null){
+						$.each(resultado, function(index, value){
+							$('option[value='+value['instructor_id']+']').attr('selected', true);
+						});
+					}
 				}
-			}
-	});
+		});
+	}
+
 
 	$.ajax("<?= site_url('cursos/consulta_invitado_tipo').'/'.$id_curso?>", {
 		dataType: 'json',
@@ -66,6 +70,7 @@ $(document).ready(function(){
 			}
 		}
 	});
+
 
 	$(document).tooltip();
 

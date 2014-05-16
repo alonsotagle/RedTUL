@@ -27,7 +27,7 @@
 			<li><a href="#tabs-3">Administrar plantillas</a></li>
 		</ul>
 		<div id="tabs-1">
-			<form id="frm_buscar_correo" action="<?= site_url('contactos/buscar')?>" method="POST">
+			<form id="frm_buscar_correo" action="<?= site_url('')?>" method="POST">
 				<label for="asunto_correo">Asunto</label>
 				<input type="text" id="asunto_correo" maxlength="255" name="asunto_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]"/>
 
@@ -72,17 +72,17 @@
 				</ul>
 				<div id="tab-contenido">
 					<label class="label_nuevo_correo">Usar plantilla</label>
-					<input type="text">
+					<input type="text" class="input_envia_correo">
 					<br>
 					<label class="label_nuevo_correo">Asunto</label>
-					<input type="text">
+					<input type="text" class="input_envia_correo">
 					<br>
 					<label class="label_nuevo_correo">Datos adjuntos</label>
 					<input type="file">
 					<br>
 					<div id="tabs_correo_cuerpo">
 						<ul>
-							<li><a href="#tab-textoplano">Texto plano</a></li>
+							<li><a href="#tab-textoplanoTexto plano</a></li>
 							<li><a href="#tab-html">HTML</a></li>
 						</ul>
 						<div id="tab-textoplano">
@@ -92,9 +92,28 @@
 							<textarea class="textarea_cuerpo_correo"></textarea>
 						</div>
 					</div>
+					<b id="titulo_programar_envio_correo">Env&iacute;o</b>
+					<div class="programar_envio_correo">
+						<input type="checkbox" id="programar_correo_inmed">
+						<label for="programar_correo_inmed">Enviar inmediatamente</label>
+					</div>
+					<div class="programar_envio_correo programar_envio_correo_posterior">
+						<input type="checkbox" id="programar_correo_posterior" class="input_envia_correo">
+						<label for="programar_correo_posterior" class="label_nuevo_correo">Programar env&iacute;o</label>
+						<br>
+						<label class="label_nuevo_correo">* Fecha termino</label>
+						<input class="input_envia_correo">
+						<br>
+						<label class="label_nuevo_correo">* Horario</label>
+						<input class="input_envia_correo" size=3> : 
+						<input class="input_envia_correo" size=3>
+						<br>
+						<input type="submit" id="btn_programar_correo">
+					</div>
+				</div>
+				<div id="tab-dest">
 
 				</div>
-				<div id="tab-dest"></div>
 			</div>
 		</div>
 		<div id="tabs-3"></div>

@@ -524,3 +524,31 @@ body {
 	display: inline-block;
 	width: 120px;
 }
+
+#titulo_programar_envio_correo{
+	width: 100%;
+	display: block;
+	text-align: center;
+	margin: 50px 0px 20px 0px;
+}
+
+.programar_envio_correo{
+	float: left;
+	width: 49%;
+	padding-top: 15px;
+}
+
+.programar_envio_correo_posterior{
+	height: 120px;
+	border-left: 1px solid black;
+	padding-left: 10px;
+}
+
+#btn_programar_correo{
+	float: right;
+}
+
+.input_envia_correo{
+	margin: 0px 0px 7px 0px;
+	text-align: center;
+}

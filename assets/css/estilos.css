@@ -510,18 +510,16 @@ body {
 	width: 60%;
 }
 
-#tabs_correo_cuerpo{
-
-}
-
 .textarea_cuerpo_correo{
 	height: 200px;
 	margin: -14px 0px -17px -19px;
+	resize: none;
 	width: 105%;
 }
 
 .label_nuevo_correo{
 	display: inline-block;
+	height: 40px;
 	width: 120px;
 }
 
@@ -529,7 +527,7 @@ body {
 	width: 100%;
 	display: block;
 	text-align: center;
-	margin: 50px 0px 20px 0px;
+	margin: 30px 0px 20px 0px;
 }
 
 .programar_envio_correo{
@@ -551,4 +549,67 @@ body {
 .input_envia_correo{
 	margin: 0px 0px 7px 0px;
 	text-align: center;
+}
+
+#tab-contenido{
+	height: 630px;
+}
+
+#fieldset_destinatarios_curso{
+	margin-top: 20px;
+}
+
+#fieldset_destinatarios_contacto{
+	margin-top: 35px;
+}
+
+#btn_correo_obtener_url{
+	float: right;
+	margin-top: 50px;
+}
+
+#search_correo_curso{
+	background: url('../img/icono_buscar.png') no-repeat;
+	background-color: white;
+	background-position: left center;
+	background-size: 20px;
+	margin-top: 20px;
+	padding-left: 18px;
+}
+
+#frm_correo_destinatarios{
+	border: 1px solid black;
+	height: 140px;
+	margin: 20px 0px 30px 15px;
+	padding: 15px;
+	width: 360px;
+}
+
+#frm_correo_destinatarios label{
+	float: left;
+	width: 35%;
+}
+
+.input_correo_buscar_destinatario{
+	margin-bottom: 7px;
+	text-align: center;
+	width: 63%;
+}
+
+#btn_correo_anadir_destinatarios{
+	float: right;
+	margin-top: 15px;
+}
+
+#tab-dest{
+	overflow: hidden;
+}
+
+#tabs-3{
+	overflow: hidden;
+}
+
+#btn_correo_plantilla{
+	float: right;
+	margin-top: 15px;
 }

@@ -118,7 +118,7 @@ class contacto_model extends CI_Model{
         }
 
         if ($data_buscar['instancia_contacto'] != "") {
-            $parametros['instancia.instancia_nombre'] = $data_buscar['nombre_contacto'];
+            $parametros['instancia.instancia_nombre'] = $data_buscar['instancia_contacto'];
         }
 
         $this->db->like($parametros);

@@ -29,9 +29,7 @@ class mensajeria_model extends CI_Model{
         $this->db->join('tipo_contacto', 'contacto.contacto_tipo = tipo_contacto.id_tipo_contacto');
         $this->db->join('instancia', 'contacto.contacto_instancia = instancia.id_instancia');
 
-        $parametros_busqueda = array();
-
-        if (isset($parametros['tipo'])) {
+        if ($parametros['tipo'] != "") {
             $this->db->where('contacto.contacto_tipo', $parametros['tipo']);
         }
 
@@ -47,7 +45,7 @@ class mensajeria_model extends CI_Model{
         }
 
         if ($parametros['instancia'] != "") {
-            $this->db->like('instacia.instancia_nombre', $parametros['instancia']);
+            $this->db->like('instancia.instancia_nombre', $parametros['instancia']);
         }
 
         $query = $this->db->get();
@@ -106,5 +104,21 @@ class mensajeria_model extends CI_Model{
         unset($plantilla['id_plantilla_correo']);
 
         $this->db->update('plantilla_correo', $plantilla);
+    }
+
+    public function consulta_cursos()
+    {
+        $this->db->select('id_curso, curso_titulo');
+
+        $this->db->from('curso');
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
     }
 }

@@ -115,4 +115,11 @@ class mensajeria extends CI_Controller {
         $this->load->view('template/footer');
     }
 
+    function consulta_cursos()
+    {
+        $resultado = $this->mensajeria_model->consulta_cursos();
+
+        print_r(json_encode($resultado));
+    }
+
 }

@@ -563,9 +563,13 @@ body {
 	margin-top: 35px;
 }
 
+#lista_cursos{
+	margin-top: 35px;
+}
+
 #btn_correo_obtener_url{
 	float: right;
-	margin-top: 50px;
+	margin-top: 35px;
 }
 
 #search_correo_curso{

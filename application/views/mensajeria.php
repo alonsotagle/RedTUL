@@ -14,37 +14,53 @@
 	    	$("#tabs_correo_plantilla").tabs();
 		});
 
-		$("#btn_buscar_contacto").click(function(){
-			event.preventDefault();
-			
-			var datos = {
-				'tipo' 		: $('select[name=tipo_contacto]').val(),
-				'nombre' 	: $('input[name=nombre_contacto]').val(),
-				'correo' 	: $('input[name=correo_contacto]').val(),
-				'instancia' : $('input[name=instancia_contacto]').val()
-			};
+		$.ajax({
+			url: "<?= site_url('mensajeria/consulta_cursos') ?>",
+			dataType: 'json',
+			type: 'post',
+			success: function(resultado) {
+				$.each(resultado, function(index, value) {
+					$("#lista_cursos").append("<option value='"+value['id_curso']+"'>"+value['curso_titulo']+"</option>");
+				});
+			}
+		});
 
-			$.ajax({
-				url: "<?= site_url('mensajeria/consulta_contactos') ?>",
-				data: datos,
-				dataType: 'json',
-				type: 'post',
-				success: function(resultado) {
-					$('#tabla_buscar_destinatarios tbody').find("tr:gt(0)").remove();
-					$.each(resultado, function(index, value) {
-						$('#tabla_buscar_destinatarios tbody').append('<tr>\
-							<td>'+value['contacto_nombre']+' '+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+'</td>\
-							<td>'+value['contacto_correo_inst']+' '+value['contacto_correo_per']+'</td>\
-							<td>'+value['contacto_telefono']+'</td>\
-							<td>'+value['tipo_contacto_descripcion']+'</td>\
-							<td>'+value['instancia_nombre']+'</td>\
-							<td>\
-								<input type="checkbox" name="curso_invitados[]" value="'+value['id_contacto']+'">\
-							</td>\
-						</tr>');
-					});
-				}
-			});
+		$("#btn_buscar_contacto").click(function(event){
+			event.preventDefault();
+			if ($("#frm_correo_destinatarios").validationEngine('validate')) {
+				var datos = {
+					'tipo' 		: $('#tipo_contacto').val(),
+					'nombre' 	: $('#nombre_contacto').val(),
+					'correo' 	: $('#correo_contacto').val(),
+					'instancia' : $('#instancia_contacto').val()
+				};
+
+				$.ajax({
+					url: "<?= site_url('mensajeria/consulta_contactos') ?>",
+					data: datos,
+					dataType: 'json',
+					type: 'post',
+					success: function(resultado) {
+						if (resultado) {
+							$('#tabla_buscar_destinatarios tbody').find("tr:gt(0)").remove();
+							$.each(resultado, function(index, value) {
+								$('#tabla_buscar_destinatarios tbody').append('<tr>\
+									<td>'+value['contacto_nombre']+' '+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+'</td>\
+									<td>'+value['contacto_correo_inst']+' '+value['contacto_correo_per']+'</td>\
+									<td>'+value['contacto_telefono']+'</td>\
+									<td>'+value['tipo_contacto_descripcion']+'</td>\
+									<td>'+value['instancia_nombre']+'</td>\
+									<td>\
+										<input type="checkbox" name="curso_invitados[]" value="'+value['id_contacto']+'">\
+									</td>\
+								</tr>');
+							});
+						}else{
+							$('#tabla_buscar_destinatarios tbody').find("tr:gt(0)").remove();
+						}
+					}
+				});
+			}
 		});
 
 		$.ajax({
@@ -148,14 +164,14 @@
 					<option value="4">Un d&iacute;a anterior</option>
 				</select>
 
-				<label for="tipo_contacto">Estatus de env&iacute;o</label>
-				<select name="tipo_contacto" id="tipo_contacto" class="input_buscar_correo validate[groupRequired[buscar_correo]]">
+				<label for="estatus_correo">Estatus de env&iacute;o</label>
+				<select name="estatus_correo" id="estatus_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]">
 					<option selected disabled>- Elija un tipo -</option>
 					<option value="1">Pendiente</option>
 					<option value="2">Cancelado</option>
 					<option value="3">Enviado</option>
 				</select>
-				<input type="submit" id="btn_buscar_contacto" value="Buscar"/>
+				<input type="submit" id="btn_buscar_correo" value="Buscar"/>
 			</form>
 
 			<table class='tables'>
@@ -179,11 +195,11 @@
 					<li><a href="#tab-dest">Destinatarios</a></li>
 				</ul>
 				<div id="tab-contenido">
-					<label class="label_nuevo_correo">Usar plantilla</label>
-					<input type="text" class="input_envia_correo">
+					<label class="label_nuevo_correo" for="nuevo_correo_plantilla">Usar plantilla</label>
+					<input type="text" class="input_envia_correo" id="nuevo_correo_plantilla">
 					<br>
-					<label class="label_nuevo_correo">Asunto</label>
-					<input type="text" class="input_envia_correo">
+					<label class="label_nuevo_correo" for="nuevo_correo_asunto">Asunto</label>
+					<input type="text" class="input_envia_correo" id="nuevo_correo_asunto">
 					<br>
 					<label class="label_nuevo_correo">Datos adjuntos</label>
 					<input type="file">
@@ -202,11 +218,11 @@
 					</div>
 					<b id="titulo_programar_envio_correo">Env&iacute;o</b>
 					<div class="programar_envio_correo">
-						<input type="checkbox" id="programar_correo_inmed">
+						<input type="radio" name="fecha_envio" id="programar_correo_inmed">
 						<label for="programar_correo_inmed">Enviar inmediatamente</label>
 					</div>
 					<div class="programar_envio_correo programar_envio_correo_posterior">
-						<input type="checkbox" id="programar_correo_posterior" class="input_envia_correo">
+						<input type="radio" name="fecha_envio" id="programar_correo_posterior" class="input_envia_correo">
 						<label for="programar_correo_posterior" class="label_nuevo_correo">Programar env&iacute;o</label>
 						<br>
 						<label class="label_nuevo_correo">* Fecha termino</label>
@@ -224,30 +240,32 @@
 						<legend>Destinatarios(Cursos)
 							<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="?" class="icon_tooltip">
 						</legend>
-						<label>T&iacute;tulo de curso</label>
-						<input type="search" id="search_correo_curso">
+						<label for="lista_cursos">T&iacute;tulo de curso</label>
+						<select id="lista_cursos">
+							<option selected disabled>- Seleccione una opción -</option>
+						</select>
 						<input type="submit" id="btn_correo_obtener_url" value="Obtener URL de registro en l&iacute;nea">
 					</fieldset>
 					<fieldset id="fieldset_destinatarios_contacto">
 						<legend>Destinatarios(Por contacto)
 							<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="?" class="icon_tooltip">
 						</legend>
-						<form id="frm_correo_destinatarios">
+						<form id="frm_correo_destinatarios" method="POST">
 							<label for="tipo_contacto">Tipo de contacto</label>
-							<select name="tipo_contacto" id="tipo_contacto" class="input_correo_buscar_destinatario validate[groupRequired[buscar_destinatario_contacto]]">
-								<option selected disabled>- Elija un tipo -</option>
+							<select name="tipo_contacto" value="" id="tipo_contacto" class="input_correo_buscar_destinatario validate[groupRequired[buscar_destinatario_contacto]]" form="frm_correo_destinatarios">
+								<option selected value="">- Elija un tipo -</option>
 								<option value="1">Webmaster</option>
 								<option value="2">Responsable de comunicación</option>
 								<option value="3">Responsable técnico</option>
 								<option value="4">Otros</option>
 							</select>
 							<label for="nombre_contacto">Nombre</label>
-							<input type="text" id="nombre_contacto" maxlength="100" name="nombre_contacto" class="input_correo_buscar_destinatario validate[groupRequired[buscar_destinatario_contacto]]"/>
+							<input type="text" id="nombre_contacto" maxlength="100" name="nombre_contacto" class="input_correo_buscar_destinatario validate[groupRequired[buscar_destinatario_contacto]]" form="frm_correo_destinatarios">
 							<label for="correo_contacto">Correo electr&oacute;nico</label>
-							<input type="text" id="correo_contacto" maxlength="100" name="correo_contacto" class="input_correo_buscar_destinatario validate[groupRequired[buscar_destinatario_contacto]]"/>
+							<input type="text" id="correo_contacto" maxlength="100" name="correo_contacto" class="input_correo_buscar_destinatario validate[groupRequired[buscar_destinatario_contacto]]" form="frm_correo_destinatarios">
 							<label for="instancia_contacto">Instancia</label>
-							<input type="text" id="instancia_contacto" name="instancia_contacto" class="input_correo_buscar_destinatario validate[groupRequired[buscar_destinatario_contacto]]"/>
-							<input type="submit" id="btn_buscar_contacto" value="Buscar"/>
+							<input type="text" id="instancia_contacto" name="instancia_contacto" class="input_correo_buscar_destinatario validate[groupRequired[buscar_destinatario_contacto]]" form="frm_correo_destinatarios">
+							<input type="submit" id="btn_buscar_contacto" value="Buscar" form="frm_correo_destinatarios"/>
 						</form>
 						<table id="tabla_buscar_destinatarios" class='tables'>
 							<tr>
@@ -275,8 +293,8 @@
 			</table>
 
 			<form id="form_plantilla" method="POST">
-				<label for="nombre_contacto">Asunto</label>
-				<input type="text" maxlength="255" name="plantilla_asunto" class="validate[required]" form="form_plantilla"/>
+				<label for="plantilla_asunto">Asunto</label>
+				<input type="text" maxlength="255" name="plantilla_asunto" id="plantilla_asunto" class="validate[required]" form="form_plantilla"/>
 				<input type="hidden" name="plantilla_id" id="plantilla_id" form="form_plantilla">
 				<div id="tabs_correo_plantilla">
 					<ul>

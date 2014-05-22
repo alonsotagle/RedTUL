@@ -121,4 +121,72 @@ class mensajeria_model extends CI_Model{
             return null;
         }
     }
+
+    public function consulta_correos()
+    {
+        $this->db->select('id_correo,
+                            correo_asunto,
+                            correo_fecha_envio,
+                            correo_fecha_creacion');
+
+        $this->db->from('correo');
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function busqueda_correos($parametros)
+    {
+        $this->db->select('id_correo,
+                            correo_asunto,
+                            correo_fecha_envio,
+                            correo_fecha_creacion');
+        $this->db->from('correo');
+
+        if ($parametros['correo_asunto'] != "") {
+            $this->db->like('correo_asunto', $parametros['correo_asunto']);
+        }
+
+        if ($parametros['correo_fecha_envio'] != "") {
+            switch ($parametros['correo_fecha_envio']) {
+                case 1:
+                    $this->db->where('correo_fecha_envio >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR)');
+                    break;
+
+                case 2:
+                    $this->db->where('correo_fecha_envio >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)');
+                    break;
+
+                case 3:
+                    $this->db->where('correo_fecha_envio >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK)');
+                    break;
+
+                case 4:
+                    $this->db->where('correo_fecha_envio >= DATE_SUB(CURDATE(), INTERVAL 1 DAY)');
+                    break;
+                
+                default:
+                    break;
+            }
+        }
+
+        if ($parametros['correo_estatus'] != "") {
+            $this->db->where('correo_estatus', $parametros['correo_estatus']);
+        }
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
 }

@@ -617,3 +617,11 @@ body {
 	float: right;
 	margin-top: 15px;
 }
+
+.img_editar_plantilla{
+	cursor: pointer;
+}
+
+#btn_buscar_correo{
+	float: right;
+}

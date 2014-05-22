@@ -15,13 +15,106 @@
 		});
 
 		$.ajax({
+			url: "<?= site_url('mensajeria/consulta_correos') ?>",
+			dataType: 'json',
+			type: 'post',
+			success: function(resultado) {
+				if (resultado) {
+					$.each(resultado, function(index, value) {
+						$('#tabla_correos tbody').append('<tr>\
+							<td>'+value['correo_asunto']+'</td>\
+							<td>'+value['correo_fecha_creacion']+'</td>\
+							<td>'+value['correo_fecha_envio']+'</td>\
+							<td></td>\
+							<td>\
+							<img id='+value['id_correo']+' class="img_editar_plantilla"\
+							src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
+							</td>\
+							<td><a \
+							href="'+"<?= site_url('mensajeria/plantilla_eliminar')?>"+"/"+value['id_correo']+'">\
+							<img \
+							src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
+							</a></td>\
+						</tr>');
+					});
+				}
+			}
+		});
+
+		$("#btn_buscar_correo").click(function(event){
+			event.preventDefault();
+			if ($("#frm_buscar_correo").validationEngine('validate')) {
+				var datos = {
+					'correo_asunto' 		: $('#asunto_correo').val(),
+					'correo_fecha_envio' 	: $('#fecha_envio_correo').val(),
+					'correo_estatus' 		: $('#estatus_correo').val()
+				};
+
+				$.ajax({
+					url: "<?= site_url('mensajeria/busqueda_correos') ?>",
+					data: datos,
+					dataType: 'json',
+					type: 'post',
+					success: function(resultado) {
+						if (resultado) {
+							$('#tabla_correos tbody').find("tr:gt(0)").remove();
+							$.each(resultado, function(index, value) {
+								$('#tabla_correos tbody').append('<tr>\
+									<td>'+value['correo_asunto']+'</td>\
+									<td>'+value['correo_fecha_creacion']+'</td>\
+									<td>'+value['correo_fecha_envio']+'</td>\
+									<td></td>\
+									<td>\
+									<img id='+value['id_correo']+' class="img_editar_plantilla"\
+									src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
+									</td>\
+									<td><a \
+									href="'+"<?= site_url('mensajeria')?>"+"/"+value['id_correo']+'">\
+									<img \
+									src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
+									</a></td>\
+								</tr>');
+							});
+						}else{
+							$('#tabla_correos tbody').find("tr:gt(0)").remove();
+						}
+					}
+				});
+			}
+		});
+
+		$.ajax({
 			url: "<?= site_url('mensajeria/consulta_cursos') ?>",
 			dataType: 'json',
 			type: 'post',
 			success: function(resultado) {
-				$.each(resultado, function(index, value) {
-					$("#lista_cursos").append("<option value='"+value['id_curso']+"'>"+value['curso_titulo']+"</option>");
-				});
+				if (resultado) {
+					$.each(resultado, function(index, value) {
+						$("#lista_cursos").append("<option value='"+value['id_curso']+"'>"+value['curso_titulo']+"</option>");
+					});
+				}
+			}
+		});
+
+		$("#btn_correo_obtener_url").click(function(){
+			event.preventDefault();
+			if ($("#frm_curso_destinatarios").validationEngine('validate') && $("#lista_cursos").val() != "") {
+
+				tab_activo_contenido_correo = $("#tabs_correo_cuerpo").tabs("option", "active");
+				if (tab_activo_contenido_correo == 0) {
+					$("#tabs_correo_cuerpo").tabs("disable", 1);
+					$("#tab-html textarea").val("");
+					valor_contenido_textarea = $("#tab-textoplano textarea").val();
+					valor_contenido_textarea += "\nPágina para incribirse:\nhttp://www.tab-textoplano.com";
+					$("#tab-textoplano textarea").val(valor_contenido_textarea);
+				}else{
+					$("#tabs_correo_cuerpo").tabs("disable", 0);
+					$("#tab-textoplano textarea").val("");
+					valor_contenido_textarea = $("#tab-html textarea").val();
+					valor_contenido_textarea += "\nPágina para incribirse:\n<a href='http://www.tab-html.com'></a>";
+					$("#tab-html textarea").val(valor_contenido_textarea);
+				}
+				$("#tabs_enviar_correo").tabs("option", "active", 0);
 			}
 		});
 
@@ -68,20 +161,39 @@
 			dataType: 'json',
 			type: 'post',
 			success: function(resultado) {
-				$.each(resultado, function(index, value) {
-					$('#tabla_plantillas tbody').append('<tr>\
-						<td>'+value['plantilla_asunto']+'</td>\
-						<td>\
-						<img id='+value['id_plantilla_correo']+' class="img_editar"\
-						src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
-						</td>\
-						<td><a \
-						href="'+"<?= site_url('mensajeria/plantilla_eliminar')?>"+"/"+value['id_plantilla_correo']+'">\
-						<img \
-						src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
-						</a></td>\
-					</tr>');
-				});
+				if (resultado) {
+					$.each(resultado, function(index, value) {
+						$('#tabla_plantillas tbody').append('<tr>\
+							<td>'+value['plantilla_asunto']+'</td>\
+							<td>\
+							<img id='+value['id_plantilla_correo']+' class="img_editar_plantilla"\
+							src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
+							</td>\
+							<td><a \
+							href="'+"<?= site_url('mensajeria/plantilla_eliminar')?>"+"/"+value['id_plantilla_correo']+'">\
+							<img \
+							src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
+							</a></td>\
+						</tr>');
+						$('#nuevo_correo_plantilla').append("<option value='"+value['id_plantilla_correo']+"'>"+value['plantilla_asunto']+"</option>");
+					});
+				}
+			}
+		});
+
+		$('#tab-textoplano textarea').change('input propertychange', function(){
+			if ($('#tab-textoplano textarea').val() != "") {
+				$("#tabs_correo_cuerpo").tabs("disable", 1);
+			}else{
+				$("#tabs_correo_cuerpo").tabs("enable");
+			}
+		});
+
+		$('#tab-html textarea').change('input propertychange', function(){
+			if ($('#tab-html textarea').val() != "") {
+				$("#tabs_correo_cuerpo").tabs("disable", 0);
+			}else{
+				$("#tabs_correo_cuerpo").tabs("enable");
 			}
 		});
 
@@ -111,7 +223,7 @@
 			}
 		});
 
-		$("#tabla_plantillas").on( "click", ".img_editar", function() {
+		$("#tabla_plantillas").on( "click", ".img_editar_plantilla", function() {
 			$.ajax({
 				url: "<?= site_url('mensajeria/consulta_plantilla') ?>"+"/"+$(this).attr('id'),
 				dataType: 'json',
@@ -151,13 +263,13 @@
 			<li><a href="#tabs-3">Administrar plantillas</a></li>
 		</ul>
 		<div id="tabs-1">
-			<form id="frm_buscar_correo" action="<?= site_url('mensajeria')?>" method="POST">
+			<form id="frm_buscar_correo" method="POST">
 				<label for="asunto_correo">Asunto</label>
 				<input type="text" id="asunto_correo" maxlength="255" name="asunto_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]"/>
 
 				<label for="fecha_envio_correo">Fecha de env&iacute;o</label>
-				<select name="fecha_envio_correo" id="fecha_envio_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]">
-					<option selected disabled>- Elija un tipo -</option>
+				<select name="fecha_envio_correo" id="fecha_envio_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]" value="">
+					<option selected value="">- Elija un tipo -</option>
 					<option value="1">El &uacute;ltimo año</option>
 					<option value="2">El &uacute;ltimo mes</option>
 					<option value="3">La &uacute;ltima semana</option>
@@ -165,8 +277,8 @@
 				</select>
 
 				<label for="estatus_correo">Estatus de env&iacute;o</label>
-				<select name="estatus_correo" id="estatus_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]">
-					<option selected disabled>- Elija un tipo -</option>
+				<select name="estatus_correo" id="estatus_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]" value="">
+					<option selected value="">- Elija un tipo -</option>
 					<option value="1">Pendiente</option>
 					<option value="2">Cancelado</option>
 					<option value="3">Enviado</option>
@@ -174,7 +286,7 @@
 				<input type="submit" id="btn_buscar_correo" value="Buscar"/>
 			</form>
 
-			<table class='tables'>
+			<table id="tabla_correos" class='tables'>
 				<tr>
 					<td>Asunto</td>
 					<td>Fecha de creación</td>
@@ -196,7 +308,9 @@
 				</ul>
 				<div id="tab-contenido">
 					<label class="label_nuevo_correo" for="nuevo_correo_plantilla">Usar plantilla</label>
-					<input type="text" class="input_envia_correo" id="nuevo_correo_plantilla">
+					<select id="nuevo_correo_plantilla" class="input_envia_correo">
+						<option selected value="">- Seleccione una opción -</option>
+					</select>
 					<br>
 					<label class="label_nuevo_correo" for="nuevo_correo_asunto">Asunto</label>
 					<input type="text" class="input_envia_correo" id="nuevo_correo_asunto">
@@ -240,11 +354,13 @@
 						<legend>Destinatarios(Cursos)
 							<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="?" class="icon_tooltip">
 						</legend>
-						<label for="lista_cursos">T&iacute;tulo de curso</label>
-						<select id="lista_cursos">
-							<option selected disabled>- Seleccione una opción -</option>
-						</select>
-						<input type="submit" id="btn_correo_obtener_url" value="Obtener URL de registro en l&iacute;nea">
+						<form id="frm_curso_destinatarios">
+							<label for="lista_cursos">T&iacute;tulo de curso</label>
+							<select id="lista_cursos" class="validate[required]">
+								<option selected value="">- Seleccione una opción -</option>
+							</select>
+							<input type="submit" id="btn_correo_obtener_url" value="Obtener URL de registro en l&iacute;nea">
+						</form>
 					</fieldset>
 					<fieldset id="fieldset_destinatarios_contacto">
 						<legend>Destinatarios(Por contacto)

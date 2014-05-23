@@ -142,19 +142,22 @@ class mensajeria extends CI_Controller {
         print_r(json_encode($resultado));
     }
 
-    function correo()
+    function mandar_correo()
     {
+        echo "<pre>";
+        var_dump($_POST);
+        echo "</pre>";
         $this->load->library('email');
 
-    $this->email->from('tu_direccion@tu_sitio.com', 'Tu nombre');
-    $this->email->to('alonsoauriazul@gmail.com');
+        $this->email->from('yo@alo.com', 'Tagle');
+        $this->email->to('alonsoauriazul@gmail.com');
 
-    $this->email->subject('Correo de Prueba');
-    $this->email->message('Probando la clase email');   
+        $this->email->subject('Correo de Prueba');
+        $this->email->message('Probando la clase email');   
 
-    $this->email->send();
+        $this->email->send();
 
-    echo $this->email->print_debugger();
+        echo $this->email->print_debugger();
     }
 
 }

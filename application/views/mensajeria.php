@@ -6,6 +6,7 @@
         $("#frm_buscar_correo").validationEngine({promptPosition: "centerRight"});
 		$("#frm_correo_destinatarios").validationEngine({promptPosition: "centerRight"});
 		$("#form_plantilla").validationEngine({promptPosition: "centerRight"});
+		$("#frm_enviar_correo").validationEngine({promptPosition: "centerRight"});
 
         $(function() {
 	    	$("#tabs").tabs({ active: <?= $tab ?>});
@@ -83,6 +84,47 @@
 			}
 		});
 
+		$("#nuevo_correo_plantilla").on("change", function(){
+			if ($(this).val() == "") {
+				$('#nuevo_correo_asunto').val('');
+				$('#tab-textoplano textarea').val('');
+				$('#tab-html textarea').val('');
+				$("#tabs_correo_cuerpo").tabs("enable");
+			}else{
+				$.ajax({
+					url: "<?= site_url('mensajeria/consulta_plantilla') ?>"+"/"+$(this).val(),
+					dataType: 'json',
+					type: 'post',
+					success: function(resultado) {
+						$('#tab-textoplano textarea').val('');
+						$('#tab-html textarea').val('');
+						$("#tabs_correo_cuerpo").tabs("enable");
+
+						$('#nuevo_correo_asunto').val(resultado[0]['plantilla_asunto']);
+
+						if (resultado[0]['plantilla_tipo_contenido'] == 0) {
+							$("#tabs_correo_cuerpo").tabs("disable", 1);
+							$("#tabs_correo_cuerpo").tabs("option", "active", 0);
+							$("#tab-textoplano textarea").val(resultado[0]['plantilla_contenido']);
+						}else{
+							$("#tabs_correo_cuerpo").tabs("disable", 0);
+							$("#tabs_correo_cuerpo").tabs("option", "active", 1);
+							$("#tab-html textarea").val(resultado[0]['plantilla_contenido']);
+						}
+					}
+				});
+			}
+		});
+
+		$("#programar_correo_fecha").datepicker({
+			changeMonth: true,
+			numberOfMonths: 2,
+			minDate: 0,
+			showOn: "both",
+			buttonImage: "<?= base_url('assets/img/calendar.gif')?>",
+			buttonImageOnly: true
+		});
+
 		$.ajax({
 			url: "<?= site_url('mensajeria/consulta_cursos') ?>",
 			dataType: 'json',
@@ -93,6 +135,49 @@
 						$("#lista_cursos").append("<option value='"+value['id_curso']+"'>"+value['curso_titulo']+"</option>");
 					});
 				}
+			}
+		});
+
+		$("#programar_correo_fecha").prop('disabled', true);
+		$("#programar_correo_hora").prop('disabled', true);
+		$("input[name=fecha_envio]").change(function(){
+			if ($('input[name=fecha_envio]:checked').val() == 1) {
+				$("#programar_correo_fecha").prop('disabled', false);
+				$("#programar_correo_hora").prop('disabled', false);
+				$("#programar_correo_fecha").addClass("validate[required] datepicker");
+				$("#programar_correo_hora").addClass("validate[required]");
+			}else{
+				$("#programar_correo_fecha").prop('disabled', true);
+				$("#programar_correo_hora").prop('disabled', true);
+				$("#frm_enviar_correo").validationEngine('hide');
+				$("#programar_correo_fecha").removeClass("validate[required] datepicker");
+				$("#programar_correo_hora").removeClass("validate[required]");
+			}
+		});
+
+		$("#frm_enviar_correo").submit(function(){
+			event.preventDefault();
+			if ($("#frm_enviar_correo").validationEngine('validate')) {
+				var datos = {
+					'asunto' 			: $('#nuevo_correo_asunto').val(),
+					'archivos_adjuntos'	: $('#nuevo_correo_archivos_adjuntos').val(),
+					'contenido_plano'	: $('#tab-textoplano textarea').val(),
+					'contenido_html'	: $('#tab-html textarea').val(),
+					'envio'				: $('input[name="fecha_envio"]').val(),
+					'fecha_envio'		: $('#programar_correo_fecha').val(),
+					'hora_envio' 		: $('#programar_correo_hora').val(),
+					'id_destinatario'	: "alonsoauriazul@gmail.com"
+				};
+
+				$.ajax({
+					url: "<?= site_url('mensajeria/mandar_correo') ?>",
+					data: datos,
+					dataType: 'json',
+					type: 'post',
+					success: function(resultado) {
+						alert(resultado);
+					}
+				});
 			}
 		});
 
@@ -160,6 +245,7 @@
 			url: "<?= site_url('mensajeria/consulta_plantillas') ?>",
 			dataType: 'json',
 			type: 'post',
+			async: false,
 			success: function(resultado) {
 				if (resultado) {
 					$.each(resultado, function(index, value) {
@@ -312,42 +398,43 @@
 						<option selected value="">- Seleccione una opción -</option>
 					</select>
 					<br>
-					<label class="label_nuevo_correo" for="nuevo_correo_asunto">Asunto</label>
-					<input type="text" class="input_envia_correo" id="nuevo_correo_asunto">
-					<br>
-					<label class="label_nuevo_correo">Datos adjuntos</label>
-					<input type="file">
-					<br>
-					<div id="tabs_correo_cuerpo">
-						<ul>
-							<li><a href="#tab-textoplano">Texto plano</a></li>
-							<li><a href="#tab-html">HTML</a></li>
-						</ul>
-						<div id="tab-textoplano">
-							<textarea class="textarea_cuerpo_correo"></textarea>
+					<form id="frm_enviar_correo">
+						<label class="label_nuevo_correo" for="nuevo_correo_asunto">Asunto</label>
+						<input type="text" class="input_envia_correo validate[required]" id="nuevo_correo_asunto" size="50">
+						<br>
+						<label class="label_nuevo_correo">Datos adjuntos</label>
+						<input type="file" id="nuevo_correo_archivos_adjuntos">
+						<br>
+						<div id="tabs_correo_cuerpo">
+							<ul>
+								<li><a href="#tab-textoplano">Texto plano</a></li>
+								<li><a href="#tab-html">HTML</a></li>
+							</ul>
+							<div id="tab-textoplano">
+								<textarea class="textarea_cuerpo_correo validate[groupRequired[nuevo_correo_contenido]]" data-prompt-position="topLeft"></textarea>
+							</div>
+							<div id="tab-html">
+								<textarea class="textarea_cuerpo_correo validate[groupRequired[nuevo_correo_contenido]]" data-prompt-position="topLeft"></textarea>
+							</div>
 						</div>
-						<div id="tab-html">
-							<textarea class="textarea_cuerpo_correo"></textarea>
+						<b id="titulo_programar_envio_correo">Env&iacute;o</b>
+						<div class="programar_envio_correo">
+							<input type="radio" name="fecha_envio" id="programar_correo_inmed" class="validate[required] radio" value="0">
+							<label for="programar_correo_inmed">Enviar inmediatamente</label>
 						</div>
-					</div>
-					<b id="titulo_programar_envio_correo">Env&iacute;o</b>
-					<div class="programar_envio_correo">
-						<input type="radio" name="fecha_envio" id="programar_correo_inmed">
-						<label for="programar_correo_inmed">Enviar inmediatamente</label>
-					</div>
-					<div class="programar_envio_correo programar_envio_correo_posterior">
-						<input type="radio" name="fecha_envio" id="programar_correo_posterior" class="input_envia_correo">
-						<label for="programar_correo_posterior" class="label_nuevo_correo">Programar env&iacute;o</label>
-						<br>
-						<label class="label_nuevo_correo">* Fecha termino</label>
-						<input class="input_envia_correo">
-						<br>
-						<label class="label_nuevo_correo">* Horario</label>
-						<input class="input_envia_correo" size=3> : 
-						<input class="input_envia_correo" size=3>
-						<br>
-					</div>
-					<input type="submit" id="btn_programar_correo">
+						<div class="programar_envio_correo programar_envio_correo_posterior">
+							<input type="radio" name="fecha_envio" id="programar_correo_posterior" class="input_envia_correo validate[required] radio" value="1">
+							<label for="programar_correo_posterior" class="label_nuevo_correo">Programar env&iacute;o</label>
+							<br>
+							<label class="label_nuevo_correo" for="programar_correo_fecha">* Fecha de env&iacute;o</label>
+							<input class="input_envia_correo" id="programar_correo_fecha" name="programar_correo_fecha" data-prompt-position="topLeft">
+							<br>
+							<label class="label_nuevo_correo" for="programar_correo_hora">* Hora de env&iacute;o</label>
+							<input type="time" class="input_envia_correo" id="programar_correo_hora" name="programar_correo_hora" data-prompt-position="topLeft">
+							<br>
+						</div>
+						<input type="submit" id="btn_programar_correo">
+					</form>
 				</div>
 				<div id="tab-dest">
 					<fieldset id="fieldset_destinatarios_curso">

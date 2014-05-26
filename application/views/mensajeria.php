@@ -15,6 +15,8 @@
 	    	$("#tabs_correo_plantilla").tabs();
 		});
 
+        $("#btn_programar_correo").prop('disabled', true);
+
 		$.ajax({
 			url: "<?= site_url('mensajeria/consulta_correos') ?>",
 			dataType: 'json',
@@ -172,8 +174,8 @@
 				$.ajax({
 					url: "<?= site_url('mensajeria/mandar_correo') ?>",
 					data: datos,
-					dataType: 'json',
 					type: 'post',
+					dataType: 'array',
 					success: function(resultado) {
 						alert(resultado);
 					}
@@ -190,20 +192,20 @@
 					$("#tabs_correo_cuerpo").tabs("disable", 1);
 					$("#tab-html textarea").val("");
 					valor_contenido_textarea = $("#tab-textoplano textarea").val();
-					valor_contenido_textarea += "\nPágina para incribirse:\nhttp://www.tab-textoplano.com";
+					valor_contenido_textarea += "\n\nPágina para incribirse:\n<a href='http://www.tab-textoplano.com'>http://www.tab-textoplano.com</a>";
 					$("#tab-textoplano textarea").val(valor_contenido_textarea);
 				}else{
 					$("#tabs_correo_cuerpo").tabs("disable", 0);
 					$("#tab-textoplano textarea").val("");
 					valor_contenido_textarea = $("#tab-html textarea").val();
-					valor_contenido_textarea += "\nPágina para incribirse:\n<a href='http://www.tab-html.com'></a>";
+					valor_contenido_textarea += "\nPágina para incribirse:\n<a href='http://www.tab-html.com'>http://www.tab-html.com</a>";
 					$("#tab-html textarea").val(valor_contenido_textarea);
 				}
 				$("#tabs_enviar_correo").tabs("option", "active", 0);
 			}
 		});
 
-		$("#btn_buscar_contacto").click(function(event){
+		$("#btn_buscar_contacto").click(function(){
 			event.preventDefault();
 			if ($("#frm_correo_destinatarios").validationEngine('validate')) {
 				var datos = {
@@ -238,6 +240,37 @@
 						}
 					}
 				});
+			}
+		});
+
+		$("#btn_correo_anadir_destinatarios").click(function(){
+			event.preventDefault();
+
+			var ids_contacto = new Array();
+
+			if ($("input[name='curso_invitados[]']:checked").length != 0) {
+			
+				$("input[name='curso_invitados[]']:checked").each(function() {
+					ids_contacto.push($(this).val());
+				});
+
+				var datos = {
+					ids_contacto_correo : ids_contacto
+				}
+
+				$.ajax({
+					url: "<?= site_url('mensajeria/consulta_contactos_correos') ?>",
+					data: datos,
+					dataType: 'json',
+					type: 'post',
+					success: function(resultado) {
+						console.log(resultado);
+					}
+				});
+
+				$("#tabs_enviar_correo").tabs("option", "active", 0);
+
+				$("#btn_programar_correo").prop('disabled', false);
 			}
 		});
 
@@ -375,7 +408,7 @@
 			<table id="tabla_correos" class='tables'>
 				<tr>
 					<td>Asunto</td>
-					<td>Fecha de creación</td>
+					<td>Fecha de creaci&oacute;n</td>
 					<td>Fecha de env&iacute;o</td>
 					<td>Destinatarios</td>
 					<td>Editar</td>
@@ -395,7 +428,7 @@
 				<div id="tab-contenido">
 					<label class="label_nuevo_correo" for="nuevo_correo_plantilla">Usar plantilla</label>
 					<select id="nuevo_correo_plantilla" class="input_envia_correo">
-						<option selected value="">- Seleccione una opción -</option>
+						<option selected value="">- Seleccione una opci&oacute;n -</option>
 					</select>
 					<br>
 					<form id="frm_enviar_correo">
@@ -411,10 +444,10 @@
 								<li><a href="#tab-html">HTML</a></li>
 							</ul>
 							<div id="tab-textoplano">
-								<textarea class="textarea_cuerpo_correo validate[groupRequired[nuevo_correo_contenido]]" data-prompt-position="topLeft"></textarea>
+								<textarea spellcheck="false" class="textarea_cuerpo_correo validate[groupRequired[nuevo_correo_contenido]]" data-prompt-position="topLeft"></textarea>
 							</div>
 							<div id="tab-html">
-								<textarea class="textarea_cuerpo_correo validate[groupRequired[nuevo_correo_contenido]]" data-prompt-position="topLeft"></textarea>
+								<textarea spellcheck="false" class="textarea_cuerpo_correo validate[groupRequired[nuevo_correo_contenido]]" data-prompt-position="topLeft"></textarea>
 							</div>
 						</div>
 						<b id="titulo_programar_envio_correo">Env&iacute;o</b>
@@ -444,7 +477,7 @@
 						<form id="frm_curso_destinatarios">
 							<label for="lista_cursos">T&iacute;tulo de curso</label>
 							<select id="lista_cursos" class="validate[required]">
-								<option selected value="">- Seleccione una opción -</option>
+								<option selected value="">- Seleccione una opci&oacute;n -</option>
 							</select>
 							<input type="submit" id="btn_correo_obtener_url" value="Obtener URL de registro en l&iacute;nea">
 						</form>
@@ -458,7 +491,7 @@
 							<select name="tipo_contacto" value="" id="tipo_contacto" class="input_correo_buscar_destinatario validate[groupRequired[buscar_destinatario_contacto]]" form="frm_correo_destinatarios">
 								<option selected value="">- Elija un tipo -</option>
 								<option value="1">Webmaster</option>
-								<option value="2">Responsable de comunicación</option>
+								<option value="2">Responsable de comunicaci&oacute;n</option>
 								<option value="3">Responsable técnico</option>
 								<option value="4">Otros</option>
 							</select>
@@ -505,10 +538,10 @@
 						<li><a href="#tab-plantilla_html">HTML</a></li>
 					</ul>
 					<div id="tab-plantilla_textoplano">
-						<textarea class="textarea_cuerpo_correo validate[groupRequired[plantilla_contenido]]" data-prompt-position="topLeft" name="plantilla_contenido_plano" form="form_plantilla"></textarea>
+						<textarea spellcheck="false" class="textarea_cuerpo_correo validate[groupRequired[plantilla_contenido]]" data-prompt-position="topLeft" name="plantilla_contenido_plano" form="form_plantilla"></textarea>
 					</div>
 					<div id="tab-plantilla_html">
-						<textarea class="textarea_cuerpo_correo validate[groupRequired[plantilla_contenido]]" data-prompt-position="topLeft" name="plantilla_contenido_html" form="form_plantilla"></textarea>
+						<textarea spellcheck="false" class="textarea_cuerpo_correo validate[groupRequired[plantilla_contenido]]" data-prompt-position="topLeft" name="plantilla_contenido_html" form="form_plantilla"></textarea>
 					</div>
 				</div>
 				<input type="submit" id="btn_correo_plantilla" value="Aceptar" form="form_plantilla">

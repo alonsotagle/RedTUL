@@ -144,20 +144,39 @@ class mensajeria extends CI_Controller {
 
     function mandar_correo()
     {
-        echo "<pre>";
-        var_dump($_POST);
-        echo "</pre>";
-        $this->load->library('email');
 
-        $this->email->from('yo@alo.com', 'Tagle');
-        $this->email->to('alonsoauriazul@gmail.com');
+        $this->load->library('class_email');
 
-        $this->email->subject('Correo de Prueba');
-        $this->email->message('Probando la clase email');   
+        if ($this->input->post('contenido_plano') != "") {
+            $mensaje = $this->input->post('contenido_plano');
+            $html = false;
+        } else {
+            $mensaje = $this->input->post('contenido_html');
+            $html = true;
+        }
 
-        $this->email->send();
+        if ($this->input->post('archivos_adjuntos') != "") {
+            $archivo = $this->input->post('archivos_adjuntos');
+        } else {
+            $archivo = "";
+        }
 
-        echo $this->email->print_debugger();
+        $email_data = array(
+            'to'        => array('email' => 'alonsoauriazul@gmail.com', 'name' => 'Usuario'),
+            'asunto'    => $this->input->post('asunto'),
+            'contenido' => $mensaje,
+            'html'      => $html,
+            'archivo'   => $archivo
+        );
+
+        $this->class_email->send_email($email_data);
+    }
+
+    function consulta_contactos_correos()
+    {
+        $resultado = $this->mensajeria_model->consulta_contactos_correos($this->input->post('ids_contacto_correo'));
+
+        print_r(json_encode($resultado));
     }
 
 }

@@ -189,4 +189,25 @@ class mensajeria_model extends CI_Model{
             return null;
         }
     }
+
+    public function consulta_contactos_correos($ids_contacto_correo)
+    {
+        $this->db->select('contacto_nombre,
+                            contacto_ap_paterno,
+                            contacto_ap_materno,
+                            contacto_correo_inst,
+                            contacto_correo_per');
+        $this->db->from('contacto');
+
+        $this->db->where_in('id_contacto', $ids_contacto_correo);
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
 }

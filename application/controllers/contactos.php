@@ -205,12 +205,12 @@ class contactos extends CI_Controller {
 
         $config['upload_path'] = './assets/img_avatar/';
         $config['allowed_types'] = 'gif|jpg';
-        $config['max_size'] = '2097152';
+        $config['max_size'] = '2048';
         $config['encrypt_name'] = TRUE;
 
         $this->load->library('upload', $config);
 
-        if (!$this->upload->do_upload('contacto_avatar'))
+        if (!$this->upload->do_upload())
         {
             echo $this->upload->display_errors();
             return "error_imagen";

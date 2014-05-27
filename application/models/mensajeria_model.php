@@ -210,4 +210,9 @@ class mensajeria_model extends CI_Model{
             return null;
         }
     }
+
+    public function registrar_correo($correo)
+    {
+        $this->db->insert('correo', $correo);
+    }
 }

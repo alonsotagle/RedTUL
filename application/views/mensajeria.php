@@ -34,7 +34,7 @@
 							src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
 							</td>\
 							<td><a \
-							href="'+"<?= site_url('mensajeria/plantilla_eliminar')?>"+"/"+value['id_correo']+'">\
+							href="'+"<?= site_url('mensajeria')?>"+'">\
 							<img \
 							src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
 							</a></td>\
@@ -157,32 +157,6 @@
 			}
 		});
 
-		$("#frm_enviar_correo").submit(function(){
-			event.preventDefault();
-			if ($("#frm_enviar_correo").validationEngine('validate')) {
-				var datos = {
-					'asunto' 			: $('#nuevo_correo_asunto').val(),
-					'archivos_adjuntos'	: $('#nuevo_correo_archivos_adjuntos').val(),
-					'contenido_plano'	: $('#tab-textoplano textarea').val(),
-					'contenido_html'	: $('#tab-html textarea').val(),
-					'envio'				: $('input[name="fecha_envio"]').val(),
-					'fecha_envio'		: $('#programar_correo_fecha').val(),
-					'hora_envio' 		: $('#programar_correo_hora').val(),
-					'id_destinatario'	: "alonsoauriazul@gmail.com"
-				};
-
-				$.ajax({
-					url: "<?= site_url('mensajeria/mandar_correo') ?>",
-					data: datos,
-					type: 'post',
-					dataType: 'array',
-					success: function(resultado) {
-						alert(resultado);
-					}
-				});
-			}
-		});
-
 		$("#btn_correo_obtener_url").click(function(){
 			event.preventDefault();
 			if ($("#frm_curso_destinatarios").validationEngine('validate') && $("#lista_cursos").val() != "") {
@@ -246,27 +220,17 @@
 		$("#btn_correo_anadir_destinatarios").click(function(){
 			event.preventDefault();
 
-			var ids_contacto = new Array();
-
 			if ($("input[name='curso_invitados[]']:checked").length != 0) {
-			
+
+				var ids_contacto = new Array();
 				$("input[name='curso_invitados[]']:checked").each(function() {
 					ids_contacto.push($(this).val());
 				});
 
-				var datos = {
-					ids_contacto_correo : ids_contacto
-				}
-
-				$.ajax({
-					url: "<?= site_url('mensajeria/consulta_contactos_correos') ?>",
-					data: datos,
-					dataType: 'json',
-					type: 'post',
-					success: function(resultado) {
-						console.log(resultado);
-					}
-				});
+				var input = $("<input>")
+               .attr("type", "hidden")
+               .attr("name", "id_destinatarios").val(ids_contacto);
+				$('#frm_enviar_correo').append($(input));
 
 				$("#tabs_enviar_correo").tabs("option", "active", 0);
 
@@ -431,12 +395,12 @@
 						<option selected value="">- Seleccione una opci&oacute;n -</option>
 					</select>
 					<br>
-					<form id="frm_enviar_correo">
+					<form id="frm_enviar_correo" action="<?= site_url('mensajeria/mandar_correo') ?>" method="POST" enctype="multipart/form-data">
 						<label class="label_nuevo_correo" for="nuevo_correo_asunto">Asunto</label>
-						<input type="text" class="input_envia_correo validate[required]" id="nuevo_correo_asunto" size="50">
+						<input type="text" class="input_envia_correo validate[required]" id="nuevo_correo_asunto" size="50" name="asunto">
 						<br>
 						<label class="label_nuevo_correo">Datos adjuntos</label>
-						<input type="file" id="nuevo_correo_archivos_adjuntos">
+						<input type="file" id="nuevo_correo_archivos_adjuntos" name="userfile">
 						<br>
 						<div id="tabs_correo_cuerpo">
 							<ul>
@@ -444,26 +408,26 @@
 								<li><a href="#tab-html">HTML</a></li>
 							</ul>
 							<div id="tab-textoplano">
-								<textarea spellcheck="false" class="textarea_cuerpo_correo validate[groupRequired[nuevo_correo_contenido]]" data-prompt-position="topLeft"></textarea>
+								<textarea spellcheck="false" class="textarea_cuerpo_correo validate[groupRequired[nuevo_correo_contenido]]" data-prompt-position="topLeft" name="contenido_plano"></textarea>
 							</div>
 							<div id="tab-html">
-								<textarea spellcheck="false" class="textarea_cuerpo_correo validate[groupRequired[nuevo_correo_contenido]]" data-prompt-position="topLeft"></textarea>
+								<textarea spellcheck="false" class="textarea_cuerpo_correo validate[groupRequired[nuevo_correo_contenido]]" data-prompt-position="topLeft" name="contenido_html"></textarea>
 							</div>
 						</div>
 						<b id="titulo_programar_envio_correo">Env&iacute;o</b>
 						<div class="programar_envio_correo">
-							<input type="radio" name="fecha_envio" id="programar_correo_inmed" class="validate[required] radio" value="0">
+							<input type="radio" name="envio" id="programar_correo_inmed" class="validate[required] radio" value="0">
 							<label for="programar_correo_inmed">Enviar inmediatamente</label>
 						</div>
 						<div class="programar_envio_correo programar_envio_correo_posterior">
-							<input type="radio" name="fecha_envio" id="programar_correo_posterior" class="input_envia_correo validate[required] radio" value="1">
+							<input type="radio" name="envio" id="programar_correo_posterior" class="input_envia_correo validate[required] radio" value="1">
 							<label for="programar_correo_posterior" class="label_nuevo_correo">Programar env&iacute;o</label>
 							<br>
 							<label class="label_nuevo_correo" for="programar_correo_fecha">* Fecha de env&iacute;o</label>
-							<input class="input_envia_correo" id="programar_correo_fecha" name="programar_correo_fecha" data-prompt-position="topLeft">
+							<input class="input_envia_correo" id="programar_correo_fecha" name="fecha_envio" data-prompt-position="topLeft">
 							<br>
 							<label class="label_nuevo_correo" for="programar_correo_hora">* Hora de env&iacute;o</label>
-							<input type="time" class="input_envia_correo" id="programar_correo_hora" name="programar_correo_hora" data-prompt-position="topLeft">
+							<input type="time" class="input_envia_correo" id="programar_correo_hora" name="hora_envio" data-prompt-position="topLeft">
 							<br>
 						</div>
 						<input type="submit" id="btn_programar_correo">

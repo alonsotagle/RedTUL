@@ -625,3 +625,63 @@ body {
 #btn_buscar_correo{
 	float: right;
 }
+
+/* Inicia CONFIRMACION */
+
+/* Vista de confirmacion.php */
+#contenido_confirmacion{
+	background-color: white;
+	border: 1px solid #cfcfcf;
+	float: left;
+	font-size: 13px;
+	overflow: auto;
+	padding: 10px 0px 40px 20px;
+	width: 958px;
+}
+
+.confirmacion_titulos_datos{
+	font-size: medium;
+	font-weight: bold;
+	margin: 0px 0px -10px 20px;
+}
+
+.confirmacion_titulos_info{
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.bloque_informacion{
+	margin: 20px 50px 60px 0px;
+}
+
+#cancelar_asistencia{
+	float: left;
+	margin-left: 100px;
+}
+
+#confirmar_asistencia{
+	float: right;
+	margin-right: 100px;
+}
+
+.confirmacion_info{
+	padding-left: 20px;
+}
+
+#bloque_ingresar_correo{
+	border: 1px solid black;
+	padding: 20px;
+	width: 94%;
+}
+
+#input_verificar_correo{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#verificar_correo{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}

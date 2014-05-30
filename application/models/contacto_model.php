@@ -34,6 +34,7 @@ class contacto_model extends CI_Model{
 		$this->db->from('contacto');
 		$this->db->join('tipo_contacto', 'contacto.contacto_tipo = tipo_contacto.id_tipo_contacto');
 		$this->db->join('instancia', 'contacto.contacto_instancia = instancia.id_instancia');
+        $this->db->order_by("contacto.id_contacto", "asc"); 
 
 		$query = $this->db->get();
 

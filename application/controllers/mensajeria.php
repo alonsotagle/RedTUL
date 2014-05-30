@@ -160,11 +160,8 @@ class mensajeria extends CI_Controller {
             $html = true;
         }
 
-        $id_destinatarios_string = $this->input->post('id_destinatarios');
-        $id_destinatarios = explode(",", $id_destinatarios_string);
-
         $email_data = array(
-            'id_destinatarios'  => $id_destinatarios,
+            'id_destinatarios'  => $this->input->post('id_destinatarios'),
             'asunto'            => $this->input->post('asunto'),
             'contenido'         => $mensaje,
             'html'              => $html,

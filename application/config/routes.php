@@ -38,9 +38,10 @@
 |
 */
 
-$route['default_controller'] = "login";
+$route['default_controller'] = "contactos";
 $route['404_override'] = '';
 
+$route['confirmacion/(:num)'] = 'confirmacion/index/$1';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

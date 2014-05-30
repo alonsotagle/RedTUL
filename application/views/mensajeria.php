@@ -142,8 +142,8 @@
 
 		$("#programar_correo_fecha").prop('disabled', true);
 		$("#programar_correo_hora").prop('disabled', true);
-		$("input[name=fecha_envio]").change(function(){
-			if ($('input[name=fecha_envio]:checked').val() == 1) {
+		$("input[name=envio]").change(function(){
+			if ($('input[name=envio]:checked').val() == 1) {
 				$("#programar_correo_fecha").prop('disabled', false);
 				$("#programar_correo_hora").prop('disabled', false);
 				$("#programar_correo_fecha").addClass("validate[required] datepicker");
@@ -166,13 +166,13 @@
 					$("#tabs_correo_cuerpo").tabs("disable", 1);
 					$("#tab-html textarea").val("");
 					valor_contenido_textarea = $("#tab-textoplano textarea").val();
-					valor_contenido_textarea += "\n\nPágina para incribirse:\n<a href='http://www.tab-textoplano.com'>http://www.tab-textoplano.com</a>";
+					valor_contenido_textarea += "\n\nPágina para incribirse:\n<a href='<?= site_url('confirmacion') ?>/"+$("#lista_cursos").val()+"'>Inscribirse a evento</a>";
 					$("#tab-textoplano textarea").val(valor_contenido_textarea);
 				}else{
 					$("#tabs_correo_cuerpo").tabs("disable", 0);
 					$("#tab-textoplano textarea").val("");
 					valor_contenido_textarea = $("#tab-html textarea").val();
-					valor_contenido_textarea += "\nPágina para incribirse:\n<a href='http://www.tab-html.com'>http://www.tab-html.com</a>";
+					valor_contenido_textarea += "\n\nPágina para incribirse:\n<a href='<?= site_url('confirmacion') ?>/"+$("#lista_cursos").val()+"'>Inscribirse a evento</a>";
 					$("#tab-html textarea").val(valor_contenido_textarea);
 				}
 				$("#tabs_enviar_correo").tabs("option", "active", 0);

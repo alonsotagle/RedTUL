@@ -39,7 +39,7 @@ class Class_email{
         $CI->phpmailer->SMTPSecure = 'tls';
         //Whether to use SMTP authentication
         $CI->phpmailer->SMTPAuth   = true;
-        $CI->phpmailer->CharSet  = 'UTF-8';
+        $CI->phpmailer->CharSet    = 'UTF-8';
         //Username to use for SMTP authentication - use full email address for gmail
         $CI->phpmailer->Username   = $this->email;
         //Password to use for SMTP authentication
@@ -66,7 +66,6 @@ class Class_email{
             } else {
                 $CI->phpmailer->AddAddress($value['contacto_correo_per'], $value['contacto_nombre']." ".$value['contacto_ap_paterno']." ".$value['contacto_ap_materno']);
             }
-            
         }
 
         if(!$CI->phpmailer->Send()) {

@@ -22,11 +22,21 @@
 				</table>");
 
 				$.each(resultado, function( index, value ) {
-					$('#despliega_cursos table tbody').append('<tr>\
+
+					var datos_curso_renglon = "";
+					datos_curso_renglon += '<tr>\
 						<td>'+value['curso_titulo']+'</td>\
-						<td>'+value['curso_tipo']+'</td>\
-						<td>'+value['curso_instructor']+'</td>\
-						<td>'+value['estatus_curso_descripcion']+'</td>\
+						<td>'+value['curso_tipo']+'</td>';
+
+					datos_curso_renglon += '<td>';
+
+					$.each(value['curso_instructor'], function(index, value){
+						datos_curso_renglon += value['contacto_nombre']+" "+value['contacto_ap_paterno']+" "+value['contacto_ap_materno']+"<br><br>";
+					});
+
+					datos_curso_renglon += '</td>';
+
+					datos_curso_renglon += '<td>'+value['estatus_curso_descripcion']+'</td>\
 						<td>'+value['curso_fecha_inicio']+' a '+value['curso_fecha_fin']+'</td>\
 						<td>'+value['curso_hora_inicio']+' a '+value['curso_hora_fin']+'</td>\
 						<td>'+value['curso_cupo']+'</td>\
@@ -40,7 +50,9 @@
 						<img \
 						src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
 						</a></td>\
-					</tr>');
+					</tr>';
+
+					$('#despliega_cursos table tbody').append(datos_curso_renglon);
 				});
 			}else{
 				$('#despliega_cursos').html('No hay cursos registrados');

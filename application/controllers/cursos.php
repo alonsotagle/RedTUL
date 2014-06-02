@@ -80,7 +80,7 @@ class cursos extends CI_Controller {
                 $curso['curso_tipo'] = 'En línea';
             }
 
-            $curso['curso_instructor'] = "";
+            $curso['curso_instructor'] = $this->curso_model->consulta_instructores_nombre_curso($curso['id_curso']);
         }
 
         print_r(json_encode($cursos));
@@ -109,7 +109,7 @@ class cursos extends CI_Controller {
                         $curso['curso_tipo'] = 'En línea';
                     }
 
-                    $curso['curso_instructor'] = "";
+                    $curso['curso_instructor'] = $this->curso_model->consulta_instructores_nombre_curso($curso['id_curso']);
                 }
             }
 

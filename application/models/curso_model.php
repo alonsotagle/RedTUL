@@ -62,6 +62,8 @@ class curso_model extends CI_Model{
     						curso.curso_cupo');
 		$this->db->from('curso');
 		$this->db->join('estatus_curso', 'curso.curso_estatus = estatus_curso.id_estatus_curso');
+        $this->db->join('curso_instructor', 'curso.id_curso = curso_instructor.curso_id');
+        $this->db->join('contacto', 'curso_instructor.instructor_id = contacto.id_contacto');
 
         if ($parametros_busqueda['nombre_curso'] != "") {
             $this->db->like('curso.curso_titulo', $parametros_busqueda['nombre_curso']);
@@ -69,6 +71,12 @@ class curso_model extends CI_Model{
 
         if (isset($parametros_busqueda['tipo_curso'])) {
             $this->db->where('curso.curso_tipo', $parametros_busqueda['tipo_curso']);
+        }
+
+        if ($parametros_busqueda['instructor_curso'] != "") {
+            $this->db->like('contacto.contacto_nombre', $parametros_busqueda['instructor_curso']);
+            $this->db->or_like('contacto.contacto_ap_paterno', $parametros_busqueda['instructor_curso']);
+            $this->db->or_like('contacto.contacto_ap_materno', $parametros_busqueda['instructor_curso']);
         }
 
         if (isset($parametros_busqueda['estatus_curso'])) {
@@ -255,5 +263,25 @@ class curso_model extends CI_Model{
     {
         $datos = array('curso_id' => $id_curso);
         $this->db->delete('curso_instructor', $datos);
+    }
+
+    public function consulta_instructores_nombre_curso($id_curso)
+    {
+        $this->db->select('contacto.contacto_nombre,
+                            contacto.contacto_ap_paterno,
+                            contacto.contacto_ap_materno');
+        $this->db->from('contacto');
+        $this->db->join('curso_instructor', 'contacto.id_contacto = curso_instructor.instructor_id');
+
+        $this->db->where('curso_instructor.curso_id', $id_curso);
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
     }
 }

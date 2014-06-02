@@ -17,10 +17,6 @@ class confirmacion extends CI_Controller {
 
         $datos_curso = $this->confirmacion_model->consulta_curso($id_curso);
 
-        // echo "<pre>";
-        // var_dump($datos_curso);
-        // echo "</pre>";
-
     	$this->load->view('template/header');
         $this->load->view('confirmacion', $datos_curso);
         $this->load->view('template/footer');

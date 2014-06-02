@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "contactos";
+$route['default_controller'] = "inicio";
 $route['404_override'] = '';
 
 $route['confirmacion/(:num)'] = 'confirmacion/index/$1';

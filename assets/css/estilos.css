@@ -685,3 +685,17 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 }
+
+/* Inicia INSTANCIA */
+
+#bloque_buscar_instancia{
+	border: 1px solid black;
+	height: 50px;
+	margin-bottom: 35px;
+	padding: 20px;
+	width: 280px;
+}
+
+#btn_buscar_instancia{
+	float: right;
+}

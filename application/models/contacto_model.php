@@ -107,6 +107,8 @@ class contacto_model extends CI_Model{
 
         if ($data_buscar['nombre_contacto'] != "") {
             $parametros['contacto.contacto_nombre'] = $data_buscar['nombre_contacto'];
+            $this->db->or_like('contacto.contacto_ap_paterno', $data_buscar['nombre_contacto']);
+            $this->db->or_like('contacto.contacto_ap_materno', $data_buscar['nombre_contacto']);
         }
 
         if ($data_buscar['correo_contacto'] != "") {
@@ -123,6 +125,7 @@ class contacto_model extends CI_Model{
         }
 
         $this->db->like($parametros);
+
         $query = $this->db->get();
 
         if ($query -> num_rows() > 0)

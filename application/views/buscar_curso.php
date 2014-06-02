@@ -32,7 +32,11 @@
 			echo "<tr>
 					<td>".$value['curso_titulo']."</td>
 					<td>".$value['curso_tipo']."</td>
-					<td>".$value['curso_instructor']."</td>
+					<td>";
+			foreach ($value['curso_instructor'] as $index => $instructor) {
+				echo $instructor['contacto_nombre']." ".$instructor['contacto_ap_paterno']." ".$instructor['contacto_ap_materno']."<br><br>";
+			}
+			echo "</td>
 					<td>".$value['estatus_curso_descripcion']."</td>
 					<td>".$value['curso_fecha_inicio']." a ".$value['curso_fecha_fin']."</td>
 					<td>".$value['curso_hora_inicio']." a ".$value['curso_hora_fin']."</td>

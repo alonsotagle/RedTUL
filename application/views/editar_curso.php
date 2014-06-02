@@ -17,8 +17,10 @@ $(document).ready(function(){
 				$.each(resultado, function(index, value ){
 					$("#curso_instructor").append("<option value='"+value['id_contacto']+"'>"+value['contacto_nombre']+" "+value['contacto_ap_paterno']+" "+ value['contacto_ap_materno']+"</option>");
 				});
-				seleccionar_invitados();
 			}
+		},
+		complete: function(){
+			seleccionar_invitados();
 		}
 	});
 

@@ -76,6 +76,9 @@
 				<label for="curso_titulo" class="label_nuevo_curso">* T&iacute;tulo del curso</label>
 				<input type="text" maxlength="255" id="curso_titulo" name="curso_titulo" class="validate[required]">
 				<br>
+				<label for="curso_flyer" class="label_nuevo_curso">Flyer</label>
+				<input type="file" id="curso_flyer" name="curso_flyer" class="validate[checkFileType[jpg|jpeg|gif]]"/>
+				<br>
 				<label for="curso_tipo" class="label_nuevo_curso">* Tipo de curso
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica la modalidad en que se llevará a cabo dicho curso.">
 				</label>
@@ -92,7 +95,7 @@
 				<textarea id="curso_objetivos" name="curso_objetivos" cols="40" rows="4" maxlength="250" placeholder="Ingrese el fin al que se desea llegar, la meta que se pretende lograr con la impartición de dicho curso." class="validate[required]"></textarea>
 				<br>
 				<label for="curso_temario" class="label_nuevo_curso">* Temario</label>
-				<input type="file" id="curso_temario" name="curso_temario" /> <!-- class="validate[required, checkFileType[pdf]]" -->
+				<input type="file" id="curso_temario" name="curso_temario" class="validate[required, checkFileType[pdf]]"/>
 				<br>
 
 				<p class="encabezado_form_nuevo_curso">Datos del evento</p>

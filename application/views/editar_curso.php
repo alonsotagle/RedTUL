@@ -29,19 +29,31 @@ $(document).ready(function(){
 		type: 'post',
 		success: function(resultado) {
 			if (resultado != null) {				
-				$('#curso_titulo').val(resultado[0]['curso_titulo']);
-				$("#curso_tipo option[value="+resultado[0]['curso_tipo']+"]").prop('selected', true);
-				$('#curso_descripcion').val(resultado[0]['curso_descripcion']);
-				$('#curso_objetivos').val(resultado[0]['curso_objetivos']);
-				$('#curso_fecha_inicio').val(resultado[0]['curso_fecha_inicio']);
-				$('#curso_fecha_fin').val(resultado[0]['curso_fecha_fin']);
-				$('#curso_hora_inicio').val(resultado[0]['curso_hora_inicio']);
-				$('#curso_hora_fin').val(resultado[0]['curso_hora_fin']);
-				$('#curso_cupo').val(resultado[0]['curso_cupo']);
-				$('#curso_ubicacion').val(resultado[0]['curso_ubicacion']);
-				$('#curso_url_ubicacion').val(resultado[0]['curso_mapa_url']);
-				$('#curso_telefono').val(resultado[0]['curso_telefono']);
-				$('#curso_telefono_extension').val(resultado[0]['curso_telefono_extension']);
+				$('#curso_titulo').val(resultado['curso_titulo']);
+				$("#curso_tipo option[value="+resultado['curso_tipo']+"]").prop('selected', true);
+				$('#curso_descripcion').val(resultado['curso_descripcion']);
+				$('#curso_objetivos').val(resultado['curso_objetivos']);
+				$('#curso_fecha_inicio').val(resultado['curso_fecha_inicio']);
+				$('#curso_fecha_fin').val(resultado['curso_fecha_fin']);
+				$('#curso_hora_inicio').val(resultado['curso_hora_inicio']);
+				$('#curso_hora_fin').val(resultado['curso_hora_fin']);
+				$('#curso_cupo').val(resultado['curso_cupo']);
+				$('#curso_ubicacion').val(resultado['curso_ubicacion']);
+				$('#curso_url_ubicacion').val(resultado['curso_mapa_url']);
+				$('#curso_telefono').val(resultado['curso_telefono']);
+				$('#curso_telefono_extension').val(resultado['curso_telefono_extension']);
+				if (resultado['curso_flyer'] != "") {
+					var url = "<?= base_url('assets/flyers_cursos') ?>";
+						url += "/"+resultado['curso_flyer'];
+
+					var img_flyer = $("<img>")
+					.attr("src", url)
+					.attr("id", "img_flyer")
+					.attr("width", "150")
+					.attr("height", "150");
+
+					$("#curso_flyer").after($(img_flyer));
+				}
 			}
 		}
 	});
@@ -198,6 +210,9 @@ $(document).ready(function(){
 				<label for="curso_titulo" class="label_nuevo_curso">* T&iacute;tulo del curso</label>
 				<input type="text" maxlength="255" id="curso_titulo" name="curso_titulo" class="validate[required]">
 				<br>
+				<label for="curso_flyer" class="label_nuevo_curso">Flyer</label>
+				<input type="file" id="curso_flyer" name="curso_flyer" class="validate[checkFileType[jpg|jpeg|gif]]"/>
+				<br>
 				<label for="curso_tipo" class="label_nuevo_curso">* Tipo de contacto
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica la modalidad en que se llevará a cabo dicho curso.">
 				</label>
@@ -214,7 +229,7 @@ $(document).ready(function(){
 				<textarea id="curso_objetivos" name="curso_objetivos" cols="40" rows="4" maxlength="250" placeholder="Ingrese el fin al que se desea llegar, la meta que se pretende lograr con la impartición de dicho curso." class="validate[required]"></textarea>
 				<br>
 				<label for="curso_temario" class="label_nuevo_curso">* Temario</label>
-				<input type="file" id="curso_temario" name="curso_temario" /> <!-- class="validate[required, checkFileType[pdf]]" -->
+				<input type="file" id="curso_temario" name="curso_temario" class="validate[required, checkFileType[pdf]]"/>
 				<br>
 
 				<p class="encabezado_form_nuevo_curso">Datos del evento</p>

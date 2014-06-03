@@ -30,40 +30,90 @@ class cursos extends CI_Controller {
     function registrar_curso() {
         if (!empty($_POST)) {
 
-            $nuevo_curso = array(
-                'curso_titulo' => $this->input->post('curso_titulo'),
-                'curso_flyer' => '/',
-                'curso_tipo' => $this->input->post('curso_tipo'),
-                'curso_descripcion' => $this->input->post('curso_descripcion'),
-                'curso_objetivos' => $this->input->post('curso_objetivos'),
-                'curso_temario' => '/',
-                'curso_fecha_inicio' => $this->input->post('curso_fecha_inicio'),
-                'curso_fecha_fin' => $this->input->post('curso_fecha_fin'),
-                'curso_hora_inicio' => $this->input->post('curso_hora_inicio'),
-                'curso_hora_fin' => $this->input->post('curso_hora_fin'),
-                'curso_cupo' => $this->input->post('curso_cupo'),
-                'curso_ubicacion' => $this->input->post('curso_ubicacion'),
-                'curso_mapa_url' => $this->input->post('curso_url_ubicacion'),
-                'curso_telefono' => $this->input->post('curso_telefono'),
-                'curso_telefono_extension' => $this->input->post('curso_telefono_extension'),
-                'curso_estatus' => 2
-            );
+            $respuesta_temario = $this->subir_temario();
 
-            if ($nuevo_curso['curso_cupo'] == "") {
-                $nuevo_curso['curso_cupo'] = 0;
+            if ($_FILES['curso_flyer']['size'] == 0) {
+                $respuesta_flyer = "";
+            }else{
+                $respuesta_flyer = $this->subir_flyer();
             }
 
-            $this->curso_model->registrar_curso($nuevo_curso);
+            if ($respuesta_temario != "error_subida" && $respuesta_flyer != "error_subida") {
+                $nuevo_curso = array(
+                    'curso_titulo' => $this->input->post('curso_titulo'),
+                    'curso_flyer' => $respuesta_flyer,
+                    'curso_tipo' => $this->input->post('curso_tipo'),
+                    'curso_descripcion' => $this->input->post('curso_descripcion'),
+                    'curso_objetivos' => $this->input->post('curso_objetivos'),
+                    'curso_temario' => $respuesta_temario,
+                    'curso_fecha_inicio' => $this->input->post('curso_fecha_inicio'),
+                    'curso_fecha_fin' => $this->input->post('curso_fecha_fin'),
+                    'curso_hora_inicio' => $this->input->post('curso_hora_inicio'),
+                    'curso_hora_fin' => $this->input->post('curso_hora_fin'),
+                    'curso_cupo' => $this->input->post('curso_cupo'),
+                    'curso_ubicacion' => $this->input->post('curso_ubicacion'),
+                    'curso_mapa_url' => $this->input->post('curso_url_ubicacion'),
+                    'curso_telefono' => $this->input->post('curso_telefono'),
+                    'curso_telefono_extension' => $this->input->post('curso_telefono_extension'),
+                    'curso_estatus' => 2
+                );
 
-            $id_curso_creado = $this->curso_model->recuperar_id();
+                if ($nuevo_curso['curso_cupo'] == "") {
+                    $nuevo_curso['curso_cupo'] = 0;
+                }
 
-            foreach ($this->input->post('curso_instructor') as $key => $value) {
-                $this->curso_model->registrar_instructor_curso($id_curso_creado['id_curso'], $value);
+                $this->curso_model->registrar_curso($nuevo_curso);
+
+                $id_curso_creado = $this->curso_model->recuperar_id();
+
+                foreach ($this->input->post('curso_instructor') as $key => $value) {
+                    $this->curso_model->registrar_instructor_curso($id_curso_creado['id_curso'], $value);
+                }
+
+                $_POST = array();
+
+                $this->editar($id_curso_creado);
             }
+        }
+    }
 
-            $_POST = array();
+    function subir_temario()
+    {
+        $config['upload_path'] = './assets/temarios_cursos/';
+        $config['allowed_types'] = 'pdf';
+        $config['max_size'] = '5120';
+        $config['encrypt_name'] = TRUE;
 
-            $this->editar($id_curso_creado);
+        $this->load->library('upload', $config);
+
+        if (!$this->upload->do_upload("curso_temario"))
+        {
+            echo $this->upload->display_errors();
+            return "error_subida";
+        }else{
+            $datos = $this->upload->data();
+            return $datos["file_name"];
+        }
+    }
+
+    function subir_flyer()
+    {
+        $config['upload_path'] = './assets/flyers_cursos/';
+        $config['allowed_types'] = 'gif|jpg';
+        $config['max_size'] = '2048';
+        $config['encrypt_name'] = TRUE;
+
+        $this->load->library('upload', $config);
+
+        $this->upload->initialize($config);
+
+        if (!$this->upload->do_upload("curso_flyer"))
+        {
+            echo $this->upload->display_errors();
+            return "error_subida";
+        }else{
+            $datos = $this->upload->data();
+            return $datos["file_name"];
         }
     }
 
@@ -140,13 +190,21 @@ class cursos extends CI_Controller {
             $this->load->view('template/footer');
         }else{
 
+            $respuesta_temario = $this->subir_temario();
+
+            if ($_FILES['curso_flyer']['size'] == 0) {
+                $respuesta_flyer = "";
+            }else{
+                $respuesta_flyer = $this->subir_flyer();
+            }
+
             $editar_curso = array(
                 'curso_titulo' => $this->input->post('curso_titulo'),
-                'curso_flyer' => '/',
+                'curso_flyer' => $respuesta_flyer,
                 'curso_tipo' => $this->input->post('curso_tipo'),
                 'curso_descripcion' => $this->input->post('curso_descripcion'),
                 'curso_objetivos' => $this->input->post('curso_objetivos'),
-                'curso_temario' => '/',
+                'curso_temario' => $respuesta_temario,
                 'curso_fecha_inicio' => $this->input->post('curso_fecha_inicio'),
                 'curso_fecha_fin' => $this->input->post('curso_fecha_fin'),
                 'curso_hora_inicio' => $this->input->post('curso_hora_inicio'),

@@ -487,6 +487,10 @@ body {
 	width: 295px;
 }
 
+#img_flyer{
+	display: block;
+}
+
 /* Inicia MENSAJERIA */
 
 /* Vista de mensajeria.php */

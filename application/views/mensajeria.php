@@ -341,7 +341,7 @@
 
 <div id="tabs">
 		<ul>
-			<li><a href="#tabs-1">Bandeja de entrada</a></li>
+			<li><a href="#tabs-1">Correo electr&oacute;nicos enviados</a></li>
 			<li><a href="#tabs-2">Nuevo correo electr&oacute;nico</a></li>
 			<li><a href="#tabs-3">Administrar plantillas</a></li>
 		</ul>

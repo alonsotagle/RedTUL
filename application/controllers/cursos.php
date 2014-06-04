@@ -130,6 +130,14 @@ class cursos extends CI_Controller {
                 $curso['curso_tipo'] = 'En línea';
             }
 
+            if ($curso['curso_cupo'] == '0') {
+                $curso['curso_cupo'] = "";
+                $curso['curso_cupo_disponible'] = "";
+            }else{
+                $curso_inscritos = $this->curso_model->contar_inscritos($curso['id_curso']);
+                $curso['curso_cupo_disponible'] = $curso['curso_cupo'] - $curso_inscritos;
+            }
+
             $curso['curso_instructor'] = $this->curso_model->consulta_instructores_nombre_curso($curso['id_curso']);
         }
 

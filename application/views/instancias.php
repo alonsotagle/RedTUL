@@ -10,26 +10,38 @@
 				$('#despliega_instancias').html("<table class='tables'>\
 					<tr>\
 						<td>Nombre</td>\
-						<td>Editar</td>\
-						<td>Eliminar</td>\
 					</tr>\
 				</table>");
+
+				// $('#despliega_instancias').html("<table class='tables'>\
+				// 	<tr>\
+				// 		<td>Nombre</td>\
+				// 		<td>Editar</td>\
+				// 		<td>Eliminar</td>\
+				// 	</tr>\
+				// </table>");
 
 				$.each(resultado, function( index, value ) {
 					$('#despliega_instancias table tbody').append('<tr>\
 						<td>'+value['instancia_nombre']+'</td>\
-						<td><a \
-						href="'+"<?= site_url('instancias/editar')?>"+"/"+value['id_instancia']+'">\
-							<img \
-							src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
-						</a></td>\
-						<td><a \
-						href="'+"<?= site_url('instancias/eliminar')?>"+"/"+value['id_instancia']+'">\
-							<img \
-							src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
-						</a></td>\
 					</tr>');
 				});
+
+				// $.each(resultado, function( index, value ) {
+				// 	$('#despliega_instancias table tbody').append('<tr>\
+				// 		<td>'+value['instancia_nombre']+'</td>\
+				// 		<td><a \
+				// 		href="'+"<?= site_url('instancias/editar')?>"+"/"+value['id_instancia']+'">\
+				// 			<img \
+				// 			src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
+				// 		</a></td>\
+				// 		<td><a \
+				// 		href="'+"<?= site_url('instancias/eliminar')?>"+"/"+value['id_instancia']+'">\
+				// 			<img \
+				// 			src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
+				// 		</a></td>\
+				// 	</tr>');
+				// });
 			}else{
 				$('#despliega_instancias').html('No hay instancias registradas');
 			}
@@ -58,17 +70,22 @@
 							$.each(resultado, function(index, value) {
 								$('#despliega_instancias table tbody').append('<tr>\
 									<td>'+value['instancia_nombre']+'</td>\
-									<td>\
-										<img id='+value['id_instancia']+' class="img_editar_plantilla"\
-										src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
-									</td>\
-									<td><a \
-										href="'+"<?= site_url('mensajeria')?>"+"/"+value['id_instancia']+'">\
-										<img \
-										src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
-									</a></td>\
 								</tr>');
 							});
+							// $.each(resultado, function(index, value) {
+							// 	$('#despliega_instancias table tbody').append('<tr>\
+							// 		<td>'+value['instancia_nombre']+'</td>\
+							// 		<td>\
+							// 			<img id='+value['id_instancia']+' class="img_editar_plantilla"\
+							// 			src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
+							// 		</td>\
+							// 		<td><a \
+							// 			href="'+"<?= site_url('mensajeria')?>"+"/"+value['id_instancia']+'">\
+							// 			<img \
+							// 			src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
+							// 		</a></td>\
+							// 	</tr>');
+							// });
 						}else{
 							$('#despliega_instancias table tbody').find("tr:gt(0)").remove();
 						}
@@ -96,9 +113,9 @@
 
 	<div id="despliega_instancias"></div>
 
-	<a href="<?= base_url('index.php/cursos/nuevo')?>">
+	<!-- <a href="<?= base_url('index.php/cursos/nuevo')?>">
 		<input type="button" id="btn_nuevo_curso" value="Nueva instancia"/>
-	</a>
+	</a> -->
 
 </div>
 <!-- termina contenido -->

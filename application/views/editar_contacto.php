@@ -10,28 +10,33 @@
 			success: function(resultado)
 			{
 				if (resultado != null) {
-					$('#contacto_nombre').val(resultado[0]['contacto_nombre']);
-					$('#contacto_paterno').val(resultado[0]['contacto_ap_paterno']);
-					$('#contacto_materno').val(resultado[0]['contacto_ap_materno']);
-					$('#contacto_adscripcion').val(resultado[0]['contacto_adscripcion']);
-					$('#contacto_funciones').val(resultado[0]['contacto_funciones']);
-					$('#contacto_correoinst').val(resultado[0]['contacto_correo_inst']);
-					$('#contacto_correopers').val(resultado[0]['contacto_correo_per']);
-					$('#contacto_telefono').val(resultado[0]['contacto_telefono']);
-					$('#contacto_ext').val(resultado[0]['contacto_extension']);
-					$('#contacto_instancias').val(resultado[0]['instancia_nombre']);
-					$('#id_instancia').val(resultado[0]['contacto_instancia']);
-					$("input[name=estatus_contacto][value="+resultado[0]['contacto_estatus']+"]").prop('checked', true);
-					$("input[name=tipo_contacto][value="+resultado[0]['contacto_tipo']+"]").prop('checked', true);
-					$("input[name=instructor_candidato][value="+resultado[0]['contacto_instructor']+"]").prop('checked', true);
-					$("input[name=comunicacion_contacto][value="+resultado[0]['contacto_comunicacion']+"]").prop('checked', true);
+					$('#contacto_nombre').val(resultado['contacto_nombre']);
+					$('#contacto_paterno').val(resultado['contacto_ap_paterno']);
+					$('#contacto_materno').val(resultado['contacto_ap_materno']);
+					$('#contacto_adscripcion').val(resultado['contacto_adscripcion']);
+					$('#contacto_funciones').val(resultado['contacto_funciones']);
+					$('#contacto_correoinst').val(resultado['contacto_correo_inst']);
+					$('#contacto_correopers').val(resultado['contacto_correo_per']);
+					$('#contacto_telefono').val(resultado['contacto_telefono']);
+					$('#contacto_ext').val(resultado['contacto_extension']);
+					$('#contacto_instancias').val(resultado['instancia_nombre']);
+					$('#id_instancia').val(resultado['contacto_instancia']);
+					$("input[name=estatus_contacto][value="+resultado['contacto_estatus']+"]").prop('checked', true);
+					$("input[name=tipo_contacto][value="+resultado['contacto_tipo']+"]").prop('checked', true);
+					$("input[name=instructor_candidato][value="+resultado['contacto_instructor']+"]").prop('checked', true);
+					$("input[name=comunicacion_contacto][value="+resultado['contacto_comunicacion']+"]").prop('checked', true);
 
-					$('#contacto_avatar_old').val(resultado[0]['contacto_avatar']);
+					$('#contacto_avatar_old').val(resultado['contacto_avatar']);
 
-					if (resultado[0]['contacto_avatar'] != "") {
+					if (resultado['contacto_avatar'] != "") {
 						url = "<?= base_url('assets/img_avatar') ?>";
-						url += "/"+resultado[0]['contacto_avatar'];
+						url += "/"+resultado['contacto_avatar'];
 						$('#contacto_imagen').attr('src', url);
+						$("#contacto_imagen").after($("<button>", {
+							text 	: "Borrar imagen",
+							id		: "borrar_imagen",
+							type	: "button"
+						}));
 					}
 				}
 			}
@@ -80,13 +85,18 @@
 		$("#contacto_avatar").change(function(){
 	        if (this.files && this.files[0]) {
 	            var reader = new FileReader();
-	            
 	            reader.onload = function (e) {
 	                $('#contacto_imagen').attr('src', e.target.result);
 	            }
-	            
 	            reader.readAsDataURL(this.files[0]);
 	        }
+	    });
+
+	    $("#contenedor_imagen").on("click", "#borrar_imagen", function(){
+	    	url = "<?= base_url('assets/img/avatar.jpg') ?>";
+			$('#contacto_imagen').attr('src', url);
+			$("#borrar_imagen").hide();
+			$("#contacto_avatar_old").val("");
 	    });
 
     });
@@ -111,7 +121,7 @@
 		</div>
 		<div id="contenedor_imagen">
 			<img src="<?= base_url('assets/img/avatar.jpg') ?>" id="contacto_imagen">
-			<input type="file" id="contacto_avatar" name="contacto_avatar">
+			<input type="file" id="contacto_avatar" name="contacto_avatar" class="validate[checkFileType[jpg|gif]]" data-prompt-position="topLeft">
 			<input type="hidden" id="contacto_avatar_old" name="contacto_avatar_old">
 		</div>
 		<div class="contenedor_seccion_formulario">

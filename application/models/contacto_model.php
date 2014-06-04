@@ -74,7 +74,7 @@ class contacto_model extends CI_Model{
 
         if ($query -> num_rows() > 0)
         {
-            return $query->result_array();
+            return $query->row();
         } else {
             return null;
         }

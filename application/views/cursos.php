@@ -15,6 +15,7 @@
 						<td>Estatus</td>\
 						<td>Vigencia</td>\
 						<td>Horario</td>\
+						<td>Cupo total</td>\
 						<td>Cupo disponible</td>\
 						<td>Editar</td>\
 						<td>Eliminar</td>\
@@ -40,6 +41,7 @@
 						<td>'+value['curso_fecha_inicio']+' a '+value['curso_fecha_fin']+'</td>\
 						<td>'+value['curso_hora_inicio']+' a '+value['curso_hora_fin']+'</td>\
 						<td>'+value['curso_cupo']+'</td>\
+						<td>'+value['curso_cupo_disponible']+'</td>\
 						<td><a \
 						href="'+"<?= site_url('cursos/editar')?>"+"/"+value['id_curso']+'">\
 						<img \

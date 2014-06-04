@@ -164,9 +164,10 @@ class curso_model extends CI_Model{
         $parametros_busqueda = array();
 
         if ($parametros['nombre'] != "") {
-            $this->db->like('contacto.contacto_nombre', $parametros['nombre']);
-            $this->db->or_like('contacto.contacto_ap_paterno', $parametros['nombre']);
-            $this->db->or_like('contacto.contacto_ap_materno', $parametros['nombre']);
+            // $this->db->like('contacto.contacto_nombre', $parametros['nombre']);
+            // $this->db->or_like('contacto.contacto_ap_paterno', $parametros['nombre']);
+            // $this->db->or_like('contacto.contacto_ap_materno', $parametros['nombre']);
+            $this->db->like('CONCAT_WS(" ", contacto.contacto_nombre, contacto.contacto_ap_paterno, contacto.contacto_ap_materno)', $parametros['nombre']);
         }
 
         if ($parametros['correo'] != "") {
@@ -175,7 +176,7 @@ class curso_model extends CI_Model{
         }
 
         if ($parametros['instancia'] != "") {
-            $this->db->like('instacia.instancia_nombre', $parametros['instancia']);
+            $this->db->like('instancia.instancia_nombre', $parametros['instancia']);
         }
 
         $query = $this->db->get();
@@ -283,5 +284,15 @@ class curso_model extends CI_Model{
         } else {
             return null;
         }
+    }
+
+    public function contar_inscritos($id_curso)
+    {
+        $this->db->from('curso_inscrito');
+        $this->db->where('id_curso', $id_curso);
+
+        $query = $this->db->count_all_results();
+
+        return $query;
     }
 }

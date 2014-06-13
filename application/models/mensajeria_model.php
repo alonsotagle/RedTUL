@@ -127,7 +127,8 @@ class mensajeria_model extends CI_Model{
         $this->db->select('id_correo,
                             correo_asunto,
                             correo_fecha_envio,
-                            correo_fecha_creacion');
+                            correo_fecha_creacion,
+                            correo_estatus');
 
         $this->db->from('correo');
 
@@ -146,7 +147,8 @@ class mensajeria_model extends CI_Model{
         $this->db->select('id_correo,
                             correo_asunto,
                             correo_fecha_envio,
-                            correo_fecha_creacion');
+                            correo_fecha_creacion,
+                            correo_estatus');
         $this->db->from('correo');
 
         if ($parametros['correo_asunto'] != "") {
@@ -174,6 +176,10 @@ class mensajeria_model extends CI_Model{
                 default:
                     break;
             }
+        }
+
+        if ($parametros['correo_hora_envio'] != "") {
+            $this->db->where('correo_hora_envio', $parametros['correo_hora_envio']);
         }
 
         if ($parametros['correo_estatus'] != "") {
@@ -214,5 +220,87 @@ class mensajeria_model extends CI_Model{
     public function registrar_correo($correo)
     {
         $this->db->insert('correo', $correo);
+
+        return  $this->db->insert_id();
+    }
+
+    public function consulta_invitados_curso_tipo($curso_id)
+    {
+        $this->db->select('contacto.id_contacto');
+
+        $this->db->from('curso_invitado_tipo');
+        $this->db->join('contacto', 'curso_invitado_tipo.tipo_contacto_id = contacto.contacto_tipo');
+
+        $this->db->where('curso_invitado_tipo.curso_id', $curso_id);
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function consulta_invitados_curso_contacto($curso_id)
+    {
+        $this->db->select('contacto.id_contacto');
+
+        $this->db->from('curso_invitado_contacto');
+        $this->db->join('contacto', 'curso_invitado_contacto.invitado_id = contacto.id_contacto');
+
+        $this->db->where('curso_invitado_contacto.curso_id', $curso_id);
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function registrar_destinatario_correo($correo_id, $contacto_id)
+    {
+        $this->db->insert('destinatario_correo', array('correo_id' => $correo_id,
+                                                        'contacto_id' => $contacto_id));
+    }
+
+    public function consulta_destinatarios_correos($id_correo)
+    {
+        $this->db->select('contacto.contacto_nombre,
+                            contacto.contacto_ap_paterno,
+                            contacto.contacto_ap_materno');
+        $this->db->from('contacto');
+        $this->db->join('destinatario_correo', 'contacto.id_contacto = destinatario_correo.contacto_id');
+
+        $this->db->where('destinatario_correo.correo_id', $id_correo);
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function consulta_correo($id_correo)
+    {
+        $this->db->from('correo');
+        $this->db->where('id_correo', $id_correo);
+
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->row_array();
+        } else {
+            return null;
+        }
     }
 }

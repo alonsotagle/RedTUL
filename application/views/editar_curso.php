@@ -72,15 +72,15 @@ $(document).ready(function(){
 
 	function seleccionar_invitados(){
 		$.ajax("<?= site_url('cursos/consulta_instructores_curso').'/'.$id_curso?>", {
-				dataType: 'json',
-				type: 'post',
-				success: function(resultado){
-					if (resultado != null){
-						$.each(resultado, function(index, value){
-							$('option[value='+value['instructor_id']+']').attr('selected', true);
-						});
-					}
+			dataType: 'json',
+			type: 'post',
+			success: function(resultado){
+				if (resultado != null){
+					$.each(resultado, function(index, value){
+						$('option[value='+value['instructor_id']+']').attr('selected', true);
+					});
 				}
+			}
 		});
 	}
 
@@ -95,6 +95,42 @@ $(document).ready(function(){
 				});
 			}
 		}
+	});
+
+	function consulta_invitado_contacto(){
+		$('#bloque_participantes table tbody').find("tr:gt(0)").remove();
+		$.ajax("<?= site_url('cursos/consulta_invitado_contacto').'/'.$id_curso?>", {
+			dataType: 'json',
+			type: 'post',
+			success: function(resultado) {
+				if (resultado != null) {
+					$.each(resultado, function(index, value) {
+						$("#bloque_participantes table").append("<tr>\
+							<td>"+value['contacto_nombre']+" "+value['contacto_ap_paterno']+" "+value['contacto_ap_materno']+"</td>\
+							<td><img src="+"<?= base_url('assets/img/icono_borrar.png')?>"+" class='eliminar_invitado' id='"+value['id_contacto']+"'></td>\
+						</tr>");
+					});
+				}
+			}
+		});
+	}
+	consulta_invitado_contacto();
+
+	$("#bloque_participantes").on("click", "table tbody tr td .eliminar_invitado", function(){
+
+		var datos = {
+			'curso' 	: <?= $id_curso ?>,
+			'contacto' 	: $(this).attr("id")
+		};
+
+		$.ajax("<?= site_url('cursos/borrar_invitado_contacto') ?>", {
+			dataType: 'json',
+			type: 'post',
+			data: datos,
+			complete: function(){
+				consulta_invitado_contacto();
+   			}
+		});
 	});
 
 
@@ -156,9 +192,9 @@ $(document).ready(function(){
 			dataType: 'json',
 			type: 'post',
 			success: function(resultado) {
-				$('table tbody').find("tr:gt(0)").remove();
+				$('#busqueda tbody').find("tr:gt(0)").remove();
 				$.each(resultado, function(index, value) {
-					$('table tbody').append('<tr>\
+					$('#busqueda tbody').append('<tr>\
 						<td>'+value['contacto_nombre']+' '+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+'</td>\
 						<td>'+value['contacto_correo_inst']+' '+value['contacto_correo_per']+'</td>\
 						<td>'+value['contacto_telefono']+'</td>\
@@ -194,6 +230,7 @@ $(document).ready(function(){
 			type: 'post',
 			success: function(resultado) {
 				alert("Invitados agregados correctamente.");
+				consulta_invitado_contacto();
 			}
 		});
 
@@ -315,6 +352,16 @@ $(document).ready(function(){
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="?">
 				</legend>
 
+				<div id='bloque_participantes'>
+					<p id="texto_participantes">Participantes</p>
+					<table class='tables'>
+						<tr>
+							<td>Nombre</td>
+							<td>Eliminar</td>
+						</tr>
+					</table>
+				</div>
+
 				<form id="frm_buscar_invitados">
 					<label for="invitados_curso" class="lbl_invitados_curso">Nombre</label>
 					<input type="text" id="invitados_curso" name="invitados_nombre" class="input_invitados_cuso validate[groupRequired[buscar_contacto]]"/>
@@ -328,7 +375,7 @@ $(document).ready(function(){
 					<input type="submit" id="btn_buscar_invitados" value="Buscar">
 				</form>
 
-				<table class='tables'>
+				<table id="busqueda" class='tables'>
 					<tr>
 						<td>Nombre completo</td>
 						<td>Correo electr&oacute;nico</td>

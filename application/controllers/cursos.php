@@ -131,8 +131,8 @@ class cursos extends CI_Controller {
             }
 
             if ($curso['curso_cupo'] == '0') {
-                $curso['curso_cupo'] = "";
-                $curso['curso_cupo_disponible'] = "";
+                $curso['curso_cupo'] = "No se registró cupo";
+                $curso['curso_cupo_disponible'] = "No se registró cupo";
             }else{
                 $curso_inscritos = $this->curso_model->contar_inscritos($curso['id_curso']);
                 $curso['curso_cupo_disponible'] = $curso['curso_cupo'] - $curso_inscritos;
@@ -303,11 +303,25 @@ class cursos extends CI_Controller {
         print_r(json_encode($resultado));
     }
 
+    function consulta_invitado_contacto($id_curso)
+    {
+        $resultado = $this->curso_model->consulta_invitado_contacto($id_curso);
+
+        print_r(json_encode($resultado));
+    }
+
     function consulta_instructores_curso($id_curso)
     {
         $instructores = $this->curso_model->consulta_instructores_curso($id_curso);
 
         print_r(json_encode($instructores));
+    }
+
+    function borrar_invitado_contacto(){
+        $id_curso = $this->input->post('curso');
+        $id_contacto = $this->input->post('contacto');
+
+        $this->curso_model->borrar_invitado_contacto($id_curso, $id_contacto);
     }
 
 }

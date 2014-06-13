@@ -11,11 +11,13 @@ class inicio_model extends CI_Model{
     public function __construct(){
         parent::__construct();
         $this->load->database();
+        date_default_timezone_set('America/Mexico_City');
     }
 
     public function consulta_cursos()
     {
-        $this->db->select('curso_titulo,
+        $this->db->select('id_curso,
+                            curso_titulo,
                             curso_tipo,
                             curso_fecha_inicio,
                             curso_hora_inicio,
@@ -34,6 +36,16 @@ class inicio_model extends CI_Model{
         } else {
             return null;
         }
+    }
+
+    public function contar_inscritos($id_curso)
+    {
+        $this->db->from('curso_inscrito');
+        $this->db->where('id_curso', $id_curso);
+
+        $query = $this->db->count_all_results();
+
+        return $query;
     }
 
 }

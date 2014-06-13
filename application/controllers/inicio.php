@@ -34,6 +34,14 @@ class inicio extends CI_Controller {
                 $curso['curso_tipo'] = 'En línea';
             }
 
+            if ($curso['curso_cupo'] != '0') {
+                $curso_inscritos = $this->inicio_model->contar_inscritos($curso['id_curso']);
+                $curso['curso_cupo_disponible'] = $curso['curso_cupo'] - $curso_inscritos;
+                $curso['curso_inscritos'] = $curso_inscritos;
+            }else{
+                $curso['curso_cupo_disponible'] = "No se registró cupo";
+                $curso['curso_inscritos'] = "No se registró cupo";
+            }
         }
 
         print_r(json_encode($cursos));

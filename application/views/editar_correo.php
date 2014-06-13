@@ -3,91 +3,20 @@
 
     	$("#menu_mensajeria").addClass("seleccion_menu");
 
-        $("#frm_buscar_correo").validationEngine({promptPosition: "centerRight"});
+    	$(function() {
+		    $("#tabs").tabs({ disabled: [ 0, 2 ] });
+		});
+
 		$("#frm_correo_destinatarios").validationEngine({promptPosition: "centerRight"});
-		$("#form_plantilla").validationEngine({promptPosition: "centerRight"});
 		$("#frm_enviar_correo").validationEngine({promptPosition: "centerRight"});
 
         $(function() {
-	    	$("#tabs").tabs({ active: <?= $tab ?>});
+	    	$("#tabs").tabs({ active: 1, disabled: [ 0, 2 ] });
 	    	$("#tabs_enviar_correo").tabs();
-	    	$("#tabs_correo_cuerpo").tabs();
-	    	$("#tabs_correo_plantilla").tabs();
+	    	$("#tabs_correo_cuerpo").tabs({active: 1, disabled: [0]});
 		});
 
         $("#btn_programar_correo").prop('disabled', true);
-
-		$.ajax({
-			url: "<?= site_url('mensajeria/consulta_correos') ?>",
-			dataType: 'json',
-			type: 'post',
-			success: function(resultado) {
-				if (resultado) {
-					$.each(resultado, function(index, value) {
-						var row_tabla = '<tr>\
-							<td>'+value['correo_asunto']+'</td>\
-							<td>'+value['correo_fecha_creacion']+'</td>\
-							<td>'+value['correo_fecha_envio']+'</td>\
-							<td>';
-						$.each(value['destinatarios'], function(index_dest, value_dest) {
-							row_tabla += value_dest['contacto_nombre']+" "+value_dest['contacto_ap_paterno']+" "+value_dest['contacto_ap_materno']+"<br>";
-						});
-						row_tabla += '</td>';
-						if (value['correo_estatus'] == 1) {
-							row_tabla += '<td>\
-								<img id='+value['id_correo']+' class="img_editar_plantilla"\
-								src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
-								</td></tr>';
-						}else{
-							row_tabla += "<td></td></tr>";
-						}
-						$('#tabla_correos tbody').append(row_tabla);
-					});
-				}
-			}
-		});
-
-		$("#btn_buscar_correo").click(function(event){
-			event.preventDefault();
-			if ($("#frm_buscar_correo").validationEngine('validate')) {
-				var datos = {
-					'correo_asunto' 		: $('#asunto_correo').val(),
-					'correo_fecha_envio' 	: $('#fecha_envio_correo').val(),
-					'correo_estatus' 		: $('#estatus_correo').val(),
-					'correo_hora_envio'		: $('#hora_envio_correo').val()
-				};
-
-				$.ajax({
-					url: "<?= site_url('mensajeria/busqueda_correos') ?>",
-					data: datos,
-					dataType: 'json',
-					type: 'post',
-					success: function(resultado) {
-						if (resultado) {
-							$('#tabla_correos tbody').find("tr:gt(0)").remove();
-							$.each(resultado, function(index, value) {
-								var row_tabla = '<tr>\
-									<td>'+value['correo_asunto']+'</td>\
-									<td>'+value['correo_fecha_creacion']+'</td>\
-									<td>'+value['correo_fecha_envio']+'</td>\
-									<td></td>';
-								if (value['correo_estatus'] == 1) {
-									row_tabla += '<td>\
-										<img id='+value['id_correo']+' class="img_editar_plantilla"\
-										src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
-										</td></tr>';
-								}else{
-									row_tabla += "<td></td><td></td></tr>";
-								}
-								$('#tabla_correos tbody').append(row_tabla);
-							});
-						}else{
-							$('#tabla_correos tbody').find("tr:gt(0)").remove();
-						}
-					}
-				});
-			}
-		});
 
 		$("#nuevo_correo_plantilla").on("change", function(){
 			if ($(this).val() == "") {
@@ -143,8 +72,6 @@
 			}
 		});
 
-		$("#programar_correo_fecha").prop('disabled', true);
-		$("#programar_correo_hora").prop('disabled', true);
 		$("input[name=envio]").change(function(){
 			if ($('input[name=envio]:checked').val() == 1) {
 				$("#programar_correo_fecha").prop('disabled', false);
@@ -294,6 +221,7 @@
 			}
 		});
 
+
 		$('#tab-textoplano textarea').change('input propertychange', function(){
 			if ($('#tab-textoplano textarea').val() != "") {
 				$("#tabs_correo_cuerpo").tabs("disable", 1);
@@ -326,42 +254,6 @@
 			}
 		});
 
-		$("#btn_correo_plantilla").click(function(){
-			if ($("#form_plantilla").validationEngine('validate')) {
-				if ($('#plantilla_id').val() == "") {
-					$('#form_plantilla').attr("action", <?php echo('"'.site_url('mensajeria/registrar_plantilla').'"'); ?> );
-				}else{
-					$('#form_plantilla').attr("action", <?php echo('"'.site_url('mensajeria/editar_plantilla').'"'); ?> );
-				}
-			}
-		});
-
-		$("#tabla_plantillas").on( "click", ".img_editar_plantilla", function() {
-			$.ajax({
-				url: "<?= site_url('mensajeria/consulta_plantilla') ?>"+"/"+$(this).attr('id'),
-				dataType: 'json',
-				type: 'post',
-				success: function(resultado) {
-					$('textarea[name=plantilla_contenido_plano]').val('');
-					$('textarea[name=plantilla_contenido_html]').val('');
-					$("#tabs_correo_plantilla").tabs("enable");
-
-					$('input[name=plantilla_asunto]').val(resultado[0]['plantilla_asunto']);
-					$('input[name=plantilla_id]').val(resultado[0]['id_plantilla_correo']);
-
-					if (resultado[0]['plantilla_tipo_contenido'] == 0) {
-						$("#tabs_correo_plantilla").tabs("disable", 1);
-						$("#tabs_correo_plantilla").tabs( "option", "active", 0);
-						$('textarea[name=plantilla_contenido_plano]').val(resultado[0]['plantilla_contenido']);
-					}else{
-						$("#tabs_correo_plantilla").tabs("disable", 0);
-						$("#tabs_correo_plantilla").tabs( "option", "active", 1);
-						$('textarea[name=plantilla_contenido_html]').val(resultado[0]['plantilla_contenido']);
-					}
-				}
-			});
-		});
-
 		$("#programar_correo_fecha").change(function(){
 			hoy = new Date();
 			var hora = hoy.getHours()+":"+hoy.getMinutes();
@@ -369,12 +261,22 @@
 
 			fecha = $("#programar_correo_fecha").val();
 			if(fecha == hoy){
-				//$("#programar_correo_hora").attr("min", hora);
-				$("#programar_correo_hora").attr("min", "10:00:00");
+				$("#programar_correo_hora").attr("min", hora);
+				//$("#programar_correo_hora").attr("min", "10:00:00");
 			}else{
 				$("#programar_correo_hora").removeAttr("min");
 			}
 		});
+
+		if ("<?= $correo_archivo_adjunto ?>" !="") {
+			var url_adjunto = "<?= $correo_archivo_adjunto ?>";
+			var arreglo_url = url_adjunto.split( '/' );
+			var nombre_archivo = arreglo_url[arreglo_url.length-1];
+
+			$("#archivo_adjunto")
+			.attr("href", "<?= base_url('assets/email_archivos_adjuntos')?>"+"/"+nombre_archivo)
+			.text("Archivo adjunto");
+		}
     }); 
 </script>
 <!-- inicia contenido -->
@@ -389,43 +291,7 @@
 			<li><a href="#tabs-2">Nuevo correo electr&oacute;nico</a></li>
 			<li><a href="#tabs-3">Administrar plantillas</a></li>
 		</ul>
-		<div id="tabs-1">
-			<form id="frm_buscar_correo" method="POST">
-				<label for="asunto_correo">Asunto</label>
-				<input type="text" id="asunto_correo" maxlength="255" name="asunto_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]"/>
-
-				<label for="fecha_envio_correo">Fecha de env&iacute;o</label>
-				<select name="fecha_envio_correo" id="fecha_envio_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]" value="">
-					<option selected value="">- Elija un tipo -</option>
-					<option value="1">El &uacute;ltimo año</option>
-					<option value="2">El &uacute;ltimo mes</option>
-					<option value="3">La &uacute;ltima semana</option>
-					<option value="4">Un d&iacute;a anterior</option>
-				</select>
-				<label for="hora_envio_correo">Hora de env&iacute;o</label>
-				<input type="time" id="hora_envio_correo" maxlength="5" name="hora_envio_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]"/>
-
-				<label for="estatus_correo">Estatus de env&iacute;o</label>
-				<select name="estatus_correo" id="estatus_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]" value="">
-					<option selected value="">- Elija un tipo -</option>
-					<option value="1">Pendiente</option>
-					<option value="2">Cancelado</option>
-					<option value="3">Enviado</option>
-				</select>
-				<input type="submit" id="btn_buscar_correo" value="Buscar"/>
-			</form>
-
-			<table id="tabla_correos" class='tables'>
-				<tr>
-					<td>Asunto</td>
-					<td>Fecha de creaci&oacute;n</td>
-					<td>Fecha de env&iacute;o</td>
-					<td>Destinatarios</td>
-					<td>Editar</td>
-				</tr>
-			</table>
-
-		</div>
+		<div id="tabs-1"></div>
 
 
 		<div id="tabs-2">
@@ -442,11 +308,13 @@
 					<br>
 					<form id="frm_enviar_correo" action="<?= site_url('mensajeria/mandar_correo') ?>" method="POST" enctype="multipart/form-data">
 						<label class="label_nuevo_correo" for="nuevo_correo_asunto">Asunto</label>
-						<input type="text" class="input_envia_correo validate[required]" id="nuevo_correo_asunto" size="50" name="asunto">
+						<input type="text" class="input_envia_correo validate[required]" id="nuevo_correo_asunto" size="50" name="asunto" value="<?= $correo_asunto ?>">
 						<br>
 						<label class="label_nuevo_correo">Datos adjuntos</label>
 						<input type="file" id="nuevo_correo_archivos_adjuntos" name="userfile">
 						<br>
+						<a href="#" id="archivo_adjunto" target="_blank"></a>
+						<br><br>
 						<div id="tabs_correo_cuerpo">
 							<ul>
 								<li><a href="#tab-textoplano">Texto plano</a></li>
@@ -456,7 +324,7 @@
 								<textarea spellcheck="false" class="textarea_cuerpo_correo validate[groupRequired[nuevo_correo_contenido]]" data-prompt-position="topLeft" name="contenido_plano"></textarea>
 							</div>
 							<div id="tab-html">
-								<textarea spellcheck="false" class="textarea_cuerpo_correo validate[groupRequired[nuevo_correo_contenido]]" data-prompt-position="topLeft" name="contenido_html"></textarea>
+								<textarea spellcheck="false" class="textarea_cuerpo_correo validate[groupRequired[nuevo_correo_contenido]]" data-prompt-position="topLeft" name="contenido_html"><?= $correo_contenido ?></textarea>
 							</div>
 						</div>
 						<b id="titulo_programar_envio_correo">Env&iacute;o</b>
@@ -465,14 +333,14 @@
 							<label for="programar_correo_inmed">Enviar inmediatamente</label>
 						</div>
 						<div class="programar_envio_correo programar_envio_correo_posterior">
-							<input type="radio" name="envio" id="programar_correo_posterior" class="input_envia_correo validate[required] radio" value="1">
+							<input type="radio" name="envio" id="programar_correo_posterior" class="input_envia_correo validate[required] radio" value="1" checked="checked">
 							<label for="programar_correo_posterior" class="label_nuevo_correo">Programar env&iacute;o</label>
 							<br>
 							<label class="label_nuevo_correo" for="programar_correo_fecha">* Fecha de env&iacute;o</label>
-							<input class="input_envia_correo" id="programar_correo_fecha" name="fecha_envio" data-prompt-position="topLeft">
+							<input class="input_envia_correo" id="programar_correo_fecha" name="fecha_envio" data-prompt-position="topLeft" value="<?= $correo_fecha_envio ?>">
 							<br>
 							<label class="label_nuevo_correo" for="programar_correo_hora">* Hora de env&iacute;o</label>
-							<input type="time" class="input_envia_correo" id="programar_correo_hora" name="hora_envio" data-prompt-position="topLeft">
+							<input type="time" class="input_envia_correo" id="programar_correo_hora" name="hora_envio" data-prompt-position="topLeft" value="<?= $correo_hora_envio ?>">
 							<br>
 						</div>
 						<input type="submit" id="btn_programar_correo">
@@ -527,34 +395,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="tabs-3">
 
-			<table class='tables' id="tabla_plantillas">
-				<tr>
-					<td>Asunto</td>
-					<td>Editar</td>
-					<td>Eliminar</td>
-				</tr>
-			</table>
-
-			<form id="form_plantilla" method="POST">
-				<label for="plantilla_asunto">Asunto</label>
-				<input type="text" maxlength="255" name="plantilla_asunto" id="plantilla_asunto" class="validate[required]" form="form_plantilla"/>
-				<input type="hidden" name="plantilla_id" id="plantilla_id" form="form_plantilla">
-				<div id="tabs_correo_plantilla">
-					<ul>
-						<li><a href="#tab-plantilla_textoplano">Texto plano</a></li>
-						<li><a href="#tab-plantilla_html">HTML</a></li>
-					</ul>
-					<div id="tab-plantilla_textoplano">
-						<textarea spellcheck="false" class="textarea_cuerpo_correo validate[groupRequired[plantilla_contenido]]" data-prompt-position="topLeft" name="plantilla_contenido_plano" form="form_plantilla"></textarea>
-					</div>
-					<div id="tab-plantilla_html">
-						<textarea spellcheck="false" class="textarea_cuerpo_correo validate[groupRequired[plantilla_contenido]]" data-prompt-position="topLeft" name="plantilla_contenido_html" form="form_plantilla"></textarea>
-					</div>
-				</div>
-				<input type="submit" id="btn_correo_plantilla" value="Aceptar" form="form_plantilla">
-			</form>
-		</div>
+		<div id="tabs-3"></div>
 </div>
 <!-- termina contenido -->

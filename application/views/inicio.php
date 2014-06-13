@@ -24,8 +24,8 @@
 						<td>'+value['curso_tipo']+'</td>\
 						<td>'+value['curso_fecha_inicio']+'</td>\
 						<td>'+value['curso_hora_inicio']+' a '+value['curso_hora_fin']+'</td>\
-						<td></td>\
-						<td>'+value['curso_cupo']+'</td>\
+						<td>'+value['curso_inscritos']+'</td>\
+						<td>'+value['curso_cupo_disponible']+'</td>\
 					</tr>');
 				});
 			}else{

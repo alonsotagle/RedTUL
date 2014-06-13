@@ -11,6 +11,7 @@ class mensajeria extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('mensajeria_model');
+        date_default_timezone_set('America/Mexico_City');
     }
 
     public function index() {
@@ -126,6 +127,10 @@ class mensajeria extends CI_Controller {
     {
         $resultado = $this->mensajeria_model->consulta_correos();
 
+        foreach ($resultado as $key => $value) {
+            $resultado[$key]['destinatarios'] = $this->consulta_destinatarios_correos($value['id_correo']);
+        }
+
         print_r(json_encode($resultado));
     }
 
@@ -134,7 +139,8 @@ class mensajeria extends CI_Controller {
         $parametros = array(
             'correo_asunto'         => $this->input->post('correo_asunto'),
             'correo_fecha_envio'    => $this->input->post('correo_fecha_envio'),
-            'correo_estatus'        => $this->input->post('correo_estatus')
+            'correo_estatus'        => $this->input->post('correo_estatus'),
+            'correo_hora_envio'     => $this->input->post('correo_hora_envio')
         );
 
         $resultado = $this->mensajeria_model->busqueda_correos($parametros);
@@ -145,6 +151,9 @@ class mensajeria extends CI_Controller {
     function mandar_correo()
     {
         $this->load->library('class_email');
+
+        $destinatarios = $this->input->post('id_destinatarios');
+        $id_destinatarios = explode(",", $destinatarios);
 
         if ($_FILES['userfile']['size'] == 0) {
             $respuesta_archivo_adjunto = "";
@@ -161,23 +170,30 @@ class mensajeria extends CI_Controller {
         }
 
         $email_data = array(
-            'id_destinatarios'  => $this->input->post('id_destinatarios'),
+            'id_destinatarios'  => $id_destinatarios,
             'asunto'            => $this->input->post('asunto'),
             'contenido'         => $mensaje,
             'html'              => $html,
-            'archivo'           => $respuesta_archivo_adjunto
+            'archivo_adjunto'   => $respuesta_archivo_adjunto
         );
 
         if ($this->input->post('envio') == 0) {
             $email_data['correo_fecha_envio'] = date("Y-m-d");
+            $email_data['correo_hora_envio'] = date("H:i");
             $email_data['estatus'] = 3;
             $this->class_email->send_email($email_data);
         } else {
             $email_data['correo_fecha_envio'] = $this->input->post('fecha_envio');
+            $email_data['correo_hora_envio'] = $this->input->post('hora_envio');
             $email_data['estatus'] = 1;
         }
 
-        $this->registrar_correo($email_data);
+        $id_nuevo_correo = $this->registrar_correo($email_data);
+
+
+        foreach ($id_destinatarios as $key => $value) {
+            $this->mensajeria_model->registrar_destinatario_correo($id_nuevo_correo, $value);
+        }
 
         $parametros_vista = array("tab" => 0,
                             "mensaje_plantilla" => "Correo enviado satisfactoriamente.");
@@ -221,10 +237,60 @@ class mensajeria extends CI_Controller {
                             "correo_contenido"      => $correo['contenido'],
                             "correo_fecha_envio"    => $correo['correo_fecha_envio'],
                             "correo_estatus"        => $correo['estatus'],
-                            "correo_fecha_creacion" => date("Y-m-d")
-        );
+                            "correo_fecha_creacion" => date("Y-m-d"),
+                            "correo_hora_envio"     => $correo['correo_hora_envio'],
+                            "correo_archivo_adjunto"=> $correo['archivo_adjunto']);
 
-        $this->mensajeria_model->registrar_correo($nuevo_correo);
+        $id_nuevo_correo = $this->mensajeria_model->registrar_correo($nuevo_correo);
+
+        return $id_nuevo_correo;
+    }
+
+    function consulta_invitados_curso()
+    {
+        $id_invitados_curso = array();
+
+        $resultado_tipo = $this->mensajeria_model->consulta_invitados_curso_tipo($this->input->post('curso_id'));
+
+        foreach ($resultado_tipo as $key => $value) {
+            array_push($id_invitados_curso, $value['id_contacto']);
+        }
+
+        $resultado_contacto =$this->mensajeria_model->consulta_invitados_curso_contacto($this->input->post('curso_id'));
+        foreach ($resultado_contacto as $key => $value) {
+            array_push($id_invitados_curso, $value['id_contacto']);
+        }
+
+        $id_invitados_curso = array_unique($id_invitados_curso);
+
+        print_r(json_encode($id_invitados_curso));
+    }
+
+    function consulta_destinatarios_correos($id_correo)
+    {
+        $resultado = $this->mensajeria_model->consulta_destinatarios_correos($id_correo);
+
+        return $resultado;
+    }
+
+    function editar_correo($id_correo)
+    {
+        $correo = $this->mensajeria_model->consulta_correo($id_correo);
+
+        $this->load->view('template/header');
+        $this->load->view('template/menu');
+        $this->load->view('editar_correo', $correo);
+        $this->load->view('template/footer');
+    }
+
+    function correo($id_correo)
+    {
+        $correo = $this->mensajeria_model->consulta_correo($id_correo);
+
+        $this->load->view('template/header');
+        $this->load->view('template/menu');
+        $this->load->view('correo', $correo);
+        $this->load->view('template/footer');
     }
 
 }

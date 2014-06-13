@@ -501,12 +501,20 @@ body {
 	margin-left: 203px;
 }
 
+#texto_participante{
+	text-align: center;
+}
+
+.eliminar_invitado{
+	cursor: pointer;
+}
+
 /* Inicia MENSAJERIA */
 
 /* Vista de mensajeria.php */
 #frm_buscar_correo{
 	border: 1px solid black;
-	height: 110px;
+	height: 132px;
 	margin-bottom: 30px;
 	padding: 15px;
 	width: 320px;

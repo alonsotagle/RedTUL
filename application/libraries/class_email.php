@@ -55,9 +55,13 @@ class Class_email{
 
         $CI->phpmailer->msgHTML($contenido);
         $CI->phpmailer->AltBody = '';
-        $CI->phpmailer->AddAttachment($archivo);
+
+        if ($archivo_adjunto != "") {
+            $CI->phpmailer->AddAttachment($archivo_adjunto);
+        }
 
         //Destinatarios
+        $CI->phpmailer->ClearAddresses();
         $destinatarios = $CI->mensajeria_model->consulta_contactos_correos($id_destinatarios);
 
         foreach ($destinatarios as $key => $value) {
@@ -70,9 +74,10 @@ class Class_email{
 
         if(!$CI->phpmailer->Send()) {
           echo "Mailer Error: " . $CI->phpmailer->ErrorInfo;
+          return false;
         } else {
           return true;
-        }       
+        }
 
     }
 

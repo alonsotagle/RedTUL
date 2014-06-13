@@ -214,8 +214,29 @@ class curso_model extends CI_Model{
 
     public function consulta_invitado_tipo($id_curso)
     {
-        $this->db->where('curso_invitado_tipo.curso_id', $id_curso);
+        $this->db->where('curso_id', $id_curso);
         $this->db->from('curso_invitado_tipo');
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function consulta_invitado_contacto($id_curso)
+    {
+        $this->db->select('contacto.id_contacto,
+                            contacto.contacto_nombre,
+                            contacto.contacto_ap_paterno,
+                            contacto.contacto_ap_materno');
+        $this->db->from('contacto');
+        $this->db->join('curso_invitado_contacto', 'contacto.id_contacto = curso_invitado_contacto.invitado_id');
+
+        $this->db->where('curso_id', $id_curso);
 
         $query = $this->db->get();
 
@@ -294,5 +315,13 @@ class curso_model extends CI_Model{
         $query = $this->db->count_all_results();
 
         return $query;
+    }
+
+    public function borrar_invitado_contacto($id_curso, $id_contacto)
+    {
+        $datos = array('curso_id'       => $id_curso,
+                        'invitado_id'   => $id_contacto);
+
+        $this->db->delete('curso_invitado_contacto', $datos);
     }
 }

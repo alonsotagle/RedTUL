@@ -31,9 +31,13 @@
 
 					datos_curso_renglon += '<td>';
 
-					$.each(value['curso_instructor'], function(index, value){
-						datos_curso_renglon += value['contacto_nombre']+" "+value['contacto_ap_paterno']+" "+value['contacto_ap_materno']+"<br><br>";
-					});
+					if (value['curso_instructor'] != null) {
+						$.each(value['curso_instructor'], function(index, value){
+							datos_curso_renglon += value['contacto_nombre']+" "+value['contacto_ap_paterno']+" "+value['contacto_ap_materno']+"<br><br>";
+						});
+					}else{
+						datos_curso_renglon += "¡Instructor eliminado! Asignar instructor";
+					}
 
 					datos_curso_renglon += '</td>';
 
@@ -48,7 +52,7 @@
 						src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
 						</a></td>\
 						<td><a \
-						href="'+"<?= site_url('cursos/eliminar')?>"+"/"+value['id_curso']+'">\
+						href="'+"<?= site_url('cursos/eliminar')?>"+"/"+value['id_curso']+'" class="eliminar_curso">\
 						<img \
 						src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
 						</a></td>\
@@ -91,6 +95,15 @@
 			}
 		});
 
+		$("#despliega_cursos").on("click", "table tbody tr td .eliminar_curso", function(){
+			var eliminar = confirm("¿Está seguro de eliminar el curso?");
+			if (eliminar) {
+				return true;
+			}else{
+				return false;
+			}
+		});
+
     }); 
 </script>
 <!-- inicia contenido -->
@@ -104,7 +117,7 @@
 			<input type="text" id="nombre_curso" name="nombre_curso" class="buscar_curso_textInput validate[groupRequired[buscar_curso]]"/>
 			<label for="tipo_curso">Tipo de curso</label>
 			<select name="tipo_curso" id="tipo_curso" class="buscar_curso_textInput validate[groupRequired[buscar_curso]]">
-				<option selected disabled>- Elija un tipo -</option>
+				<option selected disabled value="">- Elija un tipo -</option>
 				<option value="0">Presencial</option>
 				<option value="1">En l&iacute;nea</option>
 			</select>
@@ -112,7 +125,7 @@
 			<input type="text" id="instructor_curso" name="instructor_curso" class="buscar_curso_textInput validate[groupRequired[buscar_curso]]"/>
 			<label for="estatus_curso">Estatus</label>
 			<select name="estatus_curso" id="estatus_curso" class="buscar_curso_textInput validate[groupRequired[buscar_curso]]">
-				<option selected disabled>- Elija un tipo -</option>
+				<option selected disabled value="">- Elija un tipo -</option>
 				<option value="1">Vigente</option>
 				<option value="2">Pr&oacute;ximo</option>
 				<option value="3">Finalizado</option>

@@ -69,17 +69,23 @@ class curso_model extends CI_Model{
             $this->db->like('curso.curso_titulo', $parametros_busqueda['nombre_curso']);
         }
 
-        if (isset($parametros_busqueda['tipo_curso'])) {
+        if ($parametros_busqueda['tipo_curso'] != "") {
             $this->db->where('curso.curso_tipo', $parametros_busqueda['tipo_curso']);
         }
 
-        if ($parametros_busqueda['instructor_curso'] != "") {
-            $this->db->like('contacto.contacto_nombre', $parametros_busqueda['instructor_curso']);
-            $this->db->or_like('contacto.contacto_ap_paterno', $parametros_busqueda['instructor_curso']);
-            $this->db->or_like('contacto.contacto_ap_materno', $parametros_busqueda['instructor_curso']);
+        if ($parametros_busqueda['nombre_instructor'] != "") {
+            $this->db->like('contacto.contacto_nombre', $parametros_busqueda['nombre_instructor']);
         }
 
-        if (isset($parametros_busqueda['estatus_curso'])) {
+        if ($parametros_busqueda['paterno_instructor'] != "") {
+            $this->db->like('contacto.contacto_ap_paterno', $parametros_busqueda['paterno_instructor']);
+        }
+
+        if ($parametros_busqueda['materno_instructor'] != "") {
+            $this->db->like('contacto.contacto_ap_materno', $parametros_busqueda['materno_instructor']);
+        }
+
+        if ($parametros_busqueda['estatus_curso'] != "") {
             $this->db->where('curso.curso_estatus', $parametros_busqueda['estatus_curso']);
         }
 

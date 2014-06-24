@@ -16,8 +16,6 @@
 	    	$("#tabs_correo_cuerpo").tabs({active: 1, disabled: [0]});
 		});
 
-        $("#btn_programar_correo").prop('disabled', true);
-
 		$("#nuevo_correo_plantilla").on("change", function(){
 			if ($(this).val() == "") {
 				$('#nuevo_correo_asunto').val('');
@@ -109,6 +107,49 @@
 			}
 		});
 
+		function seleccionar_destinatarios(){
+			
+			$.ajax({
+				url: "<?= site_url('mensajeria/consulta_destinatarios_correos_editar') ?>"+"/"+"<?= $id_correo ?>",
+				dataType: 'json',
+				type: 'post',
+				success: function(resultado) {
+					var id_destinatarios = [];
+					$.each(resultado, function(index, value) {
+						id_destinatarios.push(value['id_contacto']);
+						$('#tabla_buscar_destinatarios tbody input[value='+value['id_contacto']+']').attr('checked', true);
+					});
+					$("#id_destinatarios").val(id_destinatarios);
+				}
+			});			
+		}
+
+		$.ajax({
+			url: "<?= site_url('mensajeria/consulta_contactos') ?>",
+			dataType: 'json',
+			type: 'post',
+			success: function(resultado) {
+				if (resultado) {
+					$('#tabla_buscar_destinatarios tbody').find("tr:gt(0)").remove();
+					$.each(resultado, function(index, value) {
+						$('#tabla_buscar_destinatarios tbody').append('<tr>\
+							<td>'+value['contacto_nombre']+' '+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+'</td>\
+							<td>'+value['contacto_correo_inst']+' '+value['contacto_correo_per']+'</td>\
+							<td>'+value['contacto_telefono']+'</td>\
+							<td>'+value['tipo_contacto_descripcion']+'</td>\
+							<td>'+value['instancia_nombre']+'</td>\
+							<td>\
+								<input type="checkbox" name="curso_invitados[]" value="'+value['id_contacto']+'">\
+							</td>\
+						</tr>');
+					});
+				}
+			},
+			complete: function(){
+				seleccionar_destinatarios();
+			}
+		});
+
 		$("#btn_buscar_contacto").click(function(){
 			event.preventDefault();
 			if ($("#frm_correo_destinatarios").validationEngine('validate')) {
@@ -190,7 +231,6 @@
 				$("#tabs_enviar_correo").tabs("option", "active", 0);
 
 				$("#btn_programar_correo").prop('disabled', false);
-
 			}
 
 		});
@@ -254,17 +294,29 @@
 			}
 		});
 
-		$("#programar_correo_fecha").change(function(){
-			hoy = new Date();
-			var hora = hoy.getHours()+":"+hoy.getMinutes();
+		$("#programar_correo_hora").change(function(){
+			var hoy = new Date();
+
+			var hora_actual = hoy.getHours();
+			var minutos_actual = hoy.getMinutes();
+
 			hoy = hoy.getFullYear()+"-"+("0" + (hoy.getMonth() + 1)).slice(-2)+"-"+("0" + hoy.getDate()).slice(-2);
 
 			fecha = $("#programar_correo_fecha").val();
+
 			if(fecha == hoy){
-				$("#programar_correo_hora").attr("min", hora);
-				//$("#programar_correo_hora").attr("min", "10:00:00");
-			}else{
-				$("#programar_correo_hora").removeAttr("min");
+				var tiempo_introducido = $("#programar_correo_hora").val();
+				var arreglo_hora = tiempo_introducido.split(":");
+				var hora_introducida = arreglo_hora[0];
+				var minutos_introducido = arreglo_hora[1];
+
+				if (hora_introducida < hora_actual) {
+					alert("El sistema no permite ingresar horas anteriores a la actual, cuando se selecciona el día actual");
+					$("#programar_correo_hora").val("");
+				}else if (hora_introducida == hora_actual && minutos_introducido < minutos_actual) {
+					alert("El sistema no permite ingresar horas anteriores a la actual, cuando se selecciona el día actual");
+					$("#programar_correo_hora").val("");
+				}
 			}
 		});
 
@@ -277,6 +329,13 @@
 			.attr("href", "<?= base_url('assets/email_archivos_adjuntos')?>"+"/"+nombre_archivo)
 			.text("Archivo adjunto");
 		}
+
+		$("#btn_cancelar_correo").click(function(event){
+			event.preventDefault();
+			id = <?= $id_correo; ?>;
+			window.location.href = "<?= site_url('mensajeria/cancelar_correo') ?>"+"/"+id;
+		});
+
     }); 
 </script>
 <!-- inicia contenido -->
@@ -306,7 +365,9 @@
 						<option selected value="">- Seleccione una opci&oacute;n -</option>
 					</select>
 					<br>
-					<form id="frm_enviar_correo" action="<?= site_url('mensajeria/mandar_correo') ?>" method="POST" enctype="multipart/form-data">
+					<form id="frm_enviar_correo" action="<?= site_url('mensajeria/guardar_correo') ?>" method="POST" enctype="multipart/form-data">
+						<input type="hidden" name="id_correo" value="<?= $id_correo ?>">
+						<input type="hidden" name="id_destinatarios" id="id_destinatarios">
 						<label class="label_nuevo_correo" for="nuevo_correo_asunto">Asunto</label>
 						<input type="text" class="input_envia_correo validate[required]" id="nuevo_correo_asunto" size="50" name="asunto" value="<?= $correo_asunto ?>">
 						<br>
@@ -343,7 +404,8 @@
 							<input type="time" class="input_envia_correo" id="programar_correo_hora" name="hora_envio" data-prompt-position="topLeft" value="<?= $correo_hora_envio ?>">
 							<br>
 						</div>
-						<input type="submit" id="btn_programar_correo">
+						<input type="submit" id="btn_programar_correo" value="Guardar">
+						<input type="submit" id="btn_cancelar_correo" value="Cancelar envio de correo">
 					</form>
 				</div>
 				<div id="tab-dest">

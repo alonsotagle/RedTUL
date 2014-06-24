@@ -52,6 +52,9 @@ class Cron extends CI_Controller {
 		if (!is_null($correos_pendientes)) {
 			foreach ($correos_pendientes as $key => $value) {
 				$fecha_envio = date_create($value['correo_fecha_envio']);
+				$hora_envio = explode(":", $value['correo_hora_envio']);
+				$fecha_envio->setTime($hora_envio[0], $hora_envio[1]);
+
 				if ($fecha_envio <= $hoy) {
 					$this->mandar_correo($value['id_correo']);
 				}

@@ -17,16 +17,25 @@ class confirmacion extends CI_Controller {
 
         $datos_curso = $this->confirmacion_model->consulta_curso($id_curso);
 
-    	$this->load->view('template/header');
-        $this->load->view('confirmacion', $datos_curso);
-        $this->load->view('template/footer');
+        if (is_null($datos_curso)) {
+            show_404();
+        } else {
+            $this->load->view('template/header');
+            $this->load->view('confirmacion', $datos_curso);
+            $this->load->view('template/footer');
+        }
     }
 
     public function verifica_contacto()
     {
-        $contacto_correo = $this->input->get('verificar_correo');
+        $contacto_correo = $this->input->post('correo');
 
         $datos_contacto = $this->confirmacion_model->verifica_contacto($contacto_correo);
+
+        if (!is_null($datos_contacto)) {
+            $datos_contacto["invitado"] = $this->confirmacion_model->invitado_curso($datos_contacto["id_contacto"], $this->input->post('id_curso'));
+            $datos_contacto["contacto_estatus"] = $this->confirmacion_model->estatus_contacto($datos_contacto["id_contacto"], $this->input->post('id_curso'));
+        }
 
         print_r(json_encode($datos_contacto));
     }
@@ -40,4 +49,24 @@ class confirmacion extends CI_Controller {
         $this->load->view('template/footer');
     }
 
+    public function consulta_instancias()
+    {
+        $instancias = $this->confirmacion_model->consulta_instancias();
+
+        print_r(json_encode($instancias));
+    }
+
+    public function actualizar_contacto()
+    {
+        $this->confirmacion_model->actualizar_contacto($_POST);
+    }
+
+    public function cancelar_inscripcion()
+    {
+        $this->confirmacion_model->cancelar_inscripcion($_POST);
+
+        $this->load->view('template/header');
+        $this->load->view('confirmacion_inscripcion');
+        $this->load->view('template/footer');
+    }
 }

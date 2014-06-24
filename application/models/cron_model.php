@@ -67,7 +67,8 @@ class cron_model extends CI_Model{
     public function correos_pendientes()
     {
         $this->db->select('id_correo,
-                            correo_fecha_envio');
+                            correo_fecha_envio,
+                            correo_hora_envio');
         $this->db->from('correo');
         $this->db->where('correo_estatus', 1);
 

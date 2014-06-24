@@ -155,7 +155,57 @@ class cursos extends CI_Controller {
     {
         if (!empty($_POST)) {
 
-            $resultado_busqueda['resultado'] = $this->curso_model->buscar($_POST);
+            $parametros_busqueda = array(
+                'nombre_curso'  => $this->input->post('nombre_curso'),
+                'tipo_curso'    => $this->input->post('tipo_curso'),
+                'estatus_curso' => $this->input->post('estatus_curso'),
+                'inicio_curso'  => $this->input->post('inicio_curso'),
+                'fin_curso'     => $this->input->post('fin_curso')
+            );
+
+            $nombre_completo = $this->input->post('instructor_curso');
+            if ($nombre_completo != "") {
+                $arreglo_nombre = explode(" ", $nombre_completo);
+                $tamano_arreglo = count($arreglo_nombre);
+
+                switch ($tamano_arreglo) {
+                    case 1:
+                        $parametros_busqueda['nombre_instructor'] = $arreglo_nombre[0];
+                        $parametros_busqueda['paterno_instructor'] = "";
+                        $parametros_busqueda['materno_instructor'] = "";
+                        break;
+
+                    case 2:
+                        $parametros_busqueda['nombre_instructor'] = $arreglo_nombre[0];
+                        $parametros_busqueda['paterno_instructor'] = $arreglo_nombre[1];
+                        $parametros_busqueda['materno_instructor'] = "";
+                        break;
+
+                    case 3:
+                        $parametros_busqueda['nombre_instructor'] = $arreglo_nombre[0];
+                        $parametros_busqueda['paterno_instructor'] = $arreglo_nombre[1];
+                        $parametros_busqueda['materno_instructor'] = $arreglo_nombre[2];
+                        break;
+
+                    case 4:
+                        $parametros_busqueda['nombre_instructor'] = $arreglo_nombre[0]." ".$arreglo_nombre[1];
+                        $parametros_busqueda['paterno_instructor'] = $arreglo_nombre[2];
+                        $parametros_busqueda['materno_instructor'] = $arreglo_nombre[3];
+                        break;
+                    
+                    default:
+                        $parametros_busqueda['nombre_instructor'] = "";
+                        $parametros_busqueda['paterno_instructor'] = "";
+                        $parametros_busqueda['materno_instructor'] = "";
+                        break;
+                }
+            } else {
+                $parametros_busqueda['nombre_instructor'] = "";
+                $parametros_busqueda['paterno_instructor'] = "";
+                $parametros_busqueda['materno_instructor'] = "";
+            }
+
+            $resultado_busqueda['resultado'] = $this->curso_model->buscar($parametros_busqueda);
 
             if (!is_null($resultado_busqueda['resultado'])) {
                 foreach($resultado_busqueda['resultado'] as $llave => &$curso)
@@ -166,7 +216,6 @@ class cursos extends CI_Controller {
                     }else{
                         $curso['curso_tipo'] = 'En línea';
                     }
-
                     $curso['curso_instructor'] = $this->curso_model->consulta_instructores_nombre_curso($curso['id_curso']);
                 }
             }
@@ -198,10 +247,14 @@ class cursos extends CI_Controller {
             $this->load->view('template/footer');
         }else{
 
-            $respuesta_temario = $this->subir_temario();
+            if ($_FILES['curso_temario']['size'] == 0) {
+                $respuesta_temario = $this->input->post('temario_anterior');
+            }else{
+                $respuesta_temario = $this->subir_temario();
+            }
 
             if ($_FILES['curso_flyer']['size'] == 0) {
-                $respuesta_flyer = "";
+                $respuesta_flyer = $this->input->post('flyer_anterior');
             }else{
                 $respuesta_flyer = $this->subir_flyer();
             }

@@ -35,13 +35,19 @@ class mensajeria_model extends CI_Model{
 
         if ($parametros['nombre'] != "") {
             $this->db->like('contacto.contacto_nombre', $parametros['nombre']);
-            $this->db->or_like('contacto.contacto_ap_paterno', $parametros['nombre']);
-            $this->db->or_like('contacto.contacto_ap_materno', $parametros['nombre']);
+        }
+
+        if ($parametros['paterno'] != "") {
+            $this->db->like('contacto.contacto_ap_paterno', $parametros['paterno']);
+        }
+
+        if ($parametros['materno'] != "") {
+            $this->db->like('contacto.contacto_ap_materno', $parametros['materno']);
         }
 
         if ($parametros['correo'] != "") {
-            $this->db->like('contacto.contacto_correo_inst', $parametros['correo']);
-            $this->db->or_like('contacto.contacto_correo_per', $parametros['correo']);
+            $correo = $parametros['correo'];
+            $this->db->where("(contacto.contacto_correo_inst LIKE '%$correo%' || contacto.contacto_correo_per LIKE '%$correo%')");
         }
 
         if ($parametros['instancia'] != "") {
@@ -127,6 +133,7 @@ class mensajeria_model extends CI_Model{
         $this->db->select('id_correo,
                             correo_asunto,
                             correo_fecha_envio,
+                            correo_hora_envio,
                             correo_fecha_creacion,
                             correo_estatus');
 
@@ -147,6 +154,7 @@ class mensajeria_model extends CI_Model{
         $this->db->select('id_correo,
                             correo_asunto,
                             correo_fecha_envio,
+                            correo_hora_envio,
                             correo_fecha_creacion,
                             correo_estatus');
         $this->db->from('correo');
@@ -176,10 +184,6 @@ class mensajeria_model extends CI_Model{
                 default:
                     break;
             }
-        }
-
-        if ($parametros['correo_hora_envio'] != "") {
-            $this->db->where('correo_hora_envio', $parametros['correo_hora_envio']);
         }
 
         if ($parametros['correo_estatus'] != "") {
@@ -270,7 +274,8 @@ class mensajeria_model extends CI_Model{
 
     public function consulta_destinatarios_correos($id_correo)
     {
-        $this->db->select('contacto.contacto_nombre,
+        $this->db->select('contacto.id_contacto,
+                            contacto.contacto_nombre,
                             contacto.contacto_ap_paterno,
                             contacto.contacto_ap_materno');
         $this->db->from('contacto');
@@ -293,6 +298,39 @@ class mensajeria_model extends CI_Model{
         $this->db->from('correo');
         $this->db->where('id_correo', $id_correo);
 
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->row_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function cancelar_correo($id_correo)
+    {
+        $this->db->update('correo', array('correo_estatus' => 2), array('id_correo' => $id_correo));
+    }
+
+    public function borrar_destinatarios_correo($id_correo)
+    {
+        $this->db->delete('destinatario_correo', array('correo_id' => $id_correo));
+    }
+
+    public function actualizar_correo($correo)
+    {
+        $this->db->where('id_correo', $correo['id_correo']);
+        unset($correo['id_correo']);
+
+        $this->db->update('correo', $correo);
+    }
+
+    public function consulta_detalle_correo($id_correo)
+    {
+        $this->db->from('correo');
+        $this->db->join('estatus_correo', 'correo.correo_estatus = estatus_correo.id_estatus_correo');
+        $this->db->where('correo.id_correo', $id_correo);
 
         $query = $this->db->get();
 

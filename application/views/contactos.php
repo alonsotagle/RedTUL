@@ -47,7 +47,6 @@
 		});
 
 		$("#despliega_contactos").on("click", "table tbody tr td .eliminar_contacto", function(){
-			event.preventDefault();
 			var eliminar = confirm("¿Está seguro de eliminar el contacto?");
 			if (eliminar) {
 				return true;

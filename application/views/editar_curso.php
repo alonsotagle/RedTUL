@@ -42,9 +42,20 @@ $(document).ready(function(){
 				$('#curso_url_ubicacion').val(resultado['curso_mapa_url']);
 				$('#curso_telefono').val(resultado['curso_telefono']);
 				$('#curso_telefono_extension').val(resultado['curso_telefono_extension']);
+				
 				if (resultado['curso_flyer'] != "") {
+					$("#flyer_anterior").val(resultado['curso_flyer']);
+
 					var url_flyer = "<?= base_url('assets/flyers_cursos') ?>";
 						url_flyer += "/"+resultado['curso_flyer'];
+
+					var a_tag_flyer = $("<a />", {
+						href 	: url_flyer,
+						id 	: "a_tag_flyer",
+						target	: "_blank"
+					});
+
+					$("#curso_flyer").after($(a_tag_flyer));
 
 					var img_flyer = $("<img>")
 					.attr("src", url_flyer)
@@ -52,8 +63,10 @@ $(document).ready(function(){
 					.attr("width", "150")
 					.attr("height", "150");
 
-					$("#curso_flyer").after($(img_flyer));
+					$("#a_tag_flyer").append($(img_flyer));
 				}
+
+				$("#temario_anterior").val(resultado['curso_temario']);
 				
 				var url_temario = "<?= base_url('assets/temarios_cursos') ?>";
 					url_temario += "/"+resultado['curso_temario'];
@@ -89,7 +102,7 @@ $(document).ready(function(){
 		dataType: 'json',
 		type: 'post',
 		success: function(resultado) {
-			if (resultado != null) {
+			if (resultado) {
 				$.each(resultado, function(index, value) {
 					$('input[value='+value['tipo_contacto_id']+'][class="checkbox_tipo_invitado"]').attr('checked', true);
 				});
@@ -222,7 +235,7 @@ $(document).ready(function(){
 
 		$("input:checkbox[name='curso_invitados[]']:checked").each(function(){
 			datos['invitados'].push($(this).val());
-		})
+		});
 
 		$.ajax({
 			url: "<?= site_url('cursos/agrega_invitados') ?>",
@@ -261,6 +274,7 @@ $(document).ready(function(){
 				<br>
 				<label for="curso_flyer" class="label_nuevo_curso">Flyer</label>
 				<input type="file" id="curso_flyer" name="curso_flyer" class="validate[checkFileType[jpg|gif]]"/>
+				<input type="hidden" id="flyer_anterior" name="flyer_anterior">
 				<br>
 				<label for="curso_tipo" class="label_nuevo_curso">* Tipo de contacto
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica la modalidad en que se llevará a cabo dicho curso.">
@@ -278,7 +292,8 @@ $(document).ready(function(){
 				<textarea id="curso_objetivos" name="curso_objetivos" cols="40" rows="4" maxlength="250" placeholder="Ingrese el fin al que se desea llegar, la meta que se pretende lograr con la impartición de dicho curso." class="validate[required]"></textarea>
 				<br>
 				<label for="curso_temario" class="label_nuevo_curso">* Temario</label>
-				<input type="file" id="curso_temario_editar" name="curso_temario" class="validate[required, checkFileType[pdf]]"/>
+				<input type="file" id="curso_temario_editar" name="curso_temario" class="validate[checkFileType[pdf]]"/>
+				<input type="hidden" id="temario_anterior" name="temario_anterior">
 				<br>
 
 				<p class="encabezado_form_nuevo_curso">Datos del evento</p>
@@ -331,25 +346,25 @@ $(document).ready(function(){
 		<div id="tabs-2">
 			<fieldset>
 				<legend>Añadir participantes por tipo de contacto
-					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="?">
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="El sistema le permite indicar los tipos de contacto que serán contemplados.">
 				</legend>
 				<input type="checkbox" name="tipo_invitado_webmaster" id="tipo_invitado_webmaster" class="checkbox_tipo_invitado" value="1">
 				<label for="tipo_invitado_webmaster">Webmaster</label>
-				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="?">
+				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Webmaster.">
 				<input type="checkbox" name="tipo_invitado_comunicacion" id="tipo_invitado_comunicacion" class="checkbox_tipo_invitado" value="2">
 				<label for="tipo_invitado_comunicacion">R. de comunicación</label>
-				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="?">
+				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Responsable de comunicación.">
 				<input type="checkbox" name="tipo_invitado_tecnico" id="tipo_invitado_tecnico" class="checkbox_tipo_invitado" value="3">
 				<label for="tipo_invitado_tecnico">R. Técnico</label>
-				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="?">
+				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Responsable técnico.">
 				<input type="checkbox" name="tipo_invitado_otros" id="tipo_invitado_otros" class="checkbox_tipo_invitado" value="4">
 				<label for="tipo_invitado_otros">Otros</label>
-				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="?">
+				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Otros.">
 			</fieldset>
 
 			<fieldset>
 				<legend>Añadir participantes por contacto
-					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="?">
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="El sistema le permite realizar la búsqueda de los contactos que serán invitados al curso mediante criterios de búsqueda.">
 				</legend>
 
 				<div id='bloque_participantes'>

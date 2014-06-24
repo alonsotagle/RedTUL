@@ -407,6 +407,11 @@ body {
   font-size: 10px;
 }
 
+.ui-tooltip{
+  font-family: Verdana,Arial,sans-serif;
+  font-size: 10px;
+}
+
 /* Vista curso.php */
 #conf_contacto_leyenda{
 	border-radius: 5px;
@@ -514,7 +519,7 @@ body {
 /* Vista de mensajeria.php */
 #frm_buscar_correo{
 	border: 1px solid black;
-	height: 132px;
+	height: 110px;
 	margin-bottom: 30px;
 	padding: 15px;
 	width: 320px;
@@ -644,8 +649,24 @@ body {
 	cursor: pointer;
 }
 
+.img_editar_correo{
+	cursor: pointer;
+}
+
 #btn_buscar_correo{
 	float: right;
+}
+
+.correo_cancelado {
+	background-color: #d9534f;
+}
+
+.correo_cancelado td, .correo_cancelado td a{
+	color: #fff;
+}
+
+.correo_cancelado:hover td {
+	background: #d9534f !important;
 }
 
 /* Inicia CONFIRMACION */
@@ -706,6 +727,20 @@ body {
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.lupa_instancias{
+	background: url('../img/icono_buscar.png') no-repeat;
+	background-position: left center;
+	background-size: 20px;
+	padding-left: 15px;
+	width: 53%;
+}
+
+#textarea_motivos{
+	margin: 2px;
+	height: 54px;
+	width: 374px;
 }
 
 /* Inicia INSTANCIA */

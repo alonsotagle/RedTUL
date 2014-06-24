@@ -24,10 +24,17 @@
 			success: function(resultado) {
 				if (resultado) {
 					$.each(resultado, function(index, value) {
-						var row_tabla = '<tr>\
-							<td>'+value['correo_asunto']+'</td>\
+						var url_detalle = "<?= site_url('mensajeria/detalle_correo') ?>";
+						url_detalle += "/" + value['id_correo'];
+
+						if (value['correo_estatus'] == 2) {
+							var row_tabla = "<tr class='correo_cancelado'>"
+						} else {
+							var row_tabla = "<tr>";
+						}
+						row_tabla += '<td><a href="'+url_detalle+'">'+value['correo_asunto']+'</a></td>\
 							<td>'+value['correo_fecha_creacion']+'</td>\
-							<td>'+value['correo_fecha_envio']+'</td>\
+							<td>'+value['correo_fecha_envio']+'<br>'+value['correo_hora_envio']+'</td>\
 							<td>';
 						$.each(value['destinatarios'], function(index_dest, value_dest) {
 							row_tabla += value_dest['contacto_nombre']+" "+value_dest['contacto_ap_paterno']+" "+value_dest['contacto_ap_materno']+"<br>";
@@ -35,7 +42,7 @@
 						row_tabla += '</td>';
 						if (value['correo_estatus'] == 1) {
 							row_tabla += '<td>\
-								<img id='+value['id_correo']+' class="img_editar_plantilla"\
+								<img id='+value['id_correo']+' class="img_editar_correo"\
 								src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
 								</td></tr>';
 						}else{
@@ -53,8 +60,7 @@
 				var datos = {
 					'correo_asunto' 		: $('#asunto_correo').val(),
 					'correo_fecha_envio' 	: $('#fecha_envio_correo').val(),
-					'correo_estatus' 		: $('#estatus_correo').val(),
-					'correo_hora_envio'		: $('#hora_envio_correo').val()
+					'correo_estatus' 		: $('#estatus_correo').val()
 				};
 
 				$.ajax({
@@ -66,18 +72,30 @@
 						if (resultado) {
 							$('#tabla_correos tbody').find("tr:gt(0)").remove();
 							$.each(resultado, function(index, value) {
-								var row_tabla = '<tr>\
-									<td>'+value['correo_asunto']+'</td>\
+								var url_detalle = "<?= site_url('mensajeria/detalle_correo') ?>";
+								url_detalle += "/" + value['id_correo'];
+
+								if (value['correo_estatus'] == 2) {
+									var row_tabla = "<tr class='correo_cancelado'>"
+								} else {
+									var row_tabla = "<tr>";
+								}
+								row_tabla += '<td><a href="'+url_detalle+'">'+value['correo_asunto']+'</a></td>\
 									<td>'+value['correo_fecha_creacion']+'</td>\
-									<td>'+value['correo_fecha_envio']+'</td>\
-									<td></td>';
+									<td>'+value['correo_fecha_envio']+'<br>'+value['correo_hora_envio']+'</td>\
+									<td>';
+								$.each(value['destinatarios'], function(index_dest, value_dest) {
+									row_tabla += value_dest['contacto_nombre']+" "+value_dest['contacto_ap_paterno']+" "+value_dest['contacto_ap_materno']+"<br>";
+								});
+								row_tabla += '</td>';
+
 								if (value['correo_estatus'] == 1) {
 									row_tabla += '<td>\
-										<img id='+value['id_correo']+' class="img_editar_plantilla"\
+										<img id='+value['id_correo']+' class="img_editar_correo"\
 										src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
 										</td></tr>';
 								}else{
-									row_tabla += "<td></td><td></td></tr>";
+									row_tabla += "<td></td></tr>";
 								}
 								$('#tabla_correos tbody').append(row_tabla);
 							});
@@ -362,18 +380,60 @@
 			});
 		});
 
+		$("#programar_correo_hora").change(function(){
+			verifica_hora();
+		});
 		$("#programar_correo_fecha").change(function(){
-			hoy = new Date();
-			var hora = hoy.getHours()+":"+hoy.getMinutes();
-			hoy = hoy.getFullYear()+"-"+("0" + (hoy.getMonth() + 1)).slice(-2)+"-"+("0" + hoy.getDate()).slice(-2);
+			verifica_hora();
+		});
 
-			fecha = $("#programar_correo_fecha").val();
-			if(fecha == hoy){
-				//$("#programar_correo_hora").attr("min", hora);
-				$("#programar_correo_hora").attr("min", "10:00:00");
-			}else{
-				$("#programar_correo_hora").removeAttr("min");
+		function verifica_hora(){
+			var hoy = new Date();
+			var hora_actual = hoy.getHours();
+			var minutos_actual = hoy.getMinutes();
+
+			var tiempo_introducido = $("#programar_correo_hora").val();
+			var arreglo_hora = tiempo_introducido.split(":");
+			var hora_introducida = arreglo_hora[0];
+			var minutos_introducido = arreglo_hora[1];
+
+			if (tiempo_introducido != "") {
+
+				hoy = hoy.getFullYear()+"-"+("0" + (hoy.getMonth() + 1)).slice(-2)+"-"+("0" + hoy.getDate()).slice(-2);
+
+				fecha = $("#programar_correo_fecha").val();
+
+				if(fecha == hoy){
+
+					if (hora_introducida < hora_actual) {
+						alert("El sistema no permite ingresar horas anteriores a la actual, cuando se selecciona el día actual");
+						$("#programar_correo_hora").val("");
+					}else if (hora_introducida == hora_actual && minutos_introducido < minutos_actual) {
+						alert("El sistema no permite ingresar horas anteriores a la actual, cuando se selecciona el día actual");
+						$("#programar_correo_hora").val("");
+					}
+				}
 			}
+		}
+
+		$("#tabla_correos").on( "click", ".img_editar_correo", function() {
+			id = $(this).attr('id');
+			window.location.href = "<?= site_url('mensajeria/editar_correo') ?>"+"/"+id;
+		});
+
+		$("#btn_programar_correo").click(function(){
+			$.blockUI({
+				message: $('#enviando_correo'),
+				css: {
+					border: 'none',
+					padding: '15px',
+					backgroundColor: '#000',
+					'-webkit-border-radius': '10px',
+					'-moz-border-radius': '10px',
+					opacity: .5,
+					color: '#fff'
+				}
+			});
 		});
     }); 
 </script>
@@ -402,9 +462,7 @@
 					<option value="3">La &uacute;ltima semana</option>
 					<option value="4">Un d&iacute;a anterior</option>
 				</select>
-				<label for="hora_envio_correo">Hora de env&iacute;o</label>
-				<input type="time" id="hora_envio_correo" maxlength="5" name="hora_envio_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]"/>
-
+				
 				<label for="estatus_correo">Estatus de env&iacute;o</label>
 				<select name="estatus_correo" id="estatus_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]" value="">
 					<option selected value="">- Elija un tipo -</option>
@@ -419,9 +477,12 @@
 				<tr>
 					<td>Asunto</td>
 					<td>Fecha de creaci&oacute;n</td>
-					<td>Fecha de env&iacute;o</td>
+					<td>Fecha y hora de env&iacute;o</td>
 					<td>Destinatarios</td>
-					<td>Editar</td>
+					<td>Editar
+						<br>
+						(S&oacute;lo pendientes)
+					</td>
 				</tr>
 			</table>
 
@@ -481,7 +542,7 @@
 				<div id="tab-dest">
 					<fieldset id="fieldset_destinatarios_curso">
 						<legend>Destinatarios(Cursos)
-							<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="?" class="icon_tooltip">
+							<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="El sistema permite elegir los contactos invitados a un determinado curso como destinatarios." class="icon_tooltip">
 						</legend>
 						<form id="frm_curso_destinatarios">
 							<label for="lista_cursos">T&iacute;tulo de curso</label>
@@ -493,7 +554,7 @@
 					</fieldset>
 					<fieldset id="fieldset_destinatarios_contacto">
 						<legend>Destinatarios(Por contacto)
-							<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="?" class="icon_tooltip">
+							<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="El sistema permite realizar la búsqueda de los contactos que desea añadir como destinatarios en el correo electrónico mediante criterios de búsqueda." class="icon_tooltip">
 						</legend>
 						<form id="frm_correo_destinatarios" method="POST">
 							<label for="tipo_contacto">Tipo de contacto</label>
@@ -555,6 +616,10 @@
 				</div>
 				<input type="submit" id="btn_correo_plantilla" value="Aceptar" form="form_plantilla">
 			</form>
+		</div>
+		<div id="enviando_correo" style="display: none;">
+			<h3>Enviando correo electrónico</h3>
+			<img src="<?= base_url('assets/img/email.gif')?>">
 		</div>
 </div>
 <!-- termina contenido -->

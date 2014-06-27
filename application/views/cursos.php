@@ -23,10 +23,12 @@
 				</table>");
 
 				$.each(resultado, function( index, value ) {
+					var url_detalle = "<?= site_url('cursos/detalle_curso') ?>";
+					url_detalle += "/" + value['id_curso'];
 
 					var datos_curso_renglon = "";
 					datos_curso_renglon += '<tr>\
-						<td>'+value['curso_titulo']+'</td>\
+						<td><a href="'+url_detalle+'" class="link_detalle">'+value['curso_titulo']+'</a></td>\
 						<td>'+value['curso_tipo']+'</td>';
 
 					datos_curso_renglon += '<td>';

@@ -55,6 +55,7 @@ class confirmacion_model extends CI_Model{
 
     public function confirmar_inscripcion($nueva_inscripcion)
     {
+        $this->db->delete('curso_inscrito', $nueva_inscripcion);
         $this->db->insert('curso_inscrito', $nueva_inscripcion);
         $this->db->delete('curso_cancelado', $nueva_inscripcion);
     }
@@ -114,7 +115,13 @@ class confirmacion_model extends CI_Model{
 
     public function cancelar_inscripcion($cancelar_inscripcion)
     {
+        $motivos = $cancelar_inscripcion['motivos'];
+        unset($cancelar_inscripcion['motivos']);
+        $this->db->delete('curso_cancelado', $cancelar_inscripcion);
+
+        $cancelar_inscripcion['motivos'] = $motivos;
         $this->db->insert('curso_cancelado', $cancelar_inscripcion);
+
         unset($cancelar_inscripcion['motivos']);
         $this->db->delete('curso_inscrito', $cancelar_inscripcion);
     }

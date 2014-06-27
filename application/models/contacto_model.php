@@ -88,7 +88,7 @@ class contacto_model extends CI_Model{
         $this->db->update('contacto', $contacto);
     }
 
-    public function buscar($data_buscar)
+    public function buscar($parametros_busqueda)
     {
         $this->db->select('contacto.id_contacto,
                             contacto.contacto_nombre,
@@ -103,34 +103,53 @@ class contacto_model extends CI_Model{
         $this->db->join('tipo_contacto', 'contacto.contacto_tipo = tipo_contacto.id_tipo_contacto');
         $this->db->join('instancia', 'contacto.contacto_instancia = instancia.id_instancia');
 
-        $parametros = array();
-
-        if ($data_buscar['nombre_contacto'] != "") {
-            $parametros['contacto.contacto_nombre'] = $data_buscar['nombre_contacto'];
-            $this->db->or_like('contacto.contacto_ap_paterno', $data_buscar['nombre_contacto']);
-            $this->db->or_like('contacto.contacto_ap_materno', $data_buscar['nombre_contacto']);
+        if ($parametros_busqueda['nombre_contacto'] != "") {
+            $this->db->like('contacto.contacto_nombre', $parametros_busqueda['nombre_contacto']);
         }
 
-        if ($data_buscar['correo_contacto'] != "") {
-            $parametros['contacto.contacto_correo_inst'] = $data_buscar['nombre_contacto'];
-            $this->db->or_like('contacto.contacto_correo_per', $data_buscar['correo_contacto']);
+        if ($parametros_busqueda['paterno_contacto'] != "") {
+            $this->db->like('contacto.contacto_ap_paterno', $parametros_busqueda['paterno_contacto']);
         }
 
-        if (isset($data_buscar['tipo_contacto'])) {
-            $this->db->where('contacto.contacto_tipo', $data_buscar['tipo_contacto']);
+        if ($parametros_busqueda['materno_contacto'] != "") {
+            $this->db->like('contacto.contacto_ap_materno', $parametros_busqueda['materno_contacto']);
         }
 
-        if ($data_buscar['instancia_contacto'] != "") {
-            $parametros['instancia.instancia_nombre'] = $data_buscar['instancia_contacto'];
+        if ($parametros_busqueda['correo_contacto'] != "") {
+            $correo = $parametros_busqueda['correo_contacto'];
+            $this->db->where("(contacto.contacto_correo_inst LIKE '%$correo%' || contacto.contacto_correo_per LIKE '%$correo%')");
         }
 
-        $this->db->like($parametros);
+        if ($parametros_busqueda['tipo_contacto'] != "") {
+            $this->db->where('contacto.contacto_tipo', $parametros_busqueda['tipo_contacto']);
+        }
+
+        if ($parametros_busqueda['instancia_contacto'] != "") {
+            $this->db->like('instancia.instancia_nombre', $parametros_busqueda['instancia_contacto']);
+        }
 
         $query = $this->db->get();
 
         if ($query -> num_rows() > 0)
         {
             return $query->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function consulta_detalle_contacto($id_contacto)
+    {
+        $this->db->from('contacto');
+        $this->db->join('instancia', 'contacto.contacto_instancia = instancia.id_instancia');
+        $this->db->join('tipo_contacto', 'contacto.contacto_tipo = tipo_contacto.id_tipo_contacto');
+        $this->db->where('contacto.id_contacto', $id_contacto);
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->row_array();
         } else {
             return null;
         }

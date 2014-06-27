@@ -79,6 +79,7 @@
 		<div id="contenedor_imagen">
 			<img src="<?= base_url('assets/img/avatar.jpg') ?>" id="contacto_imagen">
 			<input type="file" id="contacto_avatar" name="contacto_avatar" class="validate[checkFileType[jpg|jpeg|gif]]" data-prompt-position="topLeft">
+			<br><span>Formatos permitidos .jpg y .gif</span>
 		</div>
 		<div class="contenedor_seccion_formulario">
 			<label>* Tipo de contacto</label>
@@ -111,7 +112,8 @@
 		<br>
 		<label class="etiqueta_frm" for="contacto_paterno">* Apellido paterno</label>
 		<input type="text" maxlength="50" id="contacto_paterno" name="contacto_apaterno" class="input_frm_nuevo validate[required]">
-		<label for="contacto_materno">* Apellido materno</label>
+		<br>
+		<label class="etiqueta_frm" for="contacto_materno">* Apellido materno</label>
 		<input type="text" maxlength="50" id="contacto_materno" name="contacto_amaterno" class="validate[required]">
 		<br>
 		<p class="encabezado_form_nuevo_contacto">Datos laborales</p>

@@ -21,8 +21,11 @@
 				</table>");
 
 				$.each(resultado, function( index, value ) {
+					var url_detalle = "<?= site_url('contactos/detalle_contacto') ?>";
+					url_detalle += "/" + value['id_contacto'];
+
 					$('#despliega_contactos table tbody').append('<tr>\
-						<td>'+value['contacto_nombre']+' '+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+'</td>\
+						<td><a href="'+url_detalle+'" class="link_detalle">'+value['contacto_nombre']+' '+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+'</a></td>\
 						<td>'+value['tipo_contacto_descripcion']+'</td>\
 						<td>'+value['contacto_estatus']+'</td>\
 						<td>'+value['instancia_nombre']+'</td>\
@@ -74,7 +77,7 @@
 			<input type="text" id="correo_contacto" maxlength="100" name="correo_contacto" class="buscar_contacto_textInput validate[groupRequired[buscar_contacto]]"/>
 			<label for="tipo_contacto">Tipo de contacto</label>
 			<select name="tipo_contacto" id="tipo_contacto" class="buscar_contacto_textInput validate[groupRequired[buscar_contacto]]">
-				<option selected disabled>- Elija un tipo -</option>
+				<option selected disabled value="">- Elija un tipo -</option>
 				<option value="1">Webmaster</option>
 				<option value="2">Responsable de comunicación</option>
 				<option value="3">Responsable técnico</option>

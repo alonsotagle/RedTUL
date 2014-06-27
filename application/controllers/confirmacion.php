@@ -66,7 +66,7 @@ class confirmacion extends CI_Controller {
         $this->confirmacion_model->cancelar_inscripcion($_POST);
 
         $this->load->view('template/header');
-        $this->load->view('confirmacion_inscripcion');
+        $this->load->view('cancelar_inscripcion');
         $this->load->view('template/footer');
     }
 }

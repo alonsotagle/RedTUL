@@ -78,6 +78,7 @@
 				<br>
 				<label for="curso_flyer" class="label_nuevo_curso">Flyer</label>
 				<input type="file" id="curso_flyer" name="curso_flyer" class="validate[checkFileType[jpg|jpeg|gif]]"/>
+				<br><span class="descripcion_archivos">Formatos permitidos .jpg y .gif</span><br>
 				<br>
 				<label for="curso_tipo" class="label_nuevo_curso">* Tipo de curso
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica la modalidad en que se llevará a cabo dicho curso.">
@@ -96,6 +97,7 @@
 				<br>
 				<label for="curso_temario" class="label_nuevo_curso">* Temario</label>
 				<input type="file" id="curso_temario" name="curso_temario" class="validate[required, checkFileType[pdf]]"/>
+				<br><span class="descripcion_archivos">Formatos permitidos .pdf</span>
 				<br>
 
 				<p class="encabezado_form_nuevo_curso">Datos del evento</p>

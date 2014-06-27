@@ -51,7 +51,7 @@
 		}
 		echo "</table>";
 	}else{
-		echo "<p>No se encontraron coincidencias.</p>";
+		echo "<br><h1>No se encontraron coincidencias.</h1>";
 	}
 	?>
 

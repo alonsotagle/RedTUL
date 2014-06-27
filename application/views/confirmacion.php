@@ -1,10 +1,11 @@
+<script src="//maps.googleapis.com/maps/api/js?sensor=false" type="text/javascript"></script>
 <script>
     $(document).ready(function(){
 
 		$("#informacion_contacto").hide();
 		$("#botones_asistencia").hide();
 
-    	$("#verificar_correo").click(function(){
+    	$("#verificar_correo").click(function(event){
     		event.preventDefault();
     		if ($("#frm_validar_correo").validationEngine('validate')) {
 	    		$("#bloque_ingresar_correo").fadeOut("fast");
@@ -250,7 +251,36 @@
 			});
 			$('.blockOverlay').click($.unblockUI);
 		});
+
+		if ("<?= $curso_mapa_url; ?>" != "") {
+			var url = "<?= $curso_mapa_url; ?>";
+			var arr_arroba = url.split("@");
+
+			if (arr_arroba.length > 1) {
+				var arr_coma = arr_arroba[1].split(",");
+
+				$("#map-canvas").addClass("map-canvas");
+				initialize(arr_coma[0], arr_coma[1]);
+			}
+		}
+
+		function initialize(lat, lng) {
+			var map = new google.maps.Map(
+				document.getElementById('map-canvas'), {
+					center: new google.maps.LatLng(lat, lng),
+					zoom: 15,
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+			});
+
+			var marker = new google.maps.Marker({
+				position: new google.maps.LatLng(lat, lng),
+				map: map
+			});
+
+		}
+
     });
+
 </script>
 <!-- inicia contenido -->
 <div id="contenido_confirmacion">
@@ -315,6 +345,8 @@
 		<?php endif; ?>
 		<?php if($curso_mapa_url != "") : ?>
 			<a class='confirmacion_info' href="<?= $curso_mapa_url ?>" target="_blank">URL de la ubicaci&oacute;n</a>
+			<br><br>
+			<div id="map-canvas"></div>
 			<br><br>
 		<?php endif; ?>
 		<?php if($curso_telefono != "") : ?>

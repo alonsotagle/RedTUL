@@ -55,13 +55,14 @@ $(document).ready(function(){
 						target	: "_blank"
 					});
 
-					$("#curso_flyer").after($(a_tag_flyer));
+					$("#flyer_anterior").after($(a_tag_flyer));
 
 					var img_flyer = $("<img>")
 					.attr("src", url_flyer)
 					.attr("id", "img_flyer")
 					.attr("width", "150")
-					.attr("height", "150");
+					.attr("height", "150")
+					.addClass("descripcion_archivos");
 
 					$("#a_tag_flyer").append($(img_flyer));
 				}
@@ -191,9 +192,10 @@ $(document).ready(function(){
     	setTimeout($.unblockUI, 2000);
 	}
 
-	$("#btn_buscar_invitados").click(function(){
+	$("#btn_buscar_invitados").click(function(event){
 		event.preventDefault();
 		var datos = {
+			'id_curso' 	: <?= $id_curso ?>,
 			'nombre' 	: $('input[name=invitados_nombre]').val(),
 			'correo' 	: $('input[name=invitados_correo]').val(),
 			'instancia' : $('input[name=invitados_instancia]').val()
@@ -222,7 +224,7 @@ $(document).ready(function(){
 		});
 	});
 
-	$("#btn_invitados_curso").click(function(){
+	$("#btn_invitados_curso").click(function(event){
 		event.preventDefault();
 		var datos = {
 			'id_curso'		: <?= $id_curso ?>,
@@ -274,6 +276,7 @@ $(document).ready(function(){
 				<br>
 				<label for="curso_flyer" class="label_nuevo_curso">Flyer</label>
 				<input type="file" id="curso_flyer" name="curso_flyer" class="validate[checkFileType[jpg|gif]]"/>
+				<br><span class="descripcion_archivos">Formatos permitidos .jpg y .gif</span><br><br>
 				<input type="hidden" id="flyer_anterior" name="flyer_anterior">
 				<br>
 				<label for="curso_tipo" class="label_nuevo_curso">* Tipo de contacto
@@ -293,6 +296,7 @@ $(document).ready(function(){
 				<br>
 				<label for="curso_temario" class="label_nuevo_curso">* Temario</label>
 				<input type="file" id="curso_temario_editar" name="curso_temario" class="validate[checkFileType[pdf]]"/>
+				<br><span class="descripcion_archivos">Formatos permitidos .pdf</span>
 				<input type="hidden" id="temario_anterior" name="temario_anterior">
 				<br>
 

@@ -288,6 +288,10 @@ body {
 	margin-right: 30px;
 }
 
+.link_detalle{
+	color: #362b36;
+}
+
 /* Vista nuevo_contacto.php */
 #frm_nuevo_contacto{
 	overflow: auto;
@@ -465,6 +469,10 @@ body {
 	background-position: left center;
 	background-size: 20px;
 	padding-left: 15px;
+}
+
+.descripcion_archivos{
+	margin-left: 205px;
 }
 
 /* Vista editar_curso.php */
@@ -741,6 +749,20 @@ body {
 	margin: 2px;
 	height: 54px;
 	width: 374px;
+}
+
+#bloque_confirmacion{
+	height: 135px;
+	padding-top: 100px;
+}
+
+#bloque_confirmacion h1{
+	text-align: center;
+}
+
+.map-canvas{
+	height: 400px;
+	width: 400px;
 }
 
 /* Inicia INSTANCIA */

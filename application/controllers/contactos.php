@@ -91,12 +91,10 @@ class contactos extends CI_Controller {
                     break;
             }
 
-            if (!is_null($contacto['contacto_comunicacion'])) {
-                if ($contacto['contacto_comunicacion'] == 0) {
-                    $contacto['contacto_comunicacion'] = "Vía telefónica";
-                }else{
-                    $contacto['contacto_comunicacion'] = "Vía e-mail";
-                }
+            if ($contacto['contacto_comunicacion'] == 0) {
+                $contacto['contacto_comunicacion'] = "Vía telefónica";
+            }else{
+                $contacto['contacto_comunicacion'] = "Vía e-mail";
             }
 
             if (($contacto['contacto_avatar']) != "") {
@@ -105,7 +103,6 @@ class contactos extends CI_Controller {
             }else{
                 $contacto['contacto_avatar'] = "";
             }
-            
 
             $this->load->view('template/header');
             $this->load->view('template/menu');
@@ -224,7 +221,56 @@ class contactos extends CI_Controller {
     {
         if (!empty($_POST)) {
 
-            $resultado_busqueda['resultado'] = $this->contacto_model->buscar($_POST);
+            $parametros_busqueda = array(
+                'correo_contacto'   => $this->input->post('correo_contacto'),
+                'tipo_contacto'     => $this->input->post('tipo_contacto'),
+                'instancia_contacto'=> $this->input->post('instancia_contacto')
+            );
+
+            $nombre_completo = $this->input->post('nombre_contacto');
+
+            if ($nombre_completo != "") {
+                $arreglo_nombre = explode(" ", $nombre_completo);
+                $tamano_arreglo = count($arreglo_nombre);
+
+                switch ($tamano_arreglo) {
+                    case 1:
+                        $parametros_busqueda['nombre_contacto'] = $arreglo_nombre[0];
+                        $parametros_busqueda['paterno_contacto'] = "";
+                        $parametros_busqueda['materno_contacto'] = "";
+                        break;
+
+                    case 2:
+                        $parametros_busqueda['nombre_contacto'] = $arreglo_nombre[0];
+                        $parametros_busqueda['paterno_contacto'] = $arreglo_nombre[1];
+                        $parametros_busqueda['materno_contacto'] = "";
+                        break;
+
+                    case 3:
+                        $parametros_busqueda['nombre_contacto'] = $arreglo_nombre[0];
+                        $parametros_busqueda['paterno_contacto'] = $arreglo_nombre[1];
+                        $parametros_busqueda['materno_contacto'] = $arreglo_nombre[2];
+                        break;
+
+                    case 4:
+                        $parametros_busqueda['nombre_contacto'] = $arreglo_nombre[0]." ".$arreglo_nombre[1];
+                        $parametros_busqueda['paterno_contacto'] = $arreglo_nombre[2];
+                        $parametros_busqueda['materno_contacto'] = $arreglo_nombre[3];
+                        break;
+                    
+                    default:
+                        $parametros_busqueda['nombre_contacto'] = "";
+                        $parametros_busqueda['paterno_contacto'] = "";
+                        $parametros_busqueda['materno_contacto'] = "";
+                        break;
+                }
+            } else {
+                $parametros_busqueda['nombre_contacto'] = "";
+                $parametros_busqueda['paterno_contacto'] = "";
+                $parametros_busqueda['materno_contacto'] = "";
+            }
+
+            $resultado_busqueda['resultado'] = $this->contacto_model->buscar($parametros_busqueda);
 
             if (!is_null($resultado_busqueda['resultado'])) {
                 foreach($resultado_busqueda['resultado'] as $llave => &$contacto)
@@ -244,6 +290,57 @@ class contactos extends CI_Controller {
             $this->load->view('template/footer');
 
         }
+    }
+
+    function detalle_contacto($id_contacto)
+    {
+        $contacto = $this->contacto_model->consulta_detalle_contacto($id_contacto);
+
+        if ($contacto['contacto_estatus'] == 0) {
+            $contacto['contacto_estatus'] = "Inactivo";
+        }else{
+            $contacto['contacto_estatus'] = "Activo";
+        }
+
+        switch ($contacto['contacto_tipo']) {
+            case 1:
+                $contacto['contacto_tipo'] = "Webmaster";
+                break;
+            case 2:
+                $contacto['contacto_tipo'] = "Responsable de comunicación";
+                break;
+            case 3:
+                $contacto['contacto_tipo'] = "Responsable de técnico";
+                break;
+            case 4:
+                $contacto['contacto_tipo'] = "Otros";
+                break;
+            
+            default:
+                break;
+        }
+
+        if ($contacto['contacto_comunicacion'] == 0) {
+            $contacto['contacto_comunicacion'] = "Vía telefónica";
+        }else{
+            $contacto['contacto_comunicacion'] = "Vía e-mail";
+        }
+
+        if (($contacto['contacto_avatar']) != "") {
+            $tag_img = "<img src=".base_url('assets/img_avatar/')."/".$contacto['contacto_avatar']." width='200px' height='200px'>";
+            $contacto['contacto_avatar'] = $tag_img;
+        }
+
+        if ($contacto['contacto_instructor'] == 0) {
+            $contacto['contacto_instructor'] = "No";
+        }else{
+            $contacto['contacto_instructor'] = "Sí";
+        }
+
+        $this->load->view('template/header');
+        $this->load->view('template/menu');
+        $this->load->view('detalle_contacto', $contacto);
+        $this->load->view('template/footer');
     }
 
 }

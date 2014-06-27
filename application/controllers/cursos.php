@@ -312,14 +312,77 @@ class cursos extends CI_Controller {
     function consulta_contactos()
     {
         $parametros = array(
-            'nombre' => $this->input->post('nombre'),
-            'correo' => $this->input->post('correo'),
-            'instancia' => $this->input->post('instancia')
+            'correo'    => $this->input->post('correo'),
+            'instancia' => $this->input->post('instancia'),
+            'id_curso'  => $this->input->post('id_curso')
         );
 
-        $resultado = $this->curso_model->consulta_contactos($parametros);
+        $nombre_completo = $this->input->post('nombre');
 
-        print_r(json_encode($resultado));
+        if ($nombre_completo != "") {
+            $arreglo_nombre = explode(" ", $nombre_completo);
+            $tamano_arreglo = count($arreglo_nombre);
+
+            switch ($tamano_arreglo) {
+                case 1:
+                    $parametros['nombre_contacto'] = $arreglo_nombre[0];
+                    $parametros['paterno_contacto'] = "";
+                    $parametros['materno_contacto'] = "";
+                    break;
+
+                case 2:
+                    $parametros['nombre_contacto'] = $arreglo_nombre[0];
+                    $parametros['paterno_contacto'] = $arreglo_nombre[1];
+                    $parametros['materno_contacto'] = "";
+                    break;
+
+                case 3:
+                    $parametros['nombre_contacto'] = $arreglo_nombre[0];
+                    $parametros['paterno_contacto'] = $arreglo_nombre[1];
+                    $parametros['materno_contacto'] = $arreglo_nombre[2];
+                    break;
+
+                case 4:
+                    $parametros['nombre_contacto'] = $arreglo_nombre[0]." ".$arreglo_nombre[1];
+                    $parametros['paterno_contacto'] = $arreglo_nombre[2];
+                    $parametros['materno_contacto'] = $arreglo_nombre[3];
+                    break;
+                
+                default:
+                    $parametros['nombre_contacto'] = "";
+                    $parametros['paterno_contacto'] = "";
+                    $parametros['materno_contacto'] = "";
+                    break;
+            }
+        } else {
+            $parametros['nombre_contacto'] = "";
+            $parametros['paterno_contacto'] = "";
+            $parametros['materno_contacto'] = "";
+        }
+
+        $resultado_total = $this->curso_model->consulta_contactos($parametros);
+
+        // echo "<pre>";
+        // var_dump($resultado_total);
+        // echo "</pre><br>";
+
+        $invitados = $this->curso_model->consulta_invitado_curso($parametros['id_curso']);
+
+        // echo "<pre>";
+        // var_dump($invitados);
+        // echo "</pre><br>";
+
+        if (!is_null($invitados)) {
+            foreach ($invitados as $key_invitados => $id_invitado) {
+                foreach ($resultado_total as $key => &$contacto) {
+                    if ($id_invitado['invitado_id'] == $contacto['id_contacto']) {
+                        unset($resultado_total[$key]);
+                    }
+                }
+            }
+        }
+
+        print_r(json_encode($resultado_total));
     }
 
     function agrega_invitados()
@@ -375,6 +438,45 @@ class cursos extends CI_Controller {
         $id_contacto = $this->input->post('contacto');
 
         $this->curso_model->borrar_invitado_contacto($id_curso, $id_contacto);
+    }
+
+    function detalle_curso($id_curso)
+    {
+        $curso = $this->curso_model->consulta_detalle_curso($id_curso);
+
+        if (($curso['curso_flyer']) != "") {
+            $tag_img = "<img src=".base_url('assets/flyers_cursos/')."/".$curso['curso_flyer']." width='200px' height='200px'>";
+            $curso['curso_flyer'] = $tag_img;
+        }
+
+        if ($curso['curso_tipo'] == 0) {
+            $curso['curso_tipo'] = "Presencial";
+        }else{
+            $curso['curso_tipo'] = "En línea";
+        }
+
+        $tag_a = "<a href=".base_url('assets/temarios_cursos/')."/".$curso['curso_temario']." target='_blank'>Ver temario</a>";
+        $curso['curso_temario'] = $tag_a;
+
+        if (($curso['curso_mapa_url']) != "") {
+            $tag_url = "<a href=".$curso['curso_mapa_url']." class='conf_contacto_valores' target='_blank'>Ver en Google Maps</a>";
+            $curso['curso_mapa_url'] = $tag_url;
+        }
+
+        $curso['profesor'] = $this->curso_model->consulta_instructores_nombre_curso($curso['id_curso']);
+
+        $curso['invitados_contacto'] = $this->curso_model->consulta_invitado_contacto($curso['id_curso']);
+
+        $curso['invitados_tipo'] = $this->curso_model->consulta_invitado_tipo_detalle($curso['id_curso']);
+
+        $curso['inscritos'] = $this->curso_model->consulta_inscritos_detalle($curso['id_curso']);
+
+        $curso['cancelados'] = $this->curso_model->consulta_cancelados_detalle($curso['id_curso']);
+
+        $this->load->view('template/header');
+        $this->load->view('template/menu');
+        $this->load->view('detalle_curso', $curso);
+        $this->load->view('template/footer');
     }
 
 }

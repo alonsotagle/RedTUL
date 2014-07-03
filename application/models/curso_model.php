@@ -17,6 +17,8 @@ class curso_model extends CI_Model{
     public function registrar_curso($nuevo_curso)
     {
 		$this->db->insert('curso', $nuevo_curso);
+
+        return $this->db->insert_id();
     }
 
     public function consulta_cursos()
@@ -143,13 +145,6 @@ class curso_model extends CI_Model{
         } else {
             return null;
         }
-    }
-
-    public function recuperar_id()
-    {
-        $this->db->select_max("id_curso");
-        $query=$this->db->get("curso");
-        return $query->row_array();
     }
 
     public function consulta_contactos($parametros)

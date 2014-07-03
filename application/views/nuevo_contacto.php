@@ -69,6 +69,8 @@
 		<fieldset>
 		<legend>Nuevo contacto</legend>
 		<div class="contenedor_seccion_formulario">
+			<p>Los datos marcados con asterisco son obligatorios.</p>
+			<br>
 			<label>Estatus</label>
 			<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica el estado en el que se encuentra la cuenta del usuario." class="icon_tooltip">
 			<input type="radio" name="estatus_contacto" value="1" id="estatus_activo" checked>
@@ -116,17 +118,17 @@
 		<label class="etiqueta_frm" for="contacto_materno">* Apellido materno</label>
 		<input type="text" maxlength="50" id="contacto_materno" name="contacto_amaterno" class="validate[required]">
 		<br>
-		<p class="encabezado_form_nuevo_contacto">Datos laborales</p>
+		<p class="encabezado_form_nuevo_contacto">Datos Institucionales</p>
 		<label for="contacto_instancias">* Instancia</label>
 		<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Se refiere a la entidad o dependencia a la que pertenece el contacto.">
-		<input type="search" name="contacto_instancia_nombre" id="contacto_instancias" class="input_frm_nuevo validate[required]">
+		<input type="search" name="contacto_instancia_nombre" id="contacto_instancias" class="input_frm_nuevo validate[required]" size="73">
 		<input type="hidden" name="contacto_instancia" id="id_instancia" class="input_frm_nuevo validate[required]">
-		<label for="contacto_adscripcion">&Aacute;rea de adscripci&oacute;n</label>
+		<br><label for="contacto_adscripcion">&Aacute;rea de adscripci&oacute;n</label>
 		<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica el área de la instancia a la que pertenece.">
-		<input type="text" maxlength="255" id="contacto_adscripcion" name="contacto_adscripcion">
+		<input type="text" maxlength="255" id="contacto_adscripcion" name="contacto_adscripcion" size="67">
 		<br><br><br>
 		<label for="contacto_funciones" class="label_funciones">Descripci&oacute;n de funciones</label>
-		<textarea id="contacto_funciones" name="contacto_funciones" cols="50" rows="4" maxlength="255" placeholder="Ingrese una breve descripción de los roles que desempeña el contacto."></textarea>
+		<textarea id="contacto_funciones" name="contacto_funciones" cols="50" rows="4" maxlength="255" placeholder="Ingrese una breve descripción de las actividades que desempeña el contacto dentro de su instancia o bien describa las actividades acorde a su rol."></textarea>
 		<br>
 		<p class="encabezado_form_nuevo_contacto">Datos de Contacto</p>
 
@@ -136,18 +138,6 @@
 			<label for="contacto_extension" id="etiqueta_ext">ext.</label>
 			<input type="text" id="contacto_extension" name="contacto_extension" size="5" maxlength="5" class="validate[custom[numero]]">
 		</div>
-
-		<div id="contenedor_comunicacion">
-			<label>* Medio de comunicaci&oacute;n preferente</label>
-			<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Se refiere al medio de comunicación que el contacto prefiere.">
-			<br><br>
-			<input type="radio" name="comunicacion_contacto" value="0" id="comunicacion_tel" class="validate[required]">
-			<label for="comunicacion_tel">V&iacute;a telef&oacute;nica</label>
-			<br>
-			<input type="radio" name="comunicacion_contacto" value="1" id="comunicacion_email" class="validate[required]">
-			<label for="comunicacion_email">V&iacute;a correo electr&oacute;nico</label>
-		</div>
-		<br>
 		<label for="contacto_correoinst">Correo institucional</label>
 		<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Correo electrónico institucional con la que cuenta el usuario.">
 		<input type="text" maxlength="100" id="contacto_correoinst" name="contacto_correoinst" class="validate[groupRequired[correo],custom[email]]">
@@ -155,7 +145,16 @@
 		<label for="contacto_correopers">Correo personal</label>
 		<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Es un correo electrónico alterno al institucional.">
 		<input type="text" maxlength="100" id="contacto_correopers" name="contacto_correopers" class="validate[groupRequired[correo],custom[email]]">
-		<br><br><br>
+		<br><br>
+		<label>* Medio de comunicaci&oacute;n preferente</label>
+		<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Se refiere al medio de comunicación que el contacto prefiere.">
+		<br><br>
+		<input type="radio" name="comunicacion_contacto" value="0" id="comunicacion_tel" class="validate[required]">
+		<label for="comunicacion_tel">V&iacute;a telef&oacute;nica</label>
+		<br>
+		<input type="radio" name="comunicacion_contacto" value="1" id="comunicacion_email" class="validate[required]">
+		<label for="comunicacion_email">V&iacute;a correo electr&oacute;nico</label>
+		<br><br>
 		<div id="botones_envio">
 			<input type="submit" id="btn_guardar" value="Guardar">
 		</div>

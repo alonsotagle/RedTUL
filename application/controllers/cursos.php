@@ -62,12 +62,10 @@ class cursos extends CI_Controller {
                     $nuevo_curso['curso_cupo'] = 0;
                 }
 
-                $this->curso_model->registrar_curso($nuevo_curso);
-
-                $id_curso_creado = $this->curso_model->recuperar_id();
+                $id_curso_creado = $this->curso_model->registrar_curso($nuevo_curso);
 
                 foreach ($this->input->post('curso_instructor') as $key => $value) {
-                    $this->curso_model->registrar_instructor_curso($id_curso_creado['id_curso'], $value);
+                    $this->curso_model->registrar_instructor_curso($id_curso_creado, $value);
                 }
 
                 $_POST = array();
@@ -362,15 +360,7 @@ class cursos extends CI_Controller {
 
         $resultado_total = $this->curso_model->consulta_contactos($parametros);
 
-        // echo "<pre>";
-        // var_dump($resultado_total);
-        // echo "</pre><br>";
-
         $invitados = $this->curso_model->consulta_invitado_curso($parametros['id_curso']);
-
-        // echo "<pre>";
-        // var_dump($invitados);
-        // echo "</pre><br>";
 
         if (!is_null($invitados)) {
             foreach ($invitados as $key_invitados => $id_invitado) {

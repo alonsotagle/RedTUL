@@ -178,7 +178,7 @@
 			}
 		});
 
-		$("#btn_correo_obtener_url").click(function(){
+		$("#btn_correo_obtener_url").click(function(event){
 			event.preventDefault();
 			if ($("#frm_curso_destinatarios").validationEngine('validate') && $("#lista_cursos").val() != "") {
 
@@ -200,7 +200,7 @@
 			}
 		});
 
-		$("#btn_buscar_contacto").click(function(){
+		$("#btn_buscar_contacto").click(function(event){
 			event.preventDefault();
 			if ($("#frm_correo_destinatarios").validationEngine('validate')) {
 				var datos = {
@@ -238,7 +238,7 @@
 			}
 		});
 
-		$("#btn_correo_anadir_destinatarios").click(function(){
+		$("#btn_correo_anadir_destinatarios").click(function(event){
 			event.preventDefault();
 
 			var ids_contacto = new Array();

@@ -275,7 +275,7 @@ $(document).ready(function(){
 				<input type="text" maxlength="255" id="curso_titulo" name="curso_titulo" class="validate[required]">
 				<br>
 				<label for="curso_flyer" class="label_nuevo_curso">Flyer</label>
-				<input type="file" id="curso_flyer" name="curso_flyer" class="validate[checkFileType[jpg|gif]]"/>
+				<input type="file" id="curso_flyer" name="curso_flyer" class="validate[checkFileType[jpg|jpeg|gif|JPG|JPEG|GIF]]"/>
 				<br><span class="descripcion_archivos">Formatos permitidos .jpg y .gif</span><br><br>
 				<input type="hidden" id="flyer_anterior" name="flyer_anterior">
 				<br>

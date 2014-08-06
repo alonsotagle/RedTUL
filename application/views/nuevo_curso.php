@@ -77,7 +77,7 @@
 				<input type="text" maxlength="255" id="curso_titulo" name="curso_titulo" class="validate[required]">
 				<br>
 				<label for="curso_flyer" class="label_nuevo_curso">Flyer</label>
-				<input type="file" id="curso_flyer" name="curso_flyer" class="validate[checkFileType[jpg|jpeg|gif]]"/>
+				<input type="file" id="curso_flyer" name="curso_flyer" class="validate[checkFileType[jpg|jpeg|gif|JPG|JPEG|GIF]]"/>
 				<br><span class="descripcion_archivos">Formatos permitidos .jpg y .gif</span><br>
 				<br>
 				<label for="curso_tipo" class="label_nuevo_curso">* Tipo de curso

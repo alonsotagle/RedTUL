@@ -41,48 +41,36 @@
 		<?= $instancia_nombre; ?>
 	</p>
 
-	<?php if($contacto_adscripcion != "") : ?>
 	<p class="conf_contacto_campos">&Aacute;rea de adscripci&oacute;n</p>
 	<p class="conf_contacto_valores">
 		<?= $contacto_adscripcion; ?>
 	</p>
-	<?php endif; ?>
 
-	<?php if($contacto_funciones != "") : ?>
 	<p class="conf_contacto_campos">Descripci&oacute;n de funciones</p>
 	<p class="conf_contacto_valores">
 		<?= $contacto_funciones; ?>
 	</p>
-	<?php endif; ?>
 
 	<p class="conf_contacto_campos">Tel&eacute;fono</p>
 	<p class="conf_contacto_valores">
 		<?= $contacto_telefono; ?>
-		<?php if($contacto_extension != "") : ?>
-			<span>ext. <?= $contacto_extension; ?></span>
-		<?php endif; ?>
+		<span>ext. <?= $contacto_extension; ?></span>
 	</p>
 
-	<?php if($contacto_correo_inst != "") : ?>
 	<p class="conf_contacto_campos">Correo electr&oacute;nico institucional</p>
 	<p class="conf_contacto_valores">
 		<?= $contacto_correo_inst; ?>
 	</p>
-	<?php endif; ?>
 
-	<?php if($contacto_correo_per != "") : ?>
 	<p class="conf_contacto_campos">Correo electr&oacute;nico personal</p>
 	<p class="conf_contacto_valores">
 		<?= $contacto_correo_per; ?>
 	</p>
-	<?php endif; ?>
 
-	<?php if($contacto_avatar != "") : ?>
 	<p class="conf_contacto_campos">Avatar</p>
 	<p class="conf_contacto_valores">
 		<?= $contacto_avatar; ?>
 	</p>
-	<?php endif; ?>
 
 	<p class="conf_contacto_campos">Medio de comunicación preferente</p>
 	<p class="conf_contacto_valores">

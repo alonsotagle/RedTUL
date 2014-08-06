@@ -114,13 +114,15 @@ class contactos extends CI_Controller {
     {
         $contactos = $this->contacto_model->consulta_contactos();
 
-        foreach($contactos as $llave => &$contacto)
-        {
-            if ($contacto['contacto_estatus'] == '1')
+        if (!is_null($contactos)) {
+            foreach($contactos as $llave => &$contacto)
             {
-                $contacto['contacto_estatus'] = 'Activo';
-            }else{
-                $contacto['contacto_estatus'] = 'Inactivo';
+                if ($contacto['contacto_estatus'] == '1')
+                {
+                    $contacto['contacto_estatus'] = 'Activo';
+                }else{
+                    $contacto['contacto_estatus'] = 'Inactivo';
+                }
             }
         }
 
@@ -270,10 +272,10 @@ class contactos extends CI_Controller {
                 $parametros_busqueda['materno_contacto'] = "";
             }
 
-            $resultado_busqueda['resultado'] = $this->contacto_model->buscar($parametros_busqueda);
+            $resultado = $this->contacto_model->buscar($parametros_busqueda);
 
-            if (!is_null($resultado_busqueda['resultado'])) {
-                foreach($resultado_busqueda['resultado'] as $llave => &$contacto)
+            if (!is_null($resultado)) {
+                foreach($resultado as $llave => &$contacto)
                 {
                     if ($contacto['contacto_estatus'] == '1')
                     {
@@ -283,12 +285,7 @@ class contactos extends CI_Controller {
                     }
                 }
             }
-
-            $this->load->view('template/header');
-            $this->load->view('template/menu');
-            $this->load->view('buscar_contacto',$resultado_busqueda);
-            $this->load->view('template/footer');
-
+            print_r(json_encode($resultado));
         }
     }
 
@@ -335,6 +332,12 @@ class contactos extends CI_Controller {
             $contacto['contacto_instructor'] = "No";
         }else{
             $contacto['contacto_instructor'] = "Sí";
+        }
+
+        foreach ($contacto as $campo => $valor) {
+            if ($contacto[$campo] == "") {
+                $contacto[$campo] = "-";
+            }
         }
 
         $this->load->view('template/header');

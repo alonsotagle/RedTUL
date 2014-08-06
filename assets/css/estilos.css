@@ -89,6 +89,7 @@ body {
     width: 806px;
 	padding: 10px 0px 40px 20px;
 	font-size: 13px;
+	overflow: auto;
 }
 
 /* Pie de página */
@@ -252,6 +253,10 @@ body {
 	background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
 }
 
+.tables img{
+	width: 20px;
+}
+
 /*** Terminan estilos de las plantillas ***/
 
 
@@ -275,7 +280,6 @@ body {
 .buscar_contacto_textInput{
 	float: left;
 	margin-bottom: 7px;
-	text-align: center;
 	width: 63%;
 }
 
@@ -290,6 +294,10 @@ body {
 
 .link_detalle{
 	color: #362b36;
+}
+
+.leyenda_centrada{
+	text-align: center;
 }
 
 /* Vista nuevo_contacto.php */
@@ -371,10 +379,10 @@ fieldset > legend{
 
 #frm_buscar_curso{
 	border: 1px solid black;
-	height: 205px;
+	height: 190px;
 	margin-bottom: 30px;
 	padding: 15px;
-	width: 345px;
+	width: 350px;
 }
 
 #frm_buscar_curso label{
@@ -385,7 +393,6 @@ fieldset > legend{
 .buscar_curso_textInput{
 	float: left;
 	margin-bottom: 7px;
-	text-align: center;
 	width: 60%;
 }
 
@@ -396,7 +403,6 @@ fieldset > legend{
 
 .buscar_curso_fechas{
 	margin-bottom: 7px;
-	text-align: center;
 	width: 78px;
 }
 
@@ -426,14 +432,18 @@ fieldset > legend{
 }
 
 .conf_contacto_campos{
+	float: left;
 	font-size: medium;
 	font-weight: bold;
 	margin: 0px 0px -10px 20px;
+	width: 290px;
 }
 
 .conf_contacto_valores{
 	margin-bottom: 25px;
-	margin-left: 100px;
+	margin-left: 310px;
+	padding-right: 20px;
+	text-align: justify;
 }
 
 /* Vista nuevo_curso.php */
@@ -446,6 +456,7 @@ fieldset > legend{
 .label_nuevo_curso{
 	display: inline-block;
 	width: 200px;
+	font-weight: bold;
 }
 
 .label_nuevo_curso_textarea{
@@ -775,4 +786,37 @@ fieldset > legend{
 
 #btn_buscar_instancia{
 	float: right;
+}
+
+.tables .instancias_nombre{
+	text-align: left;
+}
+
+#btn_nueva_instancia{
+	float: right;
+	margin-right: 30px;
+}
+
+.editar_instancia{
+	height: 20px;
+	background: url('../img/icono_editar.png') no-repeat;
+	background-size: 20px 20px;
+	background-position: center;
+}
+
+.editar_instancia:hover{
+	cursor: pointer;
+}
+
+.guardar_instancia{
+	height: 20px;
+	background: url('../img/icono_guardar.png') no-repeat;
+	background-size: 20px 20px;
+	background-position: center;
+}
+
+#frm_registrar_instancia{
+	margin-top: 30px;
+	margin-left: 33%;
+	width: 185px;
 }

@@ -16,10 +16,11 @@ class instancia_model extends CI_Model{
 
     public function consulta_instancias()
     {
-    	$this->db->select('id_instancia,
-    						instancia_nombre');
+    	$this->db->select('id_instancia, instancia_nombre');
 
 		$this->db->from('instancia');
+
+        $this->db->order_by('instancia_nombre', 'asc');
 		
 		$query = $this->db->get();
 
@@ -33,11 +34,12 @@ class instancia_model extends CI_Model{
 
     public function busqueda_instancias($parametros)
     {
-        $this->db->select('id_instancia,
-                            instancia_nombre');
+        $this->db->select('id_instancia, instancia_nombre');
         $this->db->from('instancia');
 
         $this->db->like('instancia_nombre', $parametros['instancia_nombre']);
+
+        $this->db->order_by('instancia_nombre', 'asc');
 
         $query = $this->db->get();
 
@@ -49,6 +51,22 @@ class instancia_model extends CI_Model{
         }
     }
 
+    public function eliminar($id_instancia)
+    {
+        $this->db->delete('instancia', array('id_instancia' => $id_instancia));
+    }
 
+    public function editar_instancia($instancia)
+    {
+        $this->db->where('id_instancia', $instancia['id_instancia']);
+        unset($instancia['id_instancia']);
+
+        $this->db->update('instancia', $instancia);
+    }
+
+    public function registrar($nueva_instancia)
+    {
+        $this->db->insert('instancia', $nueva_instancia);
+    }
 
 }

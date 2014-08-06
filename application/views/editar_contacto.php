@@ -99,6 +99,10 @@
 			$("#contacto_avatar_old").val("");
 	    });
 
+	    $("#contacto_telefono").keypress(function(){
+	    	$("#contacto_telefono").validationEngine('validate');
+	    });
+
     });
 </script>
 <!-- inicia contenido -->
@@ -123,7 +127,7 @@
 		</div>
 		<div id="contenedor_imagen">
 			<img src="<?= base_url('assets/img/avatar.jpg') ?>" id="contacto_imagen">
-			<input type="file" id="contacto_avatar" name="contacto_avatar" class="validate[checkFileType[jpg|gif]]" data-prompt-position="topLeft">
+			<input type="file" id="contacto_avatar" name="contacto_avatar" class="validate[checkFileType[jpg|jpeg|gif|JPG|JPEG|GIF]]" data-prompt-position="topLeft">
 			<br><span>Formatos permitidos .jpg y .gif</span>
 			<input type="hidden" id="contacto_avatar_old" name="contacto_avatar_old">
 		</div>
@@ -165,7 +169,7 @@
 		<p class="encabezado_form_nuevo_contacto">Datos Institucionales</p>
 		<label for="contacto_instancias">* Instancia</label>
 		<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Se refiere a la entidad o dependencia a la que pertenece el contacto.">
-		<input type="search" name="contacto_instancia_nombre" id="contacto_instancias" class="input_frm_nuevo validate[required]" size="73">
+		<input type="search" name="contacto_instancia_nombre" id="contacto_instancias" class="input_frm_nuevo validate[required]" size="73" maxlength="255">
 		<input type="hidden" name="contacto_instancia" id="id_instancia" class="input_frm_nuevo validate[required]">
 		<br><label for="contacto_adscripcion">&Aacute;rea de adscripci&oacute;n</label>
 		<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica el área de la instancia a la que pertenece.">
@@ -184,7 +188,7 @@
 		</div>
 		<label for="contacto_correoinst">Correo institucional</label>
 		<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Correo electrónico institucional con la que cuenta el usuario.">
-		<input type="text" maxlength="100" id="contacto_correoinst" name="contacto_correoinst" class="validate[groupRequired[correo],custom[email]]">
+		<input type="text" maxlength="100" id="contacto_correoinst" name="contacto_correoinst" class="validate[groupRequired[correo],custom[email],custom[email_unam]]">
 		<br><br>
 		<label for="contacto_correopers">Correo personal</label>
 		<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Es un correo electrónico alterno al institucional.">

@@ -133,11 +133,15 @@
                 },
                 "checkFileType": {
                     "regex": "none",
-                    "alertText": "* Tipo de archivo inválido"                    
+                    "alertText": "* Tipo de archivo inválido"
                 },
                 "hora": {
                     "regex": /^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/,
-                    "alertText": "* Hora inválida, por favor utilize el formato HH:MM"                    
+                    "alertText": "* Hora inválida, por favor utilice el formato HH:MM"                    
+                },
+                "email_unam":{
+                    "regex": /\w*unam.mx\b/,
+                    "alertText": "* Debe ingresar un correo electrónico de dominio unam.mx"
                 }
             };
             

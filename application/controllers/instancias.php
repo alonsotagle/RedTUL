@@ -37,4 +37,25 @@ class instancias extends CI_Controller {
 
         print_r(json_encode($resultado));
     }
+
+    function eliminar($id_instancia)
+    {
+        $this->instancia_model->eliminar($id_instancia);
+
+        redirect('instancias');
+    }
+
+    function editar_instancia()
+    {
+        $this->instancia_model->editar_instancia($_POST);
+    }
+
+    function registrar(){
+        $nueva_instancia = array(
+            'instancia_nombre' => $this->input->post('instancia_nombre')
+        );
+
+        $this->instancia_model->registrar($nueva_instancia);
+    }
+
 }

@@ -9,7 +9,7 @@
 <div class="contenido_dinamico">
 	<div id="migaDePan">
 		<a href="<?= base_url()?>">Inicio</a> > 
-		<a href="<?= site_url('cursos')?>">Administrar cursos</a> > Detalle de curso
+		<a href="<?= site_url('cursos')?>">Administrar Cursos</a> > Detalle de curso
 	</div>
 
 	<p class="conf_contacto_campos">Estatus</p>

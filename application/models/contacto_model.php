@@ -48,8 +48,11 @@ class contacto_model extends CI_Model{
 
     public function consulta_instancias()
     {
+        $this->db->from('instancia');
 
-		$query = $this->db->get('instancia');
+        $this->db->order_by('instancia_nombre', 'asc');
+
+		$query = $this->db->get();
 
 		if ($query -> num_rows() > 0)
 		{

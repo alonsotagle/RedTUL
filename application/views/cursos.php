@@ -116,18 +116,18 @@
 
 	<form id="frm_buscar_curso" action="<?= site_url('cursos/buscar')?>" method="POST">
 			<label for="nombre_curso">Nombre curso</label>
-			<input type="text" id="nombre_curso" name="nombre_curso" class="buscar_curso_textInput validate[groupRequired[buscar_curso]]"/>
+			<input type="text" maxlength="100" id="nombre_curso" name="nombre_curso" class="buscar_curso_textInput validate[groupRequired[buscar_curso]]"/>
 			<label for="tipo_curso">Tipo de curso</label>
 			<select name="tipo_curso" id="tipo_curso" class="buscar_curso_textInput validate[groupRequired[buscar_curso]]">
-				<option selected disabled value="">- Elija un tipo -</option>
+				<option selected value="">- Elija un tipo -</option>
 				<option value="0">Presencial</option>
 				<option value="1">En l&iacute;nea</option>
 			</select>
 			<label for="instructor_curso">Instructor asignado</label>
-			<input type="text" id="instructor_curso" name="instructor_curso" class="buscar_curso_textInput validate[groupRequired[buscar_curso]]"/>
+			<input type="text" maxlength="100" id="instructor_curso" name="instructor_curso" class="buscar_curso_textInput validate[groupRequired[buscar_curso]]"/>
 			<label for="estatus_curso">Estatus</label>
 			<select name="estatus_curso" id="estatus_curso" class="buscar_curso_textInput validate[groupRequired[buscar_curso]]">
-				<option selected disabled value="">- Elija un tipo -</option>
+				<option selected value="">- Elija un tipo -</option>
 				<option value="1">Vigente</option>
 				<option value="2">Pr&oacute;ximo</option>
 				<option value="3">Finalizado</option>

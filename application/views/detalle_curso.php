@@ -3,6 +3,8 @@
 
         $("#menu_cursos").addClass("seleccion_menu");
 
+        $(document).tooltip();
+
     });
 </script>
 <!-- inicia contenido -->
@@ -44,19 +46,16 @@
 		<?= $curso_temario; ?>
 	</p>
 
-	<p class="conf_contacto_campos">Inicio del curso</p>
+	<p class="conf_contacto_campos">Vigencia del curso</p>
 	<p class="conf_contacto_valores">
-		<?= $curso_fecha_inicio; ?>
-	</p>
-
-	<p class="conf_contacto_campos">Fin del curso</p>
-	<p class="conf_contacto_valores">
-		<?= $curso_fecha_fin; ?>
+		<span>Fecha de inicio: <?= $curso_fecha_inicio; ?></span>
+		<span>Fecha de fin: <?= $curso_fecha_fin; ?></span>
 	</p>
 
 	<p class="conf_contacto_campos">Horario</p>
 	<p class="conf_contacto_valores">
-		<?= $curso_hora_inicio." - ".$curso_hora_fin ?>
+		<span>Hora de inicio: <?= $curso_hora_inicio; ?></span>
+		<span>Hora de fin: <?= $curso_hora_fin; ?></span>
 	</p>
 
 	<?php if($curso_cupo != "") : ?>
@@ -101,10 +100,12 @@
 	<br>
 	<br>
 
-	<p class="conf_contacto_campos">Invitados</p>
-	<br>
+	<p class="conf_contacto_campos">Información de los contactos invitados al curso</p>
+	<br><br>
 	<?php if(!is_null($invitados_tipo)) : ?>
-		<p class="conf_contacto_campos"> - Tipo de contacto</p>
+		<p class="conf_contacto_campos"> - Tipo de contacto
+			<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Grupo de contactos a quienes se les envió invitación al curso.">
+		</p>
 		<p class="conf_contacto_valores">
 			<?php
 				foreach ($invitados_tipo as $key => $value) {
@@ -132,7 +133,9 @@
 	<br>
 
 	<?php if(!is_null($inscritos)) : ?>
-		<p class="conf_contacto_campos">Inscritos</p>
+		<p class="conf_contacto_campos">Participantes
+			<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Grupo de contactos a quienes se les envió invitación al curso.">
+		</p>
 		<p class="conf_contacto_valores">
 			<?php
 				foreach ($inscritos as $key => $value) {
@@ -146,7 +149,7 @@
 	<br>
 
 	<?php if(!is_null($cancelados)) : ?>
-		<p class="conf_contacto_campos">Cancelados</p>
+		<p class="conf_contacto_campos">Contactos cancelados</p>
 		<p class="conf_contacto_valores">
 			<?php
 				foreach ($cancelados as $key => $value) {

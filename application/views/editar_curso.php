@@ -271,15 +271,19 @@ $(document).ready(function(){
 				<fieldset>
 				<legend>Editar curso</legend>
 				<p class="encabezado_form_nuevo_curso">Datos Generales</p>
-				<label for="curso_titulo" class="label_nuevo_curso">* T&iacute;tulo del curso</label>
+				<label for="curso_titulo" class="label_nuevo_curso">* T&iacute;tulo del curso
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Nombre alusivo al curso que será impartido.">
+				</label>
 				<input type="text" maxlength="255" id="curso_titulo" name="curso_titulo" class="validate[required]">
 				<br>
-				<label for="curso_flyer" class="label_nuevo_curso">Flyer</label>
+				<label for="curso_flyer" class="label_nuevo_curso">Flyer del curso
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Imagen promocional del curso.">
+				</label>
 				<input type="file" id="curso_flyer" name="curso_flyer" class="validate[checkFileType[jpg|jpeg|gif|JPG|JPEG|GIF]]"/>
 				<br><span class="descripcion_archivos">Formatos permitidos .jpg y .gif</span><br><br>
 				<input type="hidden" id="flyer_anterior" name="flyer_anterior">
 				<br>
-				<label for="curso_tipo" class="label_nuevo_curso">* Tipo de contacto
+				<label for="curso_tipo" class="label_nuevo_curso">* Tipo de curso
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica la modalidad en que se llevará a cabo dicho curso.">
 				</label>
 				<select name="curso_tipo" id="curso_tipo" class="validate[required]">
@@ -288,36 +292,46 @@ $(document).ready(function(){
 					<option value="1">En l&iacute;nea</option>
 				</select>
 				<br>
-				<label for="curso_descripcion" class="label_nuevo_curso label_nuevo_curso_textarea">* Descripci&oacute;n del curso</label>
+				<label for="curso_descripcion" class="label_nuevo_curso label_nuevo_curso_textarea">* Descripci&oacute;n del curso
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Explicación detallada del contenido del curso así como del público a quien va dirigido.">
+				</label>
 				<textarea id="curso_descripcion" name="curso_descripcion" cols="40" rows="4" maxlength="500" placeholder="Ingrese una breve descripción de dicho curso." class="validate[required]"></textarea>
 				<br>
 				<label for="curso_objetivos" class="label_nuevo_curso label_nuevo_curso_textarea">* Objetivos</label>
 				<textarea id="curso_objetivos" name="curso_objetivos" cols="40" rows="4" maxlength="250" placeholder="Ingrese el fin al que se desea llegar, la meta que se pretende lograr con la impartición de dicho curso." class="validate[required]"></textarea>
 				<br>
-				<label for="curso_temario" class="label_nuevo_curso">* Temario</label>
-				<input type="file" id="curso_temario_editar" name="curso_temario" class="validate[checkFileType[pdf]]"/>
+				<label for="curso_temario" class="label_nuevo_curso">* Temario
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Archivo con el listado del contenido a abordar durante el curso.">
+				</label>
+				<input type="file" id="curso_temario_editar" name="curso_temario" class="descripcion_archivos validate[checkFileType[pdf]]"/>
 				<br><span class="descripcion_archivos">Formatos permitidos .pdf</span>
 				<input type="hidden" id="temario_anterior" name="temario_anterior">
 				<br>
 
-				<p class="encabezado_form_nuevo_curso">Datos del evento</p>
+				<p class="encabezado_form_nuevo_curso">Datos del curso o evento</p>
 
-				<label for="curso_fecha_inicio" class="label_nuevo_curso">* Inicio de curso</label>
+				<label for="curso_fecha_inicio" class="label_nuevo_curso">* Inicio de curso
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Periodo de tiempo en el que se impartirá el curso.">
+				</label>
 				<input type="text" id="curso_fecha_inicio" name="curso_fecha_inicio" class="validate[required] datepicker"/>
 				<br>
-				<label for="curso_fecha_fin" class="label_nuevo_curso">* Fin de curso</label>
+				<label for="curso_fecha_fin" class="label_nuevo_curso">* Fin de curso
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Periodo de tiempo en el que se impartirá el curso.">
+				</label>
 				<input type="text" id="curso_fecha_fin" name="curso_fecha_fin" class="validate[required] datepicker"/>
 				<br>
-				<label for="curso_hora_inicio" class="label_nuevo_curso">* Horario</label>
+				<label for="curso_hora_inicio" class="label_nuevo_curso">* Horario de impartición del curso
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Duración de cada sesión del curso.">
+				</label>
 				<input type="time" id="curso_hora_inicio" name="curso_hora_inicio" maxlength="5" class="validate[required,custom[hora]]"> a
 				<input type="time" id="curso_hora_fin" name="curso_hora_fin" maxlength="5" class="validate[required,custom[hora]]">
 				<br>
 				<label for="curso_cupo" class="label_nuevo_curso">Cupo total
-					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Se determina el número máximo de participantes en un curso, sólo permite valores numéricos.">
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Número máximo de participantes en un curso.">
 				</label>
 				<input type="text" id="curso_cupo" name="curso_cupo" maxlength="3" class="input_nuevo_curso_cupo validate[custom[numero]]">
 				<br>
-				<label for="contacto_instancias" class="label_nuevo_curso_textarea label_nuevo_curso">* Profesor
+				<label for="contacto_instancias" class="label_nuevo_curso_textarea label_nuevo_curso">* Instructor a asignar
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Señala el o los instructores que estarán asignados para impartir dicho curso.">
 				</label>
 				<select name="curso_instructor[]" id="curso_instructor" class="validate[required]" size=10 multiple>
@@ -325,11 +339,13 @@ $(document).ready(function(){
 				</select>
 				<br>
 				<label for="curso_ubicacion" class="label_nuevo_curso">Ubicaci&oacute;n
-				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica el lugar exacto en el que se llevará a cabo el curso, por ejemplo entidad, edificio, salón, etc.">
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica el lugar exacto en el que se llevará a cabo el curso, por ejemplo entidad, edificio, salón, etc.">
 				</label>
 				<input type="text" maxlength="250" id="curso_ubicacion" name="curso_ubicacion">
 				<br>
-				<label for="curso_url_ubicacion" class="label_nuevo_curso">URL de mapa de localizaci&oacute;n</label>
+				<label for="curso_url_ubicacion" class="label_nuevo_curso">URL de mapa de localizaci&oacute;n
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="URL del mapa de ubicación localización del curso en Google maps.">
+				</label>
 				<input type="text" id="curso_url_ubicacion" name="curso_url_ubicacion">
 				<br>
 				<label for="curso_telefono" class="label_nuevo_curso">T&eacute;lefono</label>

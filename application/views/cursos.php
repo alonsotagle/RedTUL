@@ -26,6 +26,9 @@
 					var url_detalle = "<?= site_url('cursos/detalle_curso') ?>";
 					url_detalle += "/" + value['id_curso'];
 
+					var curso_fecha_inicio = value['curso_fecha_inicio'].split("-");
+					var curso_fecha_fin = value['curso_fecha_fin'].split("-");
+
 					var datos_curso_renglon = "";
 					datos_curso_renglon += '<tr>\
 						<td><a href="'+url_detalle+'" class="link_detalle">'+value['curso_titulo']+'</a></td>\
@@ -44,7 +47,7 @@
 					datos_curso_renglon += '</td>';
 
 					datos_curso_renglon += '<td>'+value['estatus_curso_descripcion']+'</td>\
-						<td>'+value['curso_fecha_inicio']+' a '+value['curso_fecha_fin']+'</td>\
+						<td>'+curso_fecha_inicio[2]+"/"+curso_fecha_inicio[1]+"/"+curso_fecha_inicio[0]+' a '+curso_fecha_fin[2]+"/"+curso_fecha_fin[1]+"/"+curso_fecha_fin[0]+'</td>\
 						<td>'+value['curso_hora_inicio']+' a '+value['curso_hora_fin']+'</td>\
 						<td>'+value['curso_cupo']+'</td>\
 						<td>'+value['curso_cupo_disponible']+'</td>\

@@ -453,6 +453,12 @@ class cursos extends CI_Controller {
             $curso['curso_mapa_url'] = $tag_url;
         }
 
+        $fecha_inicio_bd = explode("-", $curso['curso_fecha_inicio']);
+        $curso['curso_fecha_inicio'] = $fecha_inicio_bd[2]."/".$fecha_inicio_bd[1]."/".$fecha_inicio_bd[0];
+
+        $fecha_fin_bd = explode("-", $curso['curso_fecha_fin']);
+        $curso['curso_fecha_fin'] = $fecha_fin_bd[2]."/".$fecha_fin_bd[1]."/".$fecha_fin_bd[0];
+
         $curso['profesor'] = $this->curso_model->consulta_instructores_nombre_curso($curso['id_curso']);
 
         $curso['invitados_contacto'] = $this->curso_model->consulta_invitado_contacto($curso['id_curso']);

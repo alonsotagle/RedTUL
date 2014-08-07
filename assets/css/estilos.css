@@ -436,7 +436,6 @@ fieldset > legend{
 	font-size: medium;
 	font-weight: bold;
 	margin: 0px 0px -10px 20px;
-	width: 290px;
 }
 
 .conf_contacto_valores{
@@ -455,7 +454,7 @@ fieldset > legend{
 
 .label_nuevo_curso{
 	display: inline-block;
-	width: 200px;
+	width: 220px;
 	font-weight: bold;
 }
 
@@ -481,7 +480,7 @@ fieldset > legend{
 }
 
 .descripcion_archivos{
-	margin-left: 205px;
+	margin-left: 227px;
 }
 
 /* Vista editar_curso.php */
@@ -517,10 +516,6 @@ fieldset > legend{
 
 #img_flyer{
 	display: block;
-}
-
-#curso_temario_editar{
-	margin-left: 203px;
 }
 
 #texto_participante{

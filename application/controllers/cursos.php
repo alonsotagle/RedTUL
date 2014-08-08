@@ -362,7 +362,7 @@ class cursos extends CI_Controller {
 
         $invitados = $this->curso_model->consulta_invitado_curso($parametros['id_curso']);
 
-        if (!is_null($invitados)) {
+        if (!is_null($invitados) && !is_null($resultado_total)) {
             foreach ($invitados as $key_invitados => $id_invitado) {
                 foreach ($resultado_total as $key => &$contacto) {
                     if ($id_invitado['invitado_id'] == $contacto['id_contacto']) {
@@ -469,10 +469,26 @@ class cursos extends CI_Controller {
 
         $curso['cancelados'] = $this->curso_model->consulta_cancelados_detalle($curso['id_curso']);
 
+
+        //Falta desplegar info de Configuración del registro en línea
+
+        foreach ($curso as $campo => $valor) {
+            if ($curso[$campo] == "") {
+                $curso[$campo] = "-";
+            }
+        }
+
         $this->load->view('template/header');
         $this->load->view('template/menu');
         $this->load->view('detalle_curso', $curso);
         $this->load->view('template/footer');
+    }
+
+    function consulta_instancias()
+    {
+        $instancias = $this->curso_model->consulta_instancias();
+
+        print_r(json_encode($instancias));
     }
 
 }

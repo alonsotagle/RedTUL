@@ -486,16 +486,12 @@ fieldset > legend{
 /* Vista editar_curso.php */
 
 .checkbox_tipo_invitado{
-	margin: 20px 0px 20px 40px;
+	margin: 20px 0px 20px 26px;
 }
 
 .lbl_invitados_curso{
 	display: inline-block;
 	width: 135px;
-}
-
-.input_invitados_cuso{
-	text-align: center;
 }
 
 #btn_buscar_invitados{

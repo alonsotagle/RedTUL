@@ -417,4 +417,20 @@ class curso_model extends CI_Model{
             return null;
         }
     }
+
+    public function consulta_instancias()
+    {
+        $this->db->from('instancia');
+
+        $this->db->order_by('instancia_nombre', 'asc');
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
 }

@@ -2,6 +2,7 @@
 $(document).ready(function(){
 
     $("#frm_editar_curso").validationEngine({promptPosition: "centerRight"});
+    $("#frm_buscar_invitados").validationEngine({promptPosition: "centerRight"});
 
     $("#menu_cursos").addClass("seleccion_menu");
 
@@ -194,34 +195,50 @@ $(document).ready(function(){
 
 	$("#btn_buscar_invitados").click(function(event){
 		event.preventDefault();
-		var datos = {
-			'id_curso' 	: <?= $id_curso ?>,
-			'nombre' 	: $('input[name=invitados_nombre]').val(),
-			'correo' 	: $('input[name=invitados_correo]').val(),
-			'instancia' : $('input[name=invitados_instancia]').val()
-		};
+		if ($("#frm_buscar_invitados").validationEngine('validate')) {
+			var datos = {
+				'id_curso' 	: <?= $id_curso ?>,
+				'nombre' 	: $('input[name=invitados_nombre]').val(),
+				'correo' 	: $('input[name=invitados_correo]').val(),
+				'instancia' : $('input[name=invitados_instancia]').val()
+			};
 
-		$.ajax({
-			url: "<?= site_url('cursos/consulta_contactos') ?>",
-			data: datos,
-			dataType: 'json',
-			type: 'post',
-			success: function(resultado) {
-				$('#busqueda tbody').find("tr:gt(0)").remove();
-				$.each(resultado, function(index, value) {
-					$('#busqueda tbody').append('<tr>\
-						<td>'+value['contacto_nombre']+' '+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+'</td>\
-						<td>'+value['contacto_correo_inst']+' '+value['contacto_correo_per']+'</td>\
-						<td>'+value['contacto_telefono']+'</td>\
-						<td>'+value['tipo_contacto_descripcion']+'</td>\
-						<td>'+value['instancia_nombre']+'</td>\
-						<td>\
-							<input type="checkbox" name="curso_invitados[]" value="'+value['id_contacto']+'">\
-						</td>\
-					</tr>');
-				});
-			}
-		});
+			$.ajax({
+				url: "<?= site_url('cursos/consulta_contactos') ?>",
+				data: datos,
+				dataType: 'json',
+				type: 'post',
+				success: function(resultado) {
+					if (resultado) {
+						$('#despliega_contactos table tbody').find("tr:gt(0)").remove();
+						$("#despliega_contactos").find("h2").remove();
+						$.each(resultado, function(index, value) {
+							
+							if (value['instancia_nombre'].length > 25) {
+								instancia_nombre = '<span title="'+value['instancia_nombre']+'">'+value['instancia_nombre'].slice(0,25)+'...</span>';
+							}else{
+								instancia_nombre = value['instancia_nombre'];
+							}
+
+							$('#despliega_contactos table tbody').append('<tr>\
+								<td>'+value['contacto_nombre']+' '+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+'</td>\
+								<td>'+value['contacto_correo_inst']+' '+value['contacto_correo_per']+'</td>\
+								<td>'+value['contacto_telefono']+'</td>\
+								<td>'+value['tipo_contacto_descripcion']+'</td>\
+								<td>'+instancia_nombre+'</td>\
+								<td>\
+									<input type="checkbox" name="curso_invitados[]" value="'+value['id_contacto']+'">\
+								</td>\
+							</tr>');
+						});
+					}else{
+						$('#despliega_contactos table tbody').find("tr:gt(0)").remove();
+						$("#despliega_contactos").find("h2").remove();
+						$("#despliega_contactos").append('<h2 class="leyenda_centrada">No hay resultados de búsqueda para los datos especificados<h2>');
+					}
+				}
+			});
+		}
 	});
 
 	$("#btn_invitados_curso").click(function(event){
@@ -248,8 +265,43 @@ $(document).ready(function(){
 				consulta_invitado_contacto();
 			}
 		});
-
 	});
+
+	$.ajax("<?= site_url('cursos/consulta_instancias')?>", {
+			dataType: 'json',
+			type: 'post',
+			success: function(resultado)
+			{
+				if (resultado != null) {
+
+					var instancias = [];
+
+					$.each(resultado, function( index, value ) {
+						instancias.push({
+							label : value['instancia_nombre'],
+							value : value['id_instancia']
+						});
+
+					});
+
+					$('#invitados_instancia').autocomplete({
+						source: instancias,
+						change: function(event, ui) {
+							if(!ui.item){
+								$("#invitados_instancia").val("");
+							}
+						},
+						focus: function(event, ui) {
+							return false;
+						},
+						select: function(event, ui) {
+							$("#invitados_instancia").val( ui.item.label );
+							return false;
+						}
+					});
+				}
+			}
+		});
 });
 
 </script>
@@ -366,16 +418,16 @@ $(document).ready(function(){
 		<div id="tabs-2">
 			<fieldset>
 				<legend>Añadir participantes por tipo de contacto
-					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="El sistema le permite indicar los tipos de contacto que serán contemplados.">
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Se enviará invitación al grupo de contactos seleccionado.">
 				</legend>
 				<input type="checkbox" name="tipo_invitado_webmaster" id="tipo_invitado_webmaster" class="checkbox_tipo_invitado" value="1">
 				<label for="tipo_invitado_webmaster">Webmaster</label>
 				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Webmaster.">
 				<input type="checkbox" name="tipo_invitado_comunicacion" id="tipo_invitado_comunicacion" class="checkbox_tipo_invitado" value="2">
-				<label for="tipo_invitado_comunicacion">R. de comunicación</label>
+				<label for="tipo_invitado_comunicacion">Responsable de comunicación</label>
 				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Responsable de comunicación.">
 				<input type="checkbox" name="tipo_invitado_tecnico" id="tipo_invitado_tecnico" class="checkbox_tipo_invitado" value="3">
-				<label for="tipo_invitado_tecnico">R. Técnico</label>
+				<label for="tipo_invitado_tecnico">Responsable Técnico</label>
 				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Responsable técnico.">
 				<input type="checkbox" name="tipo_invitado_otros" id="tipo_invitado_otros" class="checkbox_tipo_invitado" value="4">
 				<label for="tipo_invitado_otros">Otros</label>
@@ -387,8 +439,36 @@ $(document).ready(function(){
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="El sistema le permite realizar la búsqueda de los contactos que serán invitados al curso mediante criterios de búsqueda.">
 				</legend>
 
+				<form id="frm_buscar_invitados">
+					<label for="invitados_curso" class="lbl_invitados_curso">Nombre</label>
+					<input type="text" id="invitados_curso" name="invitados_nombre" class="validate[groupRequired[buscar_contacto]]" maxlength="100"/>
+					<br>
+					<label for="invitados_correo" class="lbl_invitados_curso">Correo electr&oacute;nico</label>
+					<input type="text" id="invitados_correo" name="invitados_correo" class="validate[groupRequired[buscar_contacto],custom[email]]" maxlength="100"/>
+					<br>
+					<label for="invitados_instancia" class="lbl_invitados_curso">Instancia</label>
+					<input type="text" id="invitados_instancia" name="invitados_instancia" class="validate[groupRequired[buscar_contacto]]" maxlength="100"/>
+					<br>
+					<input type="submit" id="btn_buscar_invitados" value="Buscar">
+				</form>
+
+				<div id="despliega_contactos">
+					<table class='tables'>
+						<tr>
+							<td>Nombre completo</td>
+							<td>Correo electr&oacute;nico</td>
+							<td>Tel&eacute;fono</td>
+							<td>Tipo de contacto</td>
+							<td>Instancia</td>
+							<td>Añadir</td>
+						</tr>
+					</table>
+				</div>
+
 				<div id='bloque_participantes'>
-					<p id="texto_participantes">Participantes</p>
+					<p id="texto_participantes">Participantes
+						<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Contactos confirmados.">
+					</p>
 					<table class='tables'>
 						<tr>
 							<td>Nombre</td>
@@ -396,30 +476,6 @@ $(document).ready(function(){
 						</tr>
 					</table>
 				</div>
-
-				<form id="frm_buscar_invitados">
-					<label for="invitados_curso" class="lbl_invitados_curso">Nombre</label>
-					<input type="text" id="invitados_curso" name="invitados_nombre" class="input_invitados_cuso validate[groupRequired[buscar_contacto]]"/>
-					<br>
-					<label for="invitados_correo" class="lbl_invitados_curso">Correo electr&oacute;nico</label>
-					<input type="text" id="invitados_correo" name="invitados_correo" class="input_invitados_cuso validate[groupRequired[buscar_contacto]]"/>
-					<br>
-					<label for="invitados_instancia" class="lbl_invitados_curso">Instancia</label>
-					<input type="text" id="invitados_instancia" name="invitados_instancia" class="input_invitados_cuso validate[groupRequired[buscar_contacto]]"/>
-					<br>
-					<input type="submit" id="btn_buscar_invitados" value="Buscar">
-				</form>
-
-				<table id="busqueda" class='tables'>
-					<tr>
-						<td>Nombre completo</td>
-						<td>Correo electr&oacute;nico</td>
-						<td>Tel&eacute;fono</td>
-						<td>Tipo de contacto</td>
-						<td>Instancia</td>
-						<td>Añadir</td>
-					</tr>
-				</table>
 
 			</fieldset>
 			<input type="submit" id="btn_invitados_curso" value="Añadir invitados">

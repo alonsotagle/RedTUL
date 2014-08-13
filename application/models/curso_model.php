@@ -48,7 +48,17 @@ class curso_model extends CI_Model{
 
     public function eliminar($id_curso)
     {
+        $this->db->select('curso_flyer, curso_temario');
+        $this->db->from('curso');
+        $this->db->where('id_curso', $id_curso);
+
+        $query = $this->db->get();
+
+        $nombre_archivos = $query->row_array();
+
         $this->db->delete('curso', array('id_curso' => $id_curso));
+
+        return $nombre_archivos;
     }
 
     public function buscar($parametros_busqueda)
@@ -108,7 +118,7 @@ class curso_model extends CI_Model{
 
     public function consulta_curso($id_curso)
     {
-        $this->db->where('curso.id_curso', $id_curso);
+        $this->db->where('id_curso', $id_curso);
         $this->db->from('curso');
 
         $query = $this->db->get();
@@ -429,6 +439,38 @@ class curso_model extends CI_Model{
         if ($query -> num_rows() > 0)
         {
             return $query->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function registrar_configuracion_registro($configuracion_registro)
+    {
+        $this->db->select('registro_curso_id');
+        $this->db->from('registro');
+        $this->db->where('registro_curso_id', $configuracion_registro['registro_curso_id']);
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            unset($configuracion_registro['registro_curso_id']);
+            $this->db->update('registro', $configuracion_registro);
+        } else {
+            $this->db->insert('registro', $configuracion_registro);
+        }
+    }
+
+    public function consulta_registro_curso($id_curso)
+    {
+        $this->db->where('registro_curso_id', $id_curso);
+        $this->db->from('registro');
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->row_array();
         } else {
             return null;
         }

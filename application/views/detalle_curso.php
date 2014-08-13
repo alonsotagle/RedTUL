@@ -164,6 +164,81 @@
 		}
 	?>
 	</p>
+	<br>
+
+	<p class="conf_contacto_campos">Configuraci&oacute;n del registro en l&iacute;nea</p>
+	<br><br>
+
+	<p class="conf_contacto_campos">T&iacute;tulo del curso</p>
+	<p class="conf_contacto_valores">
+		<?= $registro['registro_curso_titulo']; ?>
+	</p>
+
+	<p class="conf_contacto_campos">Flyer</p>
+	<p class="conf_contacto_valores">
+		<?= $registro['registro_curso_flyer']; ?>
+	</p>
+
+	<p class="conf_contacto_campos">Tipo de evento o curso</p>
+	<p class="conf_contacto_valores">
+		<?= $registro['registro_curso_tipo']; ?>
+	</p>
+
+	<p class="conf_contacto_campos">Descripci&oacute;n</p>
+	<p class="conf_contacto_valores">
+		<?= $registro['registro_curso_descripcion']; ?>
+	</p>
+
+	<p class="conf_contacto_campos">Objetivos</p>
+	<p class="conf_contacto_valores">
+		<?= $registro['registro_curso_objetivos']; ?>
+	</p>
+
+	<p class="conf_contacto_campos">Temario</p>
+	<p class="conf_contacto_valores">
+		<?= $registro['registro_curso_temario']; ?>
+	</p>
+
+	<p class="conf_contacto_campos">Vigencia</p>
+	<p class="conf_contacto_valores">
+		<?= $registro['registro_curso_fecha']; ?>
+	</p>
+
+	<p class="conf_contacto_campos">Horario</p>
+	<p class="conf_contacto_valores">
+		<?= $registro['registro_curso_horario']; ?>
+	</p>
+
+	<p class="conf_contacto_campos">Cupo total</p>
+	<p class="conf_contacto_valores">
+		<?= $registro['registro_curso_cupo']; ?>
+	</p>
+
+	<p class="conf_contacto_campos">Instructor</p>
+	<p class="conf_contacto_valores">
+		<?= $registro['registro_curso_instructor']; ?>
+	</p>
+
+	<p class="conf_contacto_campos">Ubicaci&oacute;n</p>
+	<p class="conf_contacto_valores">
+		<?= $registro['registro_curso_ubicacion']; ?>
+	</p>
+
+	<p class="conf_contacto_campos">URL de mapa de localizaci&oacute;n</p>
+	<p class="conf_contacto_valores">
+		<?= $registro['registro_curso_mapa_url']; ?>
+	</p>
+
+	<p class="conf_contacto_campos">Tel&eacute;fono de contacto</p>
+	<p class="conf_contacto_valores">
+		<?= $registro['registro_curso_telefono']; ?>
+	</p>
+
+	<p class="conf_contacto_campos">Extensi&oacute;n telef&oacute;nica</p>
+	<p class="conf_contacto_valores">
+		<?= $registro['registro_curso_telefono_extension']; ?>
+	</p>
+
 
 </div>
 <!-- termina contenido -->

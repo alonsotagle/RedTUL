@@ -11,6 +11,7 @@ class cursos extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('curso_model');
+        $this->load->helper('file');
     }
 
     public function index() {
@@ -144,7 +145,17 @@ class cursos extends CI_Controller {
 
     function eliminar($id_curso)
     {
-        $this->curso_model->eliminar($id_curso);
+        $nombre_archivos = $this->curso_model->eliminar($id_curso);
+
+        if ($nombre_archivos['curso_flyer'] != "") {
+            $ruta_flyer = 'assets/flyers_cursos/'.$nombre_archivos['curso_flyer'];
+            unlink($ruta_flyer);
+        }
+
+        if ($nombre_archivos['curso_temario'] != "") {
+            $ruta_temario = 'assets/temarios_cursos/'.$nombre_archivos['curso_temario'];
+            unlink($ruta_temario);
+        }
 
         redirect('cursos');
     }
@@ -229,14 +240,11 @@ class cursos extends CI_Controller {
     function editar($id_curso)
     {
         if (empty($_POST)) {
-
             if (is_array($id_curso)) {
                 $var_id = $id_curso;
                 $var_id["nuevo"] = 1;
             }else{
-                $var_id = array('id_curso' => $id_curso,
-                                'nuevo' => 0
-                );
+                $var_id = array('id_curso' => $id_curso, 'nuevo' => 0);
             }
 
             $this->load->view('template/header');
@@ -469,12 +477,19 @@ class cursos extends CI_Controller {
 
         $curso['cancelados'] = $this->curso_model->consulta_cancelados_detalle($curso['id_curso']);
 
-
-        //Falta desplegar info de Configuración del registro en línea
-
         foreach ($curso as $campo => $valor) {
             if ($curso[$campo] == "") {
                 $curso[$campo] = "-";
+            }
+        }
+
+        $curso['registro'] = $this->curso_model->consulta_registro_curso($curso['id_curso']);
+
+        foreach ($curso['registro'] as $campo => $valor) {
+            if ($valor == "1") {
+                $curso['registro'][$campo] = "Visible";
+            }elseif($valor == "0"){
+                $curso['registro'][$campo] = "No visible";
             }
         }
 
@@ -489,6 +504,61 @@ class cursos extends CI_Controller {
         $instancias = $this->curso_model->consulta_instancias();
 
         print_r(json_encode($instancias));
+    }
+
+    function registra_configuracion(){
+
+        $parametros = array(
+            'registro_curso_titulo'             => $this->input->post('configuracion_curso_titulo'),
+            'registro_curso_flyer'              => $this->input->post('configuracion_curso_flyer'),
+            'registro_curso_tipo'               => $this->input->post('configuracion_curso_tipo'),
+            'registro_curso_descripcion'        => $this->input->post('configuracion_curso_descripcion'),
+            'registro_curso_objetivos'          => $this->input->post('configuracion_curso_objetivos'),
+            'registro_curso_temario'            => $this->input->post('configuracion_curso_temario'),
+            'registro_curso_fecha'              => $this->input->post('configuracion_curso_fecha'),
+            'registro_curso_horario'            => $this->input->post('configuracion_curso_horario'),
+            'registro_curso_cupo'               => $this->input->post('configuracion_curso_cupo'),
+            'registro_curso_instructor'         => $this->input->post('configuracion_curso_instructor'),
+            'registro_curso_ubicacion'          => $this->input->post('configuracion_curso_ubicacion'),
+            'registro_curso_mapa_url'           => $this->input->post('configuracion_curso_mapa'),
+            'registro_curso_telefono'           => $this->input->post('configuracion_curso_telefono'),
+            'registro_curso_telefono_extension' => $this->input->post('configuracion_curso_telefono'),
+            'registro_vigencia_inicio'          => $this->input->post('configuracion_fecha_inicio'),
+            'registro_vigencia_fin'             => $this->input->post('configuracion_fecha_fin'),
+            'registro_visibilidad'              => $this->input->post('configuracion_ocultar_registro'),
+            'registro_texto_registro'           => $this->input->post('configuracion_texto_registro'),
+            'registro_texto_confirmacion'       => $this->input->post('configuracion_texto_confirmacion'),
+            'registro_texto_agradecimientos'    => $this->input->post('configuracion_texto_agradecimientos'),
+            'registro_curso_id'                 => $this->input->post('configuracion_curso_id')
+        );
+
+        foreach ($parametros as $key => $value) {
+            if ($value == "true") {
+                $parametros[$key] = 1;
+            } elseif ($value == "false") {
+                $parametros[$key] = 0;
+            }
+        }
+
+        $this->curso_model->registrar_configuracion_registro($parametros);
+    }
+
+    function consulta_registro_curso($id_curso)
+    {
+        $registro_curso = $this->curso_model->consulta_registro_curso($id_curso);
+
+        unset($registro_curso["id_registro"]);
+        unset($registro_curso["registro_curso_id"]);
+
+        foreach ($registro_curso as $key => $value) {
+            if ($value == "1") {
+                $registro_curso[$key] = true;
+            }elseif($value == "0"){
+                $registro_curso[$key] = false;
+            }
+        }
+
+        print_r(json_encode($registro_curso));
     }
 
 }

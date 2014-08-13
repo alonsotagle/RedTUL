@@ -445,9 +445,12 @@ fieldset > legend{
 	text-align: justify;
 }
 
+#despliega_cursos{
+	min-height: 140px;
+}
 /* Vista nuevo_curso.php */
 .encabezado_form_nuevo_curso{
-	font-size: 20px;
+	font-size: 18px;
 	font-weight: bold;
 	margin-top: 35px;
 }
@@ -510,16 +513,30 @@ fieldset > legend{
 	width: 295px;
 }
 
-#img_flyer{
-	display: block;
-}
-
 #texto_participante{
 	text-align: center;
 }
 
 .eliminar_invitado{
 	cursor: pointer;
+}
+
+#configuracion_col-izq{
+	float: left;
+}
+
+#configuracion_col-der{
+	float: right;
+}
+
+#configuracion_visibilidad{
+	clear: both;
+	margin-top: 150px;
+}
+
+#btn_guardar_configuracion{
+	float: right;
+	margin-top: 50px;
 }
 
 /* Inicia MENSAJERIA */
@@ -675,6 +692,11 @@ fieldset > legend{
 
 .correo_cancelado:hover td {
 	background: #d9534f !important;
+}
+
+#tabs_enviar_correo > .ui-tabs .ui-tabs-nav a
+{
+   background-color: #006600;
 }
 
 /* Inicia CONFIRMACION */

@@ -25,7 +25,7 @@
 		</li>
 		<li id="menu_mensajeria" class="elemento_menu">
 			<a href="<?= base_url('index.php/mensajeria')?>">
-				<span>Servicio de mensajería</span>
+				<span>Envío de correos</span>
 			</a>
 		</li>
 	</ul>

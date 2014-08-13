@@ -1,14 +1,17 @@
 <script>
 $(document).ready(function(){
 
+	$("#menu_cursos").addClass("seleccion_menu");
+
     $("#frm_editar_curso").validationEngine({promptPosition: "centerRight"});
     $("#frm_buscar_invitados").validationEngine({promptPosition: "centerRight"});
-
-    $("#menu_cursos").addClass("seleccion_menu");
+    $("#frm_configuracion_linea").validationEngine({promptPosition: "centerRight"});
 
 	$(function() {
 	    $( "#tabs" ).tabs();
 	});
+
+	$(document).tooltip();
 
 	$.ajax("<?= site_url('cursos/consulta_instructores')?>", {
 		dataType: 'json',
@@ -31,6 +34,7 @@ $(document).ready(function(){
 		success: function(resultado) {
 			if (resultado != null) {				
 				$('#curso_titulo').val(resultado['curso_titulo']);
+				$('#configuracion_titulo_curso').text(resultado['curso_titulo']);
 				$("#curso_tipo option[value="+resultado['curso_tipo']+"]").prop('selected', true);
 				$('#curso_descripcion').val(resultado['curso_descripcion']);
 				$('#curso_objetivos').val(resultado['curso_objetivos']);
@@ -99,7 +103,6 @@ $(document).ready(function(){
 		});
 	}
 
-
 	$.ajax("<?= site_url('cursos/consulta_invitado_tipo').'/'.$id_curso?>", {
 		dataType: 'json',
 		type: 'post',
@@ -148,9 +151,6 @@ $(document).ready(function(){
 		});
 	});
 
-
-	$(document).tooltip();
-
 	$( "#curso_fecha_inicio" ).datepicker({
 		changeMonth: true,
 		numberOfMonths: 2,
@@ -166,6 +166,7 @@ $(document).ready(function(){
 			$( "#curso_fecha_fin" ).datepicker( "option", "defaultDate", selectedDate );
 		}
 	});
+
 	$( "#curso_fecha_fin" ).datepicker({
 		changeMonth: true,
 		numberOfMonths: 2,
@@ -268,40 +269,145 @@ $(document).ready(function(){
 	});
 
 	$.ajax("<?= site_url('cursos/consulta_instancias')?>", {
-			dataType: 'json',
-			type: 'post',
-			success: function(resultado)
-			{
-				if (resultado != null) {
+		dataType: 'json',
+		type: 'post',
+		success: function(resultado)
+		{
+			if (resultado != null) {
 
-					var instancias = [];
+				var instancias = [];
 
-					$.each(resultado, function( index, value ) {
-						instancias.push({
-							label : value['instancia_nombre'],
-							value : value['id_instancia']
-						});
-
+				$.each(resultado, function( index, value ) {
+					instancias.push({
+						label : value['instancia_nombre'],
+						value : value['id_instancia']
 					});
 
-					$('#invitados_instancia').autocomplete({
-						source: instancias,
-						change: function(event, ui) {
-							if(!ui.item){
-								$("#invitados_instancia").val("");
-							}
-						},
-						focus: function(event, ui) {
-							return false;
-						},
-						select: function(event, ui) {
-							$("#invitados_instancia").val( ui.item.label );
-							return false;
+				});
+
+				$('#invitados_instancia').autocomplete({
+					source: instancias,
+					change: function(event, ui) {
+						if(!ui.item){
+							$("#invitados_instancia").val("");
 						}
-					});
-				}
+					},
+					focus: function(event, ui) {
+						return false;
+					},
+					select: function(event, ui) {
+						$("#invitados_instancia").val( ui.item.label );
+						return false;
+					}
+				});
 			}
-		});
+		}
+	});
+
+	$( "#configuracion_fecha_inicio" ).datepicker({
+		changeMonth: true,
+		numberOfMonths: 2,
+		minDate: 0,
+		showOn: "both",
+		buttonImage: "<?= base_url('assets/img/calendar.gif')?>",
+		buttonImageOnly: true,
+		//dateFormat: "dd/mm/yy",
+		onClose: function( selectedDate ) {
+		if (selectedDate != ""){
+			$( "#configuracion_fecha_fin" ).datepicker( "option", "minDate", selectedDate );
+		}
+			$( "#configuracion_fecha_fin" ).datepicker( "option", "defaultDate", selectedDate );
+		}
+	});
+
+	$( "#configuracion_fecha_fin" ).datepicker({
+		changeMonth: true,
+		numberOfMonths: 2,
+		minDate: 0,
+		showOn: "both",
+		buttonImage: "<?= base_url('assets/img/calendar.gif')?>",
+		buttonImageOnly: true,
+		//dateFormat: "dd/mm/yy",
+		onClose: function( selectedDate ) {
+		$( "#configuracion_fecha_inicio" ).datepicker( "option", "maxDate", selectedDate );
+		}
+	});
+
+	$("#btn_guardar_configuracion").click(function(event){
+		event.preventDefault();
+		if ($("#frm_configuracion_linea").validationEngine('validate')) {
+			var datos = {
+				'configuracion_curso_id' 				: <?= $id_curso ?>,
+				'configuracion_curso_titulo'			: $('#configuracion_nombre_curso').prop('checked'),
+				'configuracion_curso_tipo'				: $('#configuracion_tipo_curso').prop('checked'),
+				'configuracion_curso_descripcion'		: $('#configuracion_descripcion_curso').prop('checked'),
+				'configuracion_curso_objetivos'			: $('#configuracion_objetivos_curso').prop('checked'),
+				'configuracion_curso_temario'			: $('#configuracion_temario_curso').prop('checked'),
+				'configuracion_curso_fecha'				: $('#configuracion_fecha_curso').prop('checked'),
+				'configuracion_curso_horario'			: $('#configuracion_horario_curso').prop('checked'),
+				'configuracion_curso_flyer'				: $('#configuracion_flyer_curso').prop('checked'),
+				'configuracion_curso_cupo'				: $('#configuracion_cupo_curso').prop('checked'),
+				'configuracion_curso_instructor'		: $('#configuracion_instructor_curso').prop('checked'),
+				'configuracion_curso_ubicacion'			: $('#configuracion_ubicacion_curso').prop('checked'),
+				'configuracion_curso_mapa'				: $('#configuracion_mapa_curso').prop('checked'),
+				'configuracion_curso_telefono'			: $('#configuracion_telefono_curso').prop('checked'),
+				'configuracion_fecha_inicio'			: $('#configuracion_fecha_inicio').val(),
+				'configuracion_fecha_fin'				: $('#configuracion_fecha_fin').val(),
+				'configuracion_ocultar_registro'		: $('#configuracion_ocultar_registro_curso').prop('checked'),
+				'configuracion_texto_registro'			: $('#configuracion_texto_registro').val(),
+				'configuracion_texto_confirmacion'		: $('#configuracion_texto_confirmacion').val(),
+				'configuracion_texto_agradecimientos'	: $('#configuracion_texto_agradecimientos').val()
+			};
+
+			$.ajax({
+				url: "<?= site_url('cursos/registra_configuracion') ?>",
+				data: datos,
+				dataType: 'json',
+				type: 'post',
+				complete: function() {
+					$.blockUI({ 
+					message: "<h3>La información se guardó satisfactoriamente</h3>",
+					css: { 
+						backgroundColor: '#54DF0E',
+						color: '#fff',
+						padding: 3,
+						border: 'none'
+					} 
+				}); 
+
+				setTimeout($.unblockUI, 2000);
+				}
+			});
+		}
+	});
+
+	$.ajax("<?= site_url('cursos/consulta_registro_curso').'/'.$id_curso?>", {
+		dataType: 'json',
+		type: 'post',
+		success: function(resultado) {
+			if (resultado != null) {				
+				$('#configuracion_nombre_curso').attr('checked', resultado['registro_curso_titulo']);
+				$('#configuracion_flyer_curso').attr('checked', resultado['registro_curso_flyer']);
+				$('#configuracion_tipo_curso').attr('checked', resultado['registro_curso_tipo']);
+				$('#configuracion_descripcion_curso').attr('checked', resultado['registro_curso_descripcion']);
+				$('#configuracion_objetivos_curso').attr('checked', resultado['registro_curso_objetivos']);
+				$('#configuracion_temario_curso').attr('checked', resultado['registro_curso_temario']);
+				$('#configuracion_fecha_curso').attr('checked', resultado['registro_curso_fecha']);
+				$('#configuracion_horario_curso').attr('checked', resultado['registro_curso_horario']);
+				$('#configuracion_cupo_curso').attr('checked', resultado['registro_curso_cupo']);
+				$('#configuracion_instructor_curso').attr('checked', resultado['registro_curso_instructor']);
+				$('#configuracion_ubicacion_curso').attr('checked', resultado['registro_curso_ubicacion']);
+				$('#configuracion_mapa_curso').attr('checked', resultado['registro_curso_mapa_url']);
+				$('#configuracion_telefono_curso').attr('checked', resultado['registro_curso_telefono']);
+				$('#configuracion_fecha_inicio').val(resultado['registro_vigencia_inicio']);
+				$('#configuracion_fecha_fin').val(resultado['registro_vigencia_fin']);
+				$('#configuracion_ocultar_registro_curso').attr('checked', resultado['registro_visibilidad']);
+				$('#configuracion_texto_registro').val(resultado['registro_texto_registro']);
+				$('#configuracion_texto_confirmacion').val(resultado['registro_texto_confirmacion']);
+				$('#configuracion_texto_agradecimientos').val(resultado['registro_texto_agradecimientos']);
+			}
+		}
+	});
 });
 
 </script>
@@ -482,9 +588,80 @@ $(document).ready(function(){
 		</div>
 
 		<div id="tabs-3">
-
+			<form id="frm_configuracion_linea">
+				<fieldset>
+					<legend>Registro en línea</legend>
+					<p class="encabezado_form_nuevo_curso" id="configuracion_titulo_curso"></p>
+					<p>Datos que se mostrar&aacute;n en la p&aacute;gina de registro en l&iacute;nea:
+						<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Imagen promocional del curso.">
+					</p>
+					<div id="configuracion_col-izq">
+						<input type="checkbox" name="configuracion_nombre_curso" id="configuracion_nombre_curso" value="1">
+						<label for="configuracion_nombre_curso">Nombre del curso o evento</label>
+						<br>
+						<input type="checkbox" name="configuracion_flyer_curso" id="configuracion_flyer_curso" value="1">
+						<label for="configuracion_flyer_curso">Flyer</label>
+						<br>
+						<input type="checkbox" name="configuracion_tipo_curso" id="configuracion_tipo_curso" value="1">
+						<label for="configuracion_tipo_curso">Tipo</label>
+						<br>
+						<input type="checkbox" name="configuracion_descripcion_curso" id="configuracion_descripcion_curso" value="1">
+						<label for="configuracion_descripcion_curso">Descripci&oacute;n</label>
+						<br>
+						<input type="checkbox" name="configuracion_objetivos_curso" id="configuracion_objetivos_curso" value="1">
+						<label for="configuracion_objetivos_curso">Objetivos</label>
+						<br>
+						<input type="checkbox" name="configuracion_temario_curso" id="configuracion_temario_curso" value="1">
+						<label for="configuracion_temario_curso">Temario</label>
+						<br>
+						<input type="checkbox" name="configuracion_fecha_curso" id="configuracion_fecha_curso" value="1">
+						<label for="configuracion_fecha_curso">Fecha del curso</label>
+						<br>
+					</div>
+					<div id="configuracion_col-der">
+						<input type="checkbox" name="configuracion_horario_curso" id="configuracion_horario_curso" value="1">
+						<label for="configuracion_horario_curso">Horario en el que ser&aacute; impartido</label>
+						<br>
+						<input type="checkbox" name="configuracion_cupo_curso" id="configuracion_cupo_curso" value="1">
+						<label for="configuracion_cupo_curso">Cupo total</label>
+						<br>
+						<input type="checkbox" name="configuracion_instructor_curso" id="configuracion_instructor_curso" value="1">
+						<label for="configuracion_instructor_curso">Instructor</label>
+						<br>
+						<input type="checkbox" name="configuracion_ubicacion_curso" id="configuracion_ubicacion_curso" value="1">
+						<label for="configuracion_ubicacion_curso">Ubicaci&oacute;n</label>
+						<br>
+						<input type="checkbox" name="configuracion_mapa_curso" id="configuracion_mapa_curso" value="1">
+						<label for="configuracion_mapa_curso">URL de mapa de localizaci&oacute;n</label>
+						<br>
+						<input type="checkbox" name="configuracion_telefono_curso" id="configuracion_telefono_curso" value="1">
+						<label for="configuracion_telefono_curso">Tel&eacute;fono de contacto</label>
+					</div>
+					<br>
+					<p class="encabezado_form_nuevo_curso" id="configuracion_visibilidad">Visibilidad de registro en l&iacute;nea</p>
+					<p>Vigencia del registro
+						<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Imagen promocional del curso.">
+					</p>
+					<label for="configuracion_fecha_inicio" class="etiqueta_frm">* Fecha inicio</label>
+					<input type="text" id="configuracion_fecha_inicio" name="configuracion_fecha_inicio" class="input_nuevo_curso_centrado validate[required] datepicker"/>
+					<br>
+					<label for="configuracion_fecha_fin" class="etiqueta_frm">* Fecha termino</label>
+					<input type="text" id="configuracion_fecha_fin" name="configuracion_fecha_fin" class="input_nuevo_curso_centrado validate[required] datepicker"/>
+					<br><br>
+					<input type="checkbox" name="configuracion_ocultar_registro_curso" id="configuracion_ocultar_registro_curso" value="1">
+					<label for="configuracion_ocultar_registro_curso">Ocultar registro en l&iacute;nea</label>
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Imagen promocional del curso.">
+					<p class="encabezado_form_nuevo_curso">Configuraci&oacute;n de texto</p>
+					<p>* Texto de pantalla de registro</p>
+					<textarea rows="4" cols="50" id="configuracion_texto_registro" maxlength="255" placeholder='Por ejemplo. "Complete el siguiente formulario para confirmar su asistencia al curso de..."' class="validate[required]"></textarea>
+					<p>* Texto de pantalla de confirmaci&oacute;n</p>
+					<textarea rows="4" cols="50" id="configuracion_texto_confirmacion" maxlength="255" placeholder='Por ejemplo. "La información de su registro ha sido enviada a su correo"' class="validate[required]"></textarea>
+					<p>Texto de pantalla de agradecimientos</p>
+					<textarea rows="4" cols="50" id="configuracion_texto_agradecimientos" maxlength="255" placeholder='Por ejemplo. "Gracias por su apoyo. Su participación es muy importante" ' class="validate[required]"></textarea>
+					<input type="submit" id="btn_guardar_configuracion" value="Guardar">
+				</fieldset>
+			</form>
 		</div>
 	</div>
-
 </div>
 <!-- termina contenido -->

@@ -243,7 +243,7 @@ class mensajeria extends CI_Controller {
             $this->mensajeria_model->registrar_destinatario_correo($id_nuevo_correo, $value);
         }
 
-        $parametros_vista = array("tab" => 0,
+        $parametros_vista = array("tab" => 1,
                             "mensaje_plantilla" => "Correo enviado satisfactoriamente.");
 
         $this->load->view('template/header');
@@ -389,7 +389,7 @@ class mensajeria extends CI_Controller {
             $this->mensajeria_model->registrar_destinatario_correo($id_correo, $value);
         }
 
-        $parametros_vista = array("tab" => 0,
+        $parametros_vista = array("tab" => 1,
                             "mensaje_plantilla" => "Correo actualizado satisfactoriamente.");
 
         $this->load->view('template/header');

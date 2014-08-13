@@ -15,6 +15,8 @@
 	    	$("#tabs_correo_plantilla").tabs();
 		});
 
+		$(document).tooltip();
+
         $("#btn_programar_correo").prop('disabled', true);
 
 		$.ajax({
@@ -23,33 +25,37 @@
 			type: 'post',
 			success: function(resultado) {
 				if (resultado) {
-					$.each(resultado, function(index, value) {
-						var url_detalle = "<?= site_url('mensajeria/detalle_correo') ?>";
-						url_detalle += "/" + value['id_correo'];
+					if (resultado) {
+						$.each(resultado, function(index, value) {
+							var url_detalle = "<?= site_url('mensajeria/detalle_correo') ?>";
+							url_detalle += "/" + value['id_correo'];
 
-						if (value['correo_estatus'] == 2) {
-							var row_tabla = "<tr class='correo_cancelado'>"
-						} else {
-							var row_tabla = "<tr>";
-						}
-						row_tabla += '<td><a href="'+url_detalle+'">'+value['correo_asunto']+'</a></td>\
-							<td>'+value['correo_fecha_creacion']+'</td>\
-							<td>'+value['correo_fecha_envio']+'<br>'+value['correo_hora_envio']+'</td>\
-							<td>';
-						$.each(value['destinatarios'], function(index_dest, value_dest) {
-							row_tabla += value_dest['contacto_nombre']+" "+value_dest['contacto_ap_paterno']+" "+value_dest['contacto_ap_materno']+"<br>";
+							if (value['correo_estatus'] == 2) {
+								var row_tabla = "<tr class='correo_cancelado'>"
+							} else {
+								var row_tabla = "<tr>";
+							}
+							row_tabla += '<td><a href="'+url_detalle+'">'+value['correo_asunto']+'</a></td>\
+								<td>'+value['correo_fecha_creacion']+'</td>\
+								<td>'+value['correo_fecha_envio']+'<br>'+value['correo_hora_envio']+'</td>\
+								<td>';
+							if (value['destinatarios']) {
+								$.each(value['destinatarios'], function(index_dest, value_dest) {
+									row_tabla += value_dest['contacto_nombre']+" "+value_dest['contacto_ap_paterno']+" "+value_dest['contacto_ap_materno']+"<br>";
+								});
+							}
+							row_tabla += '</td>';
+							if (value['correo_estatus'] == 1) {
+								row_tabla += '<td>\
+									<img id='+value['id_correo']+' class="img_editar_correo"\
+									src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
+									</td></tr>';
+							}else{
+								row_tabla += "<td></td></tr>";
+							}
+							$('#tabla_correos tbody').append(row_tabla);
 						});
-						row_tabla += '</td>';
-						if (value['correo_estatus'] == 1) {
-							row_tabla += '<td>\
-								<img id='+value['id_correo']+' class="img_editar_correo"\
-								src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
-								</td></tr>';
-						}else{
-							row_tabla += "<td></td></tr>";
-						}
-						$('#tabla_correos tbody').append(row_tabla);
-					});
+					}
 				}
 			}
 		});
@@ -440,56 +446,17 @@
 <!-- inicia contenido -->
 <div class="contenido_dinamico">
 	<div id="migaDePan">
-		<a href="<?= base_url()?>">Inicio</a> > Servicio de mensajer&iacute;a
+		<a href="<?= base_url()?>">Inicio</a> > Env&iacute;o de correos
 	</div>
 
 <div id="tabs">
 		<ul>
-			<li><a href="#tabs-1">Correo electr&oacute;nicos enviados</a></li>
-			<li><a href="#tabs-2">Nuevo correo electr&oacute;nico</a></li>
+			<li><a href="#tabs-1">Nuevo correo electr&oacute;nico</a></li>
+			<li><a href="#tabs-2">Historial de correos electrónicos</a></li>
 			<li><a href="#tabs-3">Administrar plantillas</a></li>
 		</ul>
+
 		<div id="tabs-1">
-			<form id="frm_buscar_correo" method="POST">
-				<label for="asunto_correo">Asunto</label>
-				<input type="text" id="asunto_correo" maxlength="255" name="asunto_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]"/>
-
-				<label for="fecha_envio_correo">Fecha de env&iacute;o</label>
-				<select name="fecha_envio_correo" id="fecha_envio_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]" value="">
-					<option selected value="">- Elija un tipo -</option>
-					<option value="1">El &uacute;ltimo año</option>
-					<option value="2">El &uacute;ltimo mes</option>
-					<option value="3">La &uacute;ltima semana</option>
-					<option value="4">Un d&iacute;a anterior</option>
-				</select>
-				
-				<label for="estatus_correo">Estatus de env&iacute;o</label>
-				<select name="estatus_correo" id="estatus_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]" value="">
-					<option selected value="">- Elija un tipo -</option>
-					<option value="1">Pendiente</option>
-					<option value="2">Cancelado</option>
-					<option value="3">Enviado</option>
-				</select>
-				<input type="submit" id="btn_buscar_correo" value="Buscar"/>
-			</form>
-
-			<table id="tabla_correos" class='tables'>
-				<tr>
-					<td>Asunto</td>
-					<td>Fecha de creaci&oacute;n</td>
-					<td>Fecha y hora de env&iacute;o</td>
-					<td>Destinatarios</td>
-					<td>Editar
-						<br>
-						(S&oacute;lo pendientes)
-					</td>
-				</tr>
-			</table>
-
-		</div>
-
-
-		<div id="tabs-2">
 			<div id="tabs_enviar_correo">
 				<ul>
 					<li><a href="#tab-contenido">Contenido correo electr&oacute;nico</a></li>
@@ -588,6 +555,48 @@
 				</div>
 			</div>
 		</div>
+
+		<div id="tabs-2">
+			<form id="frm_buscar_correo" method="POST">
+				<label for="asunto_correo">Asunto
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Resumen del contenido u objetivo del correo electrónico.">
+				</label>
+				<input type="text" id="asunto_correo" maxlength="255" name="asunto_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]"/>
+
+				<label for="fecha_envio_correo">Fecha de env&iacute;o</label>
+				<select name="fecha_envio_correo" id="fecha_envio_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]" value="">
+					<option selected value="">- Elija un tipo -</option>
+					<option value="1">El &uacute;ltimo año</option>
+					<option value="2">El &uacute;ltimo mes</option>
+					<option value="3">La &uacute;ltima semana</option>
+					<option value="4">Un d&iacute;a anterior</option>
+				</select>
+				
+				<label for="estatus_correo">Estatus de env&iacute;o</label>
+				<select name="estatus_correo" id="estatus_correo" class="input_buscar_correo validate[groupRequired[buscar_correo]]" value="">
+					<option selected value="">- Elija un tipo -</option>
+					<option value="1">Pendiente</option>
+					<option value="2">Cancelado</option>
+					<option value="3">Enviado</option>
+				</select>
+				<input type="submit" id="btn_buscar_correo" value="Buscar"/>
+			</form>
+
+			<table id="tabla_correos" class='tables'>
+				<tr>
+					<td>Asunto</td>
+					<td>Fecha de creaci&oacute;n</td>
+					<td>Fecha y hora de env&iacute;o</td>
+					<td>Destinatarios</td>
+					<td>Editar
+						<br>
+						(S&oacute;lo pendientes)
+					</td>
+				</tr>
+			</table>
+
+		</div>
+
 		<div id="tabs-3">
 
 			<table class='tables' id="tabla_plantillas">
@@ -599,7 +608,9 @@
 			</table>
 
 			<form id="form_plantilla" method="POST">
-				<label for="plantilla_asunto">Asunto</label>
+				<label for="plantilla_asunto">Asunto
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Resumen del contenido u objetivo del correo electrónico.">
+				</label>
 				<input type="text" maxlength="255" name="plantilla_asunto" id="plantilla_asunto" class="validate[required]" form="form_plantilla"/>
 				<input type="hidden" name="plantilla_id" id="plantilla_id" form="form_plantilla">
 				<div id="tabs_correo_plantilla">
@@ -608,13 +619,13 @@
 						<li><a href="#tab-plantilla_html">HTML</a></li>
 					</ul>
 					<div id="tab-plantilla_textoplano">
-						<textarea spellcheck="false" class="textarea_cuerpo_correo validate[groupRequired[plantilla_contenido]]" data-prompt-position="topLeft" name="plantilla_contenido_plano" form="form_plantilla"></textarea>
+						<textarea spellcheck="false" class="textarea_cuerpo_correo validate[groupRequired[plantilla_contenido]]" data-prompt-position="topLeft" name="plantilla_contenido_plano" form="form_plantilla" placeholder="Cuerpo del correo electrónico"></textarea>
 					</div>
 					<div id="tab-plantilla_html">
-						<textarea spellcheck="false" class="textarea_cuerpo_correo validate[groupRequired[plantilla_contenido]]" data-prompt-position="topLeft" name="plantilla_contenido_html" form="form_plantilla"></textarea>
+						<textarea spellcheck="false" class="textarea_cuerpo_correo validate[groupRequired[plantilla_contenido]]" data-prompt-position="topLeft" name="plantilla_contenido_html" form="form_plantilla" placeholder="Cuerpo del correo electrónico"></textarea>
 					</div>
 				</div>
-				<input type="submit" id="btn_correo_plantilla" value="Aceptar" form="form_plantilla">
+				<input type="submit" id="btn_correo_plantilla" value="Guardar plantilla" form="form_plantilla">
 			</form>
 		</div>
 		<div id="enviando_correo" style="display: none;">

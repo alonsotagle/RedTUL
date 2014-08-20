@@ -485,11 +485,15 @@ class cursos extends CI_Controller {
 
         $curso['registro'] = $this->curso_model->consulta_registro_curso($curso['id_curso']);
 
-        foreach ($curso['registro'] as $campo => $valor) {
-            if ($valor == "1") {
-                $curso['registro'][$campo] = "Visible";
-            }elseif($valor == "0"){
-                $curso['registro'][$campo] = "No visible";
+        if (is_null($curso['registro'])) {
+            $curso['registro'] = array();
+        }else{
+            foreach ($curso['registro'] as $campo => $valor) {
+                if ($valor == "1") {
+                    $curso['registro'][$campo] = "Visible";
+                }elseif($valor == "0"){
+                    $curso['registro'][$campo] = "No visible";
+                }
             }
         }
 

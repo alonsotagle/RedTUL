@@ -13,16 +13,20 @@ class confirmacion extends CI_Controller {
         $this->load->model('confirmacion_model');
     }
 
-    public function index($id_curso) {
+    public function index($id_curso = null) {
 
-        $datos_curso = $this->confirmacion_model->consulta_curso($id_curso);
-
-        if (is_null($datos_curso)) {
+        if (is_null($id_curso)) {
             show_404();
-        } else {
-            $this->load->view('template/header');
-            $this->load->view('confirmacion', $datos_curso);
-            $this->load->view('template/footer');
+        }else{
+            $datos_curso = $this->confirmacion_model->consulta_curso($id_curso);
+
+            if (is_null($datos_curso)) {
+                show_404();
+            } else {
+                $this->load->view('template/header');
+                $this->load->view('confirmacion', $datos_curso);
+                $this->load->view('template/footer');
+            }
         }
     }
 

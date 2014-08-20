@@ -6,18 +6,15 @@
  * and open the template in the editor.
  */
 
-class recursos extends CI_Controller {
+class error404 extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('recursos_model');
     }
 
     public function index() {
-    	$this->load->view('template/header');
-        $this->load->view('template/menu');
-        $this->load->view('recursos');
+        $this->load->view('template/header');
+        $this->load->view('error404');
         $this->load->view('template/footer');
     }
-
 }

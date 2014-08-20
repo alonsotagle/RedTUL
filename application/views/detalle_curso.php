@@ -5,6 +5,12 @@
 
         $(document).tooltip();
 
+        if (<?= count($registro); ?> > 0) {
+        	$("#info_registro").show();
+        }else{
+        	$("#info_registro").hide();
+        }
+
     });
 </script>
 <!-- inicia contenido -->
@@ -14,6 +20,7 @@
 		<a href="<?= site_url('cursos')?>">Administrar Cursos</a> > Detalle de curso
 	</div>
 
+	<p class="encabezado_detalle_curso">Datos generales</p>
 	<p class="conf_contacto_campos">Estatus</p>
 	<p class="conf_contacto_valores">
 		<?= $estatus_curso_descripcion; ?>
@@ -97,8 +104,7 @@
 	<br>
 	<br>
 
-	<p class="conf_contacto_campos">Información de los contactos invitados al curso</p>
-	<br><br>
+	<p class="encabezado_detalle_curso">Información de los contactos invitados al curso</p>
 	<p class="conf_contacto_campos"> - Tipo de contacto
 		<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Grupo de contactos a quienes se les envió invitación al curso.">
 	</p>
@@ -166,79 +172,80 @@
 	</p>
 	<br>
 
-	<p class="conf_contacto_campos">Configuraci&oacute;n del registro en l&iacute;nea</p>
-	<br><br>
+	<div id="info_registro">
+		<p class="encabezado_detalle_curso">Configuraci&oacute;n del registro en l&iacute;nea</p>
 
-	<p class="conf_contacto_campos">T&iacute;tulo del curso</p>
-	<p class="conf_contacto_valores">
-		<?= $registro['registro_curso_titulo']; ?>
-	</p>
 
-	<p class="conf_contacto_campos">Flyer</p>
-	<p class="conf_contacto_valores">
-		<?= $registro['registro_curso_flyer']; ?>
-	</p>
+		<p class="conf_contacto_campos">T&iacute;tulo del curso</p>
+		<p class="conf_contacto_valores">
+			<?= $registro['registro_curso_titulo']; ?>
+		</p>
 
-	<p class="conf_contacto_campos">Tipo de evento o curso</p>
-	<p class="conf_contacto_valores">
-		<?= $registro['registro_curso_tipo']; ?>
-	</p>
+		<p class="conf_contacto_campos">Flyer</p>
+		<p class="conf_contacto_valores">
+			<?= $registro['registro_curso_flyer']; ?>
+		</p>
 
-	<p class="conf_contacto_campos">Descripci&oacute;n</p>
-	<p class="conf_contacto_valores">
-		<?= $registro['registro_curso_descripcion']; ?>
-	</p>
+		<p class="conf_contacto_campos">Tipo de evento o curso</p>
+		<p class="conf_contacto_valores">
+			<?= $registro['registro_curso_tipo']; ?>
+		</p>
 
-	<p class="conf_contacto_campos">Objetivos</p>
-	<p class="conf_contacto_valores">
-		<?= $registro['registro_curso_objetivos']; ?>
-	</p>
+		<p class="conf_contacto_campos">Descripci&oacute;n</p>
+		<p class="conf_contacto_valores">
+			<?= $registro['registro_curso_descripcion']; ?>
+		</p>
 
-	<p class="conf_contacto_campos">Temario</p>
-	<p class="conf_contacto_valores">
-		<?= $registro['registro_curso_temario']; ?>
-	</p>
+		<p class="conf_contacto_campos">Objetivos</p>
+		<p class="conf_contacto_valores">
+			<?= $registro['registro_curso_objetivos']; ?>
+		</p>
 
-	<p class="conf_contacto_campos">Vigencia</p>
-	<p class="conf_contacto_valores">
-		<?= $registro['registro_curso_fecha']; ?>
-	</p>
+		<p class="conf_contacto_campos">Temario</p>
+		<p class="conf_contacto_valores">
+			<?= $registro['registro_curso_temario']; ?>
+		</p>
 
-	<p class="conf_contacto_campos">Horario</p>
-	<p class="conf_contacto_valores">
-		<?= $registro['registro_curso_horario']; ?>
-	</p>
+		<p class="conf_contacto_campos">Vigencia</p>
+		<p class="conf_contacto_valores">
+			<?= $registro['registro_curso_fecha']; ?>
+		</p>
 
-	<p class="conf_contacto_campos">Cupo total</p>
-	<p class="conf_contacto_valores">
-		<?= $registro['registro_curso_cupo']; ?>
-	</p>
+		<p class="conf_contacto_campos">Horario</p>
+		<p class="conf_contacto_valores">
+			<?= $registro['registro_curso_horario']; ?>
+		</p>
 
-	<p class="conf_contacto_campos">Instructor</p>
-	<p class="conf_contacto_valores">
-		<?= $registro['registro_curso_instructor']; ?>
-	</p>
+		<p class="conf_contacto_campos">Cupo total</p>
+		<p class="conf_contacto_valores">
+			<?= $registro['registro_curso_cupo']; ?>
+		</p>
 
-	<p class="conf_contacto_campos">Ubicaci&oacute;n</p>
-	<p class="conf_contacto_valores">
-		<?= $registro['registro_curso_ubicacion']; ?>
-	</p>
+		<p class="conf_contacto_campos">Instructor</p>
+		<p class="conf_contacto_valores">
+			<?= $registro['registro_curso_instructor']; ?>
+		</p>
 
-	<p class="conf_contacto_campos">URL de mapa de localizaci&oacute;n</p>
-	<p class="conf_contacto_valores">
-		<?= $registro['registro_curso_mapa_url']; ?>
-	</p>
+		<p class="conf_contacto_campos">Ubicaci&oacute;n</p>
+		<p class="conf_contacto_valores">
+			<?= $registro['registro_curso_ubicacion']; ?>
+		</p>
 
-	<p class="conf_contacto_campos">Tel&eacute;fono de contacto</p>
-	<p class="conf_contacto_valores">
-		<?= $registro['registro_curso_telefono']; ?>
-	</p>
+		<p class="conf_contacto_campos">URL de mapa de localizaci&oacute;n</p>
+		<p class="conf_contacto_valores">
+			<?= $registro['registro_curso_mapa_url']; ?>
+		</p>
 
-	<p class="conf_contacto_campos">Extensi&oacute;n telef&oacute;nica</p>
-	<p class="conf_contacto_valores">
-		<?= $registro['registro_curso_telefono_extension']; ?>
-	</p>
+		<p class="conf_contacto_campos">Tel&eacute;fono de contacto</p>
+		<p class="conf_contacto_valores">
+			<?= $registro['registro_curso_telefono']; ?>
+		</p>
 
+		<p class="conf_contacto_campos">Extensi&oacute;n telef&oacute;nica</p>
+		<p class="conf_contacto_valores">
+			<?= $registro['registro_curso_telefono_extension']; ?>
+		</p>
+	</div>
 
 </div>
 <!-- termina contenido -->

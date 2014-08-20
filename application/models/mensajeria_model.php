@@ -98,7 +98,7 @@ class mensajeria_model extends CI_Model{
 
         if ($query -> num_rows() > 0)
         {
-            return $query->result_array();
+            return $query->row();
         } else {
             return null;
         }
@@ -337,6 +337,113 @@ class mensajeria_model extends CI_Model{
         if ($query -> num_rows() > 0)
         {
             return $query->row_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function consulta_instancias()
+    {
+        $this->db->from('instancia');
+
+        $this->db->order_by('instancia_nombre', 'asc');
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function consulta_invitados_tipo($tipo_id)
+    {
+        $this->db->select('id_contacto');
+
+        $this->db->from('contacto');
+
+        $this->db->where('contacto_tipo', $tipo_id);
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function consulta_detalles_curso($id_curso)
+    {
+        $this->db->select('curso_titulo,
+                            curso_fecha_inicio,
+                            curso_fecha_fin,
+                            curso_hora_inicio,
+                            curso_hora_fin,
+                            curso_ubicacion');
+        $this->db->from('curso');
+
+        $this->db->where('id_curso', $id_curso);
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->row();
+        } else {
+            return null;
+        }
+    }
+
+    public function consulta_invitados_detalles_curso($ids_contacto_correo)
+    {
+        $this->db->select('contacto.id_contacto,
+                            contacto.contacto_nombre,
+                            contacto.contacto_ap_paterno,
+                            contacto.contacto_ap_materno,
+                            contacto.contacto_correo_inst,
+                            contacto.contacto_correo_per,
+                            contacto.contacto_telefono,
+                            tipo_contacto.tipo_contacto_descripcion,
+                            instancia.instancia_nombre');
+
+        $this->db->from('contacto');
+        $this->db->join('tipo_contacto', 'contacto.contacto_tipo = tipo_contacto.id_tipo_contacto');
+        $this->db->join('instancia', 'contacto.contacto_instancia = instancia.id_instancia');
+
+        $this->db->where_in('id_contacto', $ids_contacto_correo);
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function plantilla_invitacion($id_curso)
+    {
+        $this->db->select('curso_titulo,
+                            curso_fecha_inicio,
+                            curso_fecha_fin,
+                            curso_hora_inicio,
+                            curso_hora_fin,
+                            curso_ubicacion,
+                            curso_objetivos');
+        $this->db->from('curso');
+
+        $this->db->where('id_curso', $id_curso);
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->row();
         } else {
             return null;
         }

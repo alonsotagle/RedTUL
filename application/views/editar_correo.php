@@ -405,7 +405,7 @@
 							<br>
 						</div>
 						<input type="submit" id="btn_programar_correo" value="Guardar">
-						<input type="submit" id="btn_cancelar_correo" value="Cancelar envio de correo">
+						<input type="submit" id="btn_cancelar_correo" value="Cancelar envío de correo">
 					</form>
 				</div>
 				<div id="tab-dest">

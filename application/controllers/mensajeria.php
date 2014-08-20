@@ -14,9 +14,11 @@ class mensajeria extends CI_Controller {
         date_default_timezone_set('America/Mexico_City');
     }
 
-    public function index() {
+    public function index($parametros = null) {
 
-        $parametros = array("tab" => 0);
+        if (is_null($parametros)) {
+            $parametros = array("tab" => 0);
+        }
 
     	$this->load->view('template/header');
         $this->load->view('template/menu');
@@ -82,26 +84,16 @@ class mensajeria extends CI_Controller {
     function registrar_plantilla()
     {
         $parametros = array(
-            'plantilla_asunto' => $this->input->post('plantilla_asunto')
+            'plantilla_asunto'      => $this->input->post('plantilla_asunto'),
+            'plantilla_contenido'   => $this->input->post('plantilla_contenido')
         );
-
-        if ($this->input->post('plantilla_contenido_plano') != "") {
-            $parametros['plantilla_contenido'] = $this->input->post('plantilla_contenido_plano');
-            $parametros['plantilla_tipo_contenido'] = 0;
-        }else{
-            $parametros['plantilla_contenido'] = $this->input->post('plantilla_contenido_html');
-            $parametros['plantilla_tipo_contenido'] = 1;
-        }
 
         $this->mensajeria_model->registrar_plantilla($parametros);
 
         $parametros = array("tab" => 2,
                             "mensaje_plantilla" => "Plantilla agregada satisfactoriamente.");
 
-        $this->load->view('template/header');
-        $this->load->view('template/menu');
-        $this->load->view('mensajeria', $parametros);
-        $this->load->view('template/footer');
+        $this->index($parametros);
     }
 
     function consulta_plantillas()
@@ -117,10 +109,7 @@ class mensajeria extends CI_Controller {
 
         $parametros = array("tab" => 2);
 
-        $this->load->view('template/header');
-        $this->load->view('template/menu');
-        $this->load->view('mensajeria', $parametros);
-        $this->load->view('template/footer');
+        $this->index($parametros);
     }
 
     function consulta_plantilla($id_plantilla)
@@ -132,29 +121,18 @@ class mensajeria extends CI_Controller {
 
     function editar_plantilla()
     {
-
         $parametros = array(
-            'plantilla_asunto' => $this->input->post('plantilla_asunto'),
-            'id_plantilla_correo' => $this->input->post('plantilla_id')
+            'plantilla_asunto'      => $this->input->post('plantilla_asunto'),
+            'id_plantilla_correo'   => $this->input->post('plantilla_id'),
+            'plantilla_contenido'   => $this->input->post('plantilla_contenido')
         );
-
-        if ($this->input->post('plantilla_contenido_plano') != "") {
-            $parametros['plantilla_contenido'] = $this->input->post('plantilla_contenido_plano');
-            $parametros['plantilla_tipo_contenido'] = 0;
-        }else{
-            $parametros['plantilla_contenido'] = $this->input->post('plantilla_contenido_html');
-            $parametros['plantilla_tipo_contenido'] = 1;
-        }
 
         $this->mensajeria_model->editar_plantilla($parametros);
 
         $parametros_vista = array("tab" => 2,
                             "mensaje_plantilla" => "Plantilla editada satisfactoriamente.");
 
-        $this->load->view('template/header');
-        $this->load->view('template/menu');
-        $this->load->view('mensajeria', $parametros_vista);
-        $this->load->view('template/footer');
+        $this->index($parametros_vista);
     }
 
     function consulta_cursos()
@@ -209,19 +187,11 @@ class mensajeria extends CI_Controller {
             $respuesta_archivo_adjunto = $this->adjuntar_archivo();
         }
 
-        if ($this->input->post('contenido_plano') != "") {
-            $mensaje = $this->input->post('contenido_plano');
-            $html = false;
-        } else {
-            $mensaje = $this->input->post('contenido_html');
-            $html = true;
-        }
-
         $email_data = array(
             'id_destinatarios'  => $id_destinatarios,
             'asunto'            => $this->input->post('asunto'),
-            'contenido'         => $mensaje,
-            'html'              => $html,
+            'contenido'         => $this->input->post('contenido'),
+            'html'              => true,
             'archivo_adjunto'   => $respuesta_archivo_adjunto
         );
 
@@ -246,10 +216,7 @@ class mensajeria extends CI_Controller {
         $parametros_vista = array("tab" => 1,
                             "mensaje_plantilla" => "Correo enviado satisfactoriamente.");
 
-        $this->load->view('template/header');
-        $this->load->view('template/menu');
-        $this->load->view('mensajeria', $parametros_vista);
-        $this->load->view('template/footer');
+        $this->index($parametros_vista);
     }
 
     function adjuntar_archivo()
@@ -294,24 +261,29 @@ class mensajeria extends CI_Controller {
         return $id_nuevo_correo;
     }
 
-    function consulta_invitados_curso()
+    function consulta_invitados_curso($curso_id)
     {
         $id_invitados_curso = array();
 
-        $resultado_tipo = $this->mensajeria_model->consulta_invitados_curso_tipo($this->input->post('curso_id'));
+        $resultado_tipo = $this->mensajeria_model->consulta_invitados_curso_tipo($curso_id);
 
-        foreach ($resultado_tipo as $key => $value) {
-            array_push($id_invitados_curso, $value['id_contacto']);
+        if (!is_null($resultado_tipo)) {
+            foreach ($resultado_tipo as $key => $value) {
+                array_push($id_invitados_curso, $value['id_contacto']);
+            }
         }
 
-        $resultado_contacto =$this->mensajeria_model->consulta_invitados_curso_contacto($this->input->post('curso_id'));
-        foreach ($resultado_contacto as $key => $value) {
-            array_push($id_invitados_curso, $value['id_contacto']);
+        $resultado_contacto =$this->mensajeria_model->consulta_invitados_curso_contacto($curso_id);
+        
+        if (!is_null($resultado_contacto)) {
+            foreach ($resultado_contacto as $key => $value) {
+                array_push($id_invitados_curso, $value['id_contacto']);
+            }
         }
 
         $id_invitados_curso = array_unique($id_invitados_curso);
-
-        print_r(json_encode($id_invitados_curso));
+        
+        return $id_invitados_curso;
     }
 
     function consulta_destinatarios_correos($id_correo)
@@ -392,10 +364,7 @@ class mensajeria extends CI_Controller {
         $parametros_vista = array("tab" => 1,
                             "mensaje_plantilla" => "Correo actualizado satisfactoriamente.");
 
-        $this->load->view('template/header');
-        $this->load->view('template/menu');
-        $this->load->view('mensajeria', $parametros_vista);
-        $this->load->view('template/footer');
+        $this->index($parametros_vista);
     }
 
     function actualizar_correo($correo)
@@ -434,5 +403,54 @@ class mensajeria extends CI_Controller {
         $this->load->view('template/menu');
         $this->load->view('detalle_correo', $correo);
         $this->load->view('template/footer');
+    }
+
+    function consulta_instancias()
+    {
+        $instancias = $this->mensajeria_model->consulta_instancias();
+
+        print_r(json_encode($instancias));
+    }
+
+    function consulta_invitados_tipo($tipo)
+    {
+        $ids_contacto = array();
+
+        $id_invitados = $this->mensajeria_model->consulta_invitados_tipo($tipo);
+
+        if (!is_null($id_invitados)) {
+            foreach ($id_invitados as $key => $value) {
+                array_push($ids_contacto, $value['id_contacto']);
+            }
+        }
+
+        print_r(json_encode($ids_contacto));
+    }
+
+    function consulta_detalles_curso($id_curso)
+    {
+        $curso = $this->mensajeria_model->consulta_detalles_curso($id_curso);
+
+        print_r(json_encode($curso));
+    }
+
+    function consulta_invitados_detalles_curso()
+    {
+        $id_invitados_curso = $this->consulta_invitados_curso($this->input->post('curso_id'));
+
+        if (!empty($id_invitados_curso)) {
+            $invitados = $this->mensajeria_model->consulta_invitados_detalles_curso($id_invitados_curso);
+        }else{
+            $invitados = null;
+        }
+
+        print_r(json_encode($invitados));
+    }
+
+    function plantilla_invitacion($id_curso)
+    {
+        $curso = $this->mensajeria_model->plantilla_invitacion($id_curso);
+
+        print_r(json_encode($curso));
     }
 }

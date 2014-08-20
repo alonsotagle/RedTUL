@@ -18,11 +18,6 @@
 				<span>Administrar instancias</span>
 			</a>
 		</li>
-		<li id="menu_recursos" class="elemento_menu">
-			<a href="<?= base_url('index.php/recursos')?>">
-				<span>Administrar recursos</span>
-			</a>
-		</li>
 		<li id="menu_mensajeria" class="elemento_menu">
 			<a href="<?= base_url('index.php/mensajeria')?>">
 				<span>Envío de correos</span>

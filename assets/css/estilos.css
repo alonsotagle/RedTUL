@@ -298,6 +298,7 @@ body {
 
 .leyenda_centrada{
 	text-align: center;
+	margin-bottom: 50px;
 }
 
 /* Vista nuevo_contacto.php */
@@ -433,7 +434,7 @@ fieldset > legend{
 
 .conf_contacto_campos{
 	float: left;
-	font-size: medium;
+	font-size: 15px;
 	font-weight: bold;
 	margin: 0px 0px -10px 20px;
 }
@@ -484,6 +485,12 @@ fieldset > legend{
 
 .descripcion_archivos{
 	margin-left: 227px;
+}
+
+.encabezado_detalle_curso{
+	font-size: medium;
+	font-weight: bold;
+
 }
 
 /* Vista editar_curso.php */
@@ -564,22 +571,20 @@ fieldset > legend{
 
 .textarea_cuerpo_correo{
 	height: 200px;
-	margin: -14px 0px -17px -19px;
 	resize: none;
-	width: 105%;
+	width: 100%;
 }
 
 .label_nuevo_correo{
 	display: inline-block;
-	height: 40px;
-	width: 120px;
+	height: 35px;
+	width: 185px;
 }
 
-#titulo_programar_envio_correo{
-	width: 100%;
-	display: block;
-	text-align: center;
-	margin: 30px 0px 20px 0px;
+.label_programar_posterior{
+	display: inline-block;
+	height: 35px;
+	width: 140px;
 }
 
 .programar_envio_correo{
@@ -594,34 +599,22 @@ fieldset > legend{
 	padding-left: 10px;
 }
 
-#btn_programar_correo{
+#btn_enviar_correo{
 	float: right;
 }
 
 .input_envia_correo{
 	margin: 0px 0px 7px 0px;
-	text-align: center;
 }
 
-#tab-contenido{
-	height: 630px;
-}
-
-#fieldset_destinatarios_curso{
-	margin-top: 20px;
-}
-
-#fieldset_destinatarios_contacto{
-	margin-top: 35px;
-}
-
-#lista_cursos{
-	margin-top: 35px;
+.fieldset_destinatarios p{
+	font-weight: bold;
+	font-size: 15px;
+	margin-bottom: 30px;
 }
 
 #btn_correo_obtener_url{
 	float: right;
-	margin-top: 35px;
 }
 
 #search_correo_curso{
@@ -648,21 +641,15 @@ fieldset > legend{
 
 .input_correo_buscar_destinatario{
 	margin-bottom: 7px;
-	text-align: center;
 	width: 63%;
 }
 
 #btn_correo_anadir_destinatarios{
 	float: right;
-	margin-top: 15px;
 }
 
-#tab-dest{
-	overflow: hidden;
-}
-
-#tabs-3{
-	overflow: hidden;
+.seccion_envio_correo{
+	margin-bottom: 30px;
 }
 
 #btn_correo_plantilla{
@@ -683,7 +670,7 @@ fieldset > legend{
 }
 
 .correo_cancelado {
-	background-color: #d9534f;
+	background-color: #d9534f !important;
 }
 
 .correo_cancelado td, .correo_cancelado td a{
@@ -697,6 +684,10 @@ fieldset > legend{
 #tabs_enviar_correo > .ui-tabs .ui-tabs-nav a
 {
    background-color: #006600;
+}
+
+.checkbox_tipo_invitado_correo{
+	margin: 5px 0px 20px 26px;
 }
 
 /* Inicia CONFIRMACION */
@@ -832,4 +823,19 @@ fieldset > legend{
 	margin-top: 30px;
 	margin-left: 33%;
 	width: 185px;
+}
+
+/* Inicia error404 */
+
+#mensaje_error{
+	background-color: white;
+	border: 1px solid #cfcfcf;
+	height: 200px;
+	padding-top: 50px;
+	text-align: center;
+}
+
+#mensaje_error p{
+	font-weight: bolder;
+	font-size: large;
 }

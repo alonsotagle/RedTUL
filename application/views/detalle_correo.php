@@ -9,7 +9,7 @@
 <div class="contenido_dinamico">
 	<div id="migaDePan">
 		<a href="<?= base_url()?>">Inicio</a> > 
-		<a href="<?= site_url('mensajeria')?>">Servicio de mensajer&iacute;a</a> > Detalle de correo
+		<a href="<?= site_url('mensajeria')?>"> Env&iacute;o de correos</a> > Detalle de correo
 	</div>
 
 	<p class="conf_contacto_campos">Estatus</p>
@@ -20,10 +20,14 @@
 	<p class="conf_contacto_campos">Destinatarios</p>
 	<p class="conf_contacto_valores">
 		<?php
-			foreach ($destinatarios as $key => $value) {
-			 	echo $value['contacto_nombre']." ".$value['contacto_ap_paterno']." ".$value['contacto_ap_materno'];
-			 	echo "<br>";
-			 }
+			if($destinatarios){
+				foreach ($destinatarios as $key => $value) {
+				 	echo $value['contacto_nombre']." ".$value['contacto_ap_paterno']." ".$value['contacto_ap_materno'];
+				 	echo "<br>";
+				}
+			}else{
+				echo "-";
+			}
 		?>
 	</p>
 

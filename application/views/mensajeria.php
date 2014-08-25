@@ -17,6 +17,7 @@
 		$(document).tooltip();
 
 		$("#nuevo_correo_contenido").jqte();
+		$("#plantilla_contenido").jqte();
 
         $("#btn_enviar_correo").prop('disabled', true);
 
@@ -131,6 +132,37 @@
 					$('#nuevo_correo_contenido').jqteVal('');
 					break;
 
+				case "generales":
+
+					$.ajax({
+						url: "<?= site_url('mensajeria/consulta_detalles_curso') ?>"+"/"+$("#lista_cursos").val(),
+						async: false,
+						dataType: 'json',
+						type: 'post',
+						success: function(resultado) {
+							if (resultado) {
+								var curso_fecha_inicio = resultado['curso_fecha_inicio'].split("-");
+								var curso_fecha_fin = resultado['curso_fecha_fin'].split("-");
+
+								$('#nuevo_correo_asunto').val(resultado['curso_titulo']);
+
+								var contenido_generales = "<br>Por este medio se le hace una atenta invitación al curso:";
+								contenido_generales += "<br><br>Tema:  "+resultado["curso_titulo"];
+								contenido_generales += "<br>Fechas:  "+curso_fecha_inicio[2]+"/"+curso_fecha_inicio[1]+"/"+curso_fecha_inicio[0]+' a '+curso_fecha_fin[2]+"/"+curso_fecha_fin[1]+"/"+curso_fecha_fin[0];
+								contenido_generales += "<br>Horario:  "+resultado["curso_hora_inicio"]+" - "+resultado["curso_hora_fin"];
+								contenido_generales += "<br>Lugar:  "+resultado["curso_ubicacion"];
+								contenido_generales += "<br><a href='<?= site_url('detalle_curso') ?>/"+$("#lista_cursos").val()+"'>Leer más...</a>";
+								contenido_generales += "<br><br>Para confirmar sus asistencia le solicitamos que dé clic en el siguiente enlace";
+								contenido_generales += "<br><a href='<?= site_url('confirmacion') ?>/"+$("#lista_cursos").val()+"'>Inscribirse a evento</a>";
+								contenido_generales += "<br><br>De antemano agradecemos su atención.";
+								contenido_generales += "<br><br>Saludos cordiales";
+								$("#nuevo_correo_contenido").jqteVal(contenido_generales);
+							}
+						}
+					});
+
+					break;
+
 				case "invitacion":
 					$.ajax({
 						url: "<?= site_url('mensajeria/plantilla_invitacion') ?>"+"/"+$("#lista_cursos").val(),
@@ -217,8 +249,10 @@
 						dataType: 'json',
 						type: 'post',
 						success: function(resultado) {
-							$('#nuevo_correo_asunto').val(resultado['plantilla_asunto']);
-							$('#nuevo_correo_contenido').jqteVal(resultado['plantilla_contenido']);
+							if (resultado) {
+								$('#nuevo_correo_asunto').val(resultado['plantilla_asunto']);
+								$('#nuevo_correo_contenido').jqteVal(resultado['plantilla_contenido']);
+							}
 						}
 					});
 					break;
@@ -268,34 +302,10 @@
 			event.preventDefault();
 			if ($("#frm_curso_destinatarios").validationEngine('validate') && $("#lista_cursos").val() != "") {
 				valor_contenido_textarea = $("#nuevo_correo_contenido").val();
-				valor_contenido_textarea += "<br>Por este medio se le hace una atenta invitación al curso:";
-
-				$.ajax({
-					url: "<?= site_url('mensajeria/consulta_detalles_curso') ?>"+"/"+$("#lista_cursos").val(),
-					async: false,
-					dataType: 'json',
-					type: 'post',
-					success: function(resultado) {
-						if (resultado) {
-
-							var curso_fecha_inicio = resultado['curso_fecha_inicio'].split("-");
-							var curso_fecha_fin = resultado['curso_fecha_fin'].split("-");
-
-							valor_contenido_textarea += "<br><br>Tema:  "+resultado["curso_titulo"];
-							valor_contenido_textarea += "<br>Fechas:  "+curso_fecha_inicio[2]+"/"+curso_fecha_inicio[1]+"/"+curso_fecha_inicio[0]+' a '+curso_fecha_fin[2]+"/"+curso_fecha_fin[1]+"/"+curso_fecha_fin[0];
-							valor_contenido_textarea += "<br>Duración:  "+resultado["curso_hora_inicio"]+" - "+resultado["curso_hora_fin"];
-							valor_contenido_textarea += "<br>Lugar:  "+resultado["curso_ubicacion"];
-						}
-					}
-				});
-
-				valor_contenido_textarea += "<br><a href='<?= site_url('detalle_curso') ?>/"+$("#lista_cursos").val()+"'>Leer más...</a>";
-				valor_contenido_textarea += "<br><br>Para confirmar sus asistencia le solicitamos que dé clic en el siguiente enlace";
-				valor_contenido_textarea += "<br><a href='<?= site_url('confirmacion') ?>/"+$("#lista_cursos").val()+"'>Inscribirse a evento</a>";
-				valor_contenido_textarea += "<br><br>De antemano agradecemos su atención.";
-				valor_contenido_textarea += "<br><br>Saludos cordiales";
+				valor_contenido_textarea += "<br>Página para incribirse:<br><a href='<?= site_url('confirmacion') ?>/"+$("#lista_cursos").val()+"'>Inscribirse a evento</a>";
 
 				$("#nuevo_correo_contenido").jqteVal(valor_contenido_textarea);
+				$("#nuevo_correo_asunto").focus();
 			}
 		});
 
@@ -391,10 +401,12 @@
 			}
 
 			if ($("#lista_cursos").val() != "") {
-
+				$("#nuevo_correo_plantilla").append('<option value="generales" class="plantillas_curso">Datos generales</option>');
 				$("#nuevo_correo_plantilla").append('<option value="invitacion" class="plantillas_curso">Invitación al evento</option>');
 				$("#nuevo_correo_plantilla").append('<option value="evaluacion" class="plantillas_curso">Evaluación del evento</option>');
 				$("#nuevo_correo_plantilla").append('<option value="constancia" class="plantillas_curso">Envío de constancia</option>');
+			}else{
+				$(".plantillas_curso").remove();
 			}
 		});
 
@@ -434,15 +446,16 @@
 			}
 		});
 
-		$("#form_plantilla").on( "click", ".img_editar_plantilla", function() {
+		$("#tabla_plantillas").on( "click", ".img_editar_plantilla", function() {
+			console.log($(this));
 			$.ajax({
 				url: "<?= site_url('mensajeria/consulta_plantilla') ?>"+"/"+$(this).attr('id'),
 				dataType: 'json',
 				type: 'post',
 				success: function(resultado) {
-					$('input[name=plantilla_asunto]').val(resultado['plantilla_asunto']);
-					$('input[name=plantilla_id]').val(resultado['id_plantilla_correo']);
-					$('textarea[name=plantilla_contenido]').val(resultado['plantilla_contenido']);
+					$('#plantilla_asunto').val(resultado['plantilla_asunto']);
+					$('#plantilla_id').val(resultado['id_plantilla_correo']);
+					$('#plantilla_contenido').jqteVal(resultado['plantilla_contenido']);
 				}
 			});
 		});
@@ -490,6 +503,7 @@
 
 		$("#btn_enviar_correo").click(function(){
 			if ($("#frm_enviar_correo").validationEngine('validate')) {
+	
 				$.blockUI({
 					message: $('#enviando_correo'),
 					css: {
@@ -502,6 +516,24 @@
 						color: '#fff'
 					}
 				});
+
+				if ($("#lista_cursos").val() != "") {
+					var datos = {
+						'curso_id'			: $("#lista_cursos").val(),
+						'id_destinatarios'	: $("#id_destinatarios").val()};
+
+					$.ajax("<?= site_url('mensajeria/registrar_invitados_curso') ?>", {
+						dataType: 'json',
+						type: 'post',
+						async: false,
+						data: datos,
+						success: function(){
+							console.log("Correcto");
+						}
+			   		});
+				}
+			}else{
+				return false;
 			}
 		});
 
@@ -519,7 +551,6 @@
 							label : value['instancia_nombre'],
 							value : value['id_instancia']
 						});
-
 					});
 
 					$('#instancia_contacto').autocomplete({
@@ -677,51 +708,53 @@
 				<input type="submit" id="btn_correo_anadir_destinatarios" value="Añadir destinatarios">
 			</fieldset>
 
-			<fieldset class="seccion_envio_correo">
-				<legend>Detalle del correo
-					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Cuerpo principal del correo, asunto, archivos y cuerpo del correo." class="icon_tooltip">
-				</legend>
-				<label class="label_nuevo_correo" for="nuevo_correo_plantilla">Usar plantilla</label>
-				<select id="nuevo_correo_plantilla" class="input_envia_correo">
-					<option selected value="">- Seleccione una opci&oacute;n -</option>
-				</select>
-				<br>
-				<form id="frm_enviar_correo" action="<?= site_url('mensajeria/mandar_correo') ?>" method="POST" enctype="multipart/form-data">
-					<label class="label_nuevo_correo" for="nuevo_correo_asunto">Asunto</label>
-					<input type="text" class="input_envia_correo validate[required]" id="nuevo_correo_asunto" size="50" name="asunto">
-					<br>
-					<label class="label_nuevo_correo">Datos adjuntos</label>
-					<input type="file" id="nuevo_correo_archivos_adjuntos" name="userfile">
-					<br>
-					<label class="label_nuevo_correo" for="nuevo_correo_contenido">Contenido del correo
-						<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="El texto introducido puede contener etiquetas de HTML." class="icon_tooltip">
-					</label>
-					<textarea spellcheck="false" id="nuevo_correo_contenido" class="textarea_cuerpo_correo validate[required]" data-prompt-position="topLeft" name="contenido"></textarea>
+			<form id="frm_enviar_correo" action="<?= site_url('mensajeria/mandar_correo') ?>" method="POST" enctype="multipart/form-data">
+					<fieldset class="seccion_envio_correo">
+						<legend>Detalle del correo
+							<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Cuerpo principal del correo, asunto, archivos y cuerpo del correo." class="icon_tooltip">
+						</legend>
+						<label class="label_nuevo_correo" for="nuevo_correo_plantilla">Usar plantilla
+							<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Se le recomienda revisar la redacción del texto agregado." class="icon_tooltip">
+						</label>
+						<select id="nuevo_correo_plantilla" class="input_envia_correo">
+							<option selected value="">- Seleccione una opci&oacute;n -</option>
+						</select>
+						<br>
+							<label class="label_nuevo_correo" for="nuevo_correo_asunto">Asunto</label>
+							<input type="text" class="input_envia_correo validate[required]" id="nuevo_correo_asunto" size="50" name="asunto">
+							<br>
+							<label class="label_nuevo_correo">Datos adjuntos</label>
+							<input type="file" id="nuevo_correo_archivos_adjuntos" name="userfile">
+							<br>
+							<label class="label_nuevo_correo" for="nuevo_correo_contenido">Contenido del correo
+								<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="El texto introducido puede contener etiquetas de HTML." class="icon_tooltip">
+							</label>
+							<textarea spellcheck="false" id="nuevo_correo_contenido" class="textarea_cuerpo_correo validate[required]" data-prompt-position="topLeft" name="contenido"></textarea>
+					</fieldset>
+					<fieldset class="seccion_envio_correo">
+						<legend>Env&iacute;o
+							<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Aquí se puede enviar el correo de inmediato o bien se programa la fecha y hora de su env&iacute;o." class="icon_tooltip">
+						</legend>
+						<div class="programar_envio_correo">
+							<input type="radio" form="frm_enviar_correo" name="envio" id="programar_correo_inmed" class="validate[required] radio" value="0">
+							<label for="programar_correo_inmed">Enviar inmediatamente</label>
+						</div>
+						<div class="programar_envio_correo programar_envio_correo_posterior">
+							<input type="radio" form="frm_enviar_correo" name="envio" id="programar_correo_posterior" class="input_envia_correo validate[required] radio" value="1">
+							<label for="programar_correo_posterior" class="label_programar_posterior">Programar env&iacute;o</label>
+							<br>
+							<label class="label_programar_posterior" for="programar_correo_fecha">* Fecha de env&iacute;o</label>
+							<input class="input_envia_correo" id="programar_correo_fecha" form="frm_enviar_correo" name="fecha_envio" data-prompt-position="topLeft">
+							<br>
+							<label class="label_programar_posterior" for="programar_correo_hora">* Hora de env&iacute;o
+								<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Formato horario de 24 horas.">
+							</label>
+							<input type="time" class="input_envia_correo" id="programar_correo_hora" form="frm_enviar_correo" name="hora_envio" data-prompt-position="topLeft">
+							<br>
+						</div>
+					</fieldset>
+					<input type="submit" form="frm_enviar_correo" id="btn_enviar_correo">
 				</form>
-			</fieldset>
-			<fieldset class="seccion_envio_correo">
-				<legend>Env&iacute;o
-					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Aquí se puede enviar el correo de inmediato o bien se programa la fecha y hora de su env&iacute;o." class="icon_tooltip">
-				</legend>
-				<div class="programar_envio_correo">
-					<input type="radio" form="frm_enviar_correo" name="envio" id="programar_correo_inmed" class="validate[required] radio" value="0">
-					<label for="programar_correo_inmed">Enviar inmediatamente</label>
-				</div>
-				<div class="programar_envio_correo programar_envio_correo_posterior">
-					<input type="radio" form="frm_enviar_correo" name="envio" id="programar_correo_posterior" class="input_envia_correo validate[required] radio" value="1">
-					<label for="programar_correo_posterior" class="label_programar_posterior">Programar env&iacute;o</label>
-					<br>
-					<label class="label_programar_posterior" for="programar_correo_fecha">* Fecha de env&iacute;o</label>
-					<input class="input_envia_correo" id="programar_correo_fecha" form="frm_enviar_correo" name="fecha_envio" data-prompt-position="topLeft">
-					<br>
-					<label class="label_programar_posterior" for="programar_correo_hora">* Hora de env&iacute;o
-						<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Formato horario de 24 horas.">
-					</label>
-					<input type="time" class="input_envia_correo" id="programar_correo_hora" form="frm_enviar_correo" name="hora_envio" data-prompt-position="topLeft">
-					<br>
-				</div>
-			</fieldset>
-			<input type="submit" form="frm_enviar_correo" id="btn_enviar_correo">
 		</div>
 
 		<div id="tabs-2">
@@ -781,7 +814,7 @@
 				</label>
 				<input type="text" maxlength="255" name="plantilla_asunto" id="plantilla_asunto" class="validate[required]" form="form_plantilla"/>
 				<input type="hidden" name="plantilla_id" id="plantilla_id" form="form_plantilla">
-				<textarea spellcheck="false" class="textarea_cuerpo_correo validate[required]" data-prompt-position="topLeft" name="plantilla_contenido" form="form_plantilla" placeholder="Cuerpo del correo electrónico"></textarea>
+				<textarea spellcheck="false" class="textarea_cuerpo_correo validate[required]" data-prompt-position="topLeft" name="plantilla_contenido" id="plantilla_contenido" form="form_plantilla"></textarea>
 				<input type="submit" id="btn_correo_plantilla" value="Guardar plantilla" form="form_plantilla">
 			</form>
 		</div>

@@ -139,6 +139,10 @@ class mensajeria_model extends CI_Model{
 
         $this->db->from('correo');
 
+        $this->db->order_by('correo_fecha_creacion desc, correo_hora_envio desc');
+
+        $this->db->limit(10);
+
         $query = $this->db->get();
 
         if ($query -> num_rows() > 0)
@@ -447,5 +451,15 @@ class mensajeria_model extends CI_Model{
         } else {
             return null;
         }
+    }
+
+    public function eliminar_invitados_curso($id_curso)
+    {
+        $this->db->delete('curso_invitado_contacto', array('curso_id' => $id_curso));
+    }
+
+    public function registrar_invitados_correo($curso_id, $contacto_id)
+    {
+        $this->db->insert('curso_invitado_contacto', array('curso_id' => $curso_id, 'invitado_id' => $contacto_id));
     }
 }

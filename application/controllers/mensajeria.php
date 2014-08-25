@@ -208,7 +208,6 @@ class mensajeria extends CI_Controller {
 
         $id_nuevo_correo = $this->registrar_correo($email_data);
 
-
         foreach ($id_destinatarios as $key => $value) {
             $this->mensajeria_model->registrar_destinatario_correo($id_nuevo_correo, $value);
         }
@@ -452,5 +451,18 @@ class mensajeria extends CI_Controller {
         $curso = $this->mensajeria_model->plantilla_invitacion($id_curso);
 
         print_r(json_encode($curso));
+    }
+
+    function registrar_invitados_curso()
+    {
+        $id_curso = $this->input->post('curso_id');
+        $destinatarios = $this->input->post('id_destinatarios');
+        $id_destinatarios = explode(",", $destinatarios);
+
+        $this->mensajeria_model->eliminar_invitados_curso($id_curso);
+
+        foreach ($id_destinatarios as $key => $value) {
+            $this->mensajeria_model->registrar_invitados_correo($id_curso, $value);
+        }
     }
 }

@@ -252,6 +252,7 @@ class mensajeria extends CI_Controller {
                             "correo_fecha_envio"    => $correo['correo_fecha_envio'],
                             "correo_estatus"        => $correo['estatus'],
                             "correo_fecha_creacion" => date("Y-m-d"),
+                            "correo_hora_creacion"  => date("H:i"),
                             "correo_hora_envio"     => $correo['correo_hora_envio'],
                             "correo_archivo_adjunto"=> $correo['archivo_adjunto']);
 
@@ -325,19 +326,11 @@ class mensajeria extends CI_Controller {
             $respuesta_archivo_adjunto = $this->adjuntar_archivo();
         }
 
-        if ($this->input->post('contenido_plano') != "") {
-            $mensaje = $this->input->post('contenido_plano');
-            $html = false;
-        } else {
-            $mensaje = $this->input->post('contenido_html');
-            $html = true;
-        }
-
         $email_data = array(
             'id_destinatarios'  => $id_destinatarios,
             'asunto'            => $this->input->post('asunto'),
-            'contenido'         => $mensaje,
-            'html'              => $html,
+            'contenido'         => $this->input->post('contenido'),
+            'html'              => true,
             'archivo_adjunto'   => $respuesta_archivo_adjunto,
             'id_correo'         => $id_correo
         );

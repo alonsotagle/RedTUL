@@ -120,24 +120,26 @@ class cursos extends CI_Controller {
     {
         $cursos = $this->curso_model->consulta_cursos();
 
-        foreach($cursos as $llave => &$curso)
-        {
-            if ($curso['curso_tipo'] == '0')
+        if ($cursos) {
+            foreach($cursos as $llave => &$curso)
             {
-                $curso['curso_tipo'] = 'Presencial';
-            }else{
-                $curso['curso_tipo'] = 'En línea';
-            }
+                if ($curso['curso_tipo'] == '0')
+                {
+                    $curso['curso_tipo'] = 'Presencial';
+                }else{
+                    $curso['curso_tipo'] = 'En línea';
+                }
 
-            if ($curso['curso_cupo'] == '0') {
-                $curso['curso_cupo'] = "No se registró cupo";
-                $curso['curso_cupo_disponible'] = "No se registró cupo";
-            }else{
-                $curso_inscritos = $this->curso_model->contar_inscritos($curso['id_curso']);
-                $curso['curso_cupo_disponible'] = $curso['curso_cupo'] - $curso_inscritos;
-            }
+                if ($curso['curso_cupo'] == '0') {
+                    $curso['curso_cupo'] = "No se registró cupo";
+                    $curso['curso_cupo_disponible'] = "No se registró cupo";
+                }else{
+                    $curso_inscritos = $this->curso_model->contar_inscritos($curso['id_curso']);
+                    $curso['curso_cupo_disponible'] = $curso['curso_cupo'] - $curso_inscritos;
+                }
 
-            $curso['curso_instructor'] = $this->curso_model->consulta_instructores_nombre_curso($curso['id_curso']);
+                $curso['curso_instructor'] = $this->curso_model->consulta_instructores_nombre_curso($curso['id_curso']);
+            }
         }
 
         print_r(json_encode($cursos));
@@ -214,10 +216,10 @@ class cursos extends CI_Controller {
                 $parametros_busqueda['materno_instructor'] = "";
             }
 
-            $resultado_busqueda['resultado'] = $this->curso_model->buscar($parametros_busqueda);
+            $cursos = $this->curso_model->buscar($parametros_busqueda);
 
-            if (!is_null($resultado_busqueda['resultado'])) {
-                foreach($resultado_busqueda['resultado'] as $llave => &$curso)
+            if ($cursos) {
+                foreach($cursos as $llave => &$curso)
                 {
                     if ($curso['curso_tipo'] == '0')
                     {
@@ -226,13 +228,18 @@ class cursos extends CI_Controller {
                         $curso['curso_tipo'] = 'En línea';
                     }
                     $curso['curso_instructor'] = $this->curso_model->consulta_instructores_nombre_curso($curso['id_curso']);
+
+                    if ($curso['curso_cupo'] == '0') {
+                        $curso['curso_cupo'] = "No se registró cupo";
+                        $curso['curso_cupo_disponible'] = "No se registró cupo";
+                    }else{
+                        $curso_inscritos = $this->curso_model->contar_inscritos($curso['id_curso']);
+                        $curso['curso_cupo_disponible'] = $curso['curso_cupo'] - $curso_inscritos;
+                    }
                 }
             }
 
-            $this->load->view('template/header');
-            $this->load->view('template/menu');
-            $this->load->view('buscar_curso',$resultado_busqueda);
-            $this->load->view('template/footer');
+            print_r(json_encode($cursos));
 
         }
     }

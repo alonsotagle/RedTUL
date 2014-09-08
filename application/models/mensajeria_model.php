@@ -139,7 +139,7 @@ class mensajeria_model extends CI_Model{
 
         $this->db->from('correo');
 
-        $this->db->order_by('correo_fecha_creacion desc, correo_hora_envio desc');
+        $this->db->order_by('correo_fecha_creacion desc, correo_hora_creacion desc');
 
         $this->db->limit(10);
 
@@ -227,6 +227,7 @@ class mensajeria_model extends CI_Model{
 
     public function registrar_correo($correo)
     {
+
         $this->db->insert('correo', $correo);
 
         return  $this->db->insert_id();

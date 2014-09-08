@@ -45,12 +45,32 @@
 								<td>'+correo_fecha_creacion[2]+"/"+correo_fecha_creacion[1]+"/"+correo_fecha_creacion[0]+'</td>\
 								<td>'+correo_fecha_envio[2]+"/"+correo_fecha_envio[1]+"/"+correo_fecha_envio[0]+'<br>'+value['correo_hora_envio']+'</td>\
 								<td>';
+
 							if (value['destinatarios']) {
+
+								var destinatarios_global = "";
+								var destinatarios_resumen = "";
+
 								$.each(value['destinatarios'], function(index_dest, value_dest) {
-									row_tabla += value_dest['contacto_nombre']+" "+value_dest['contacto_ap_paterno']+" "+value_dest['contacto_ap_materno']+"<br>";
+									if(index_dest == value['destinatarios'].length - 1){
+										destinatarios_global += value_dest['contacto_nombre']+" "+value_dest['contacto_ap_paterno']+" "+value_dest['contacto_ap_materno'];
+									}else{
+										destinatarios_global += value_dest['contacto_nombre']+" "+value_dest['contacto_ap_paterno']+" "+value_dest['contacto_ap_materno']+", ";
+									}
 								});
+
+								if (value['destinatarios'].length > 3) {
+									destinatarios_resumen += value['destinatarios'][0]['contacto_nombre']+" "+value['destinatarios'][0]['contacto_ap_paterno']+" "+value['destinatarios'][0]['contacto_ap_materno']+", ";
+									destinatarios_resumen += value['destinatarios'][1]['contacto_nombre']+" "+value['destinatarios'][1]['contacto_ap_paterno']+" "+value['destinatarios'][1]['contacto_ap_materno']+", ";
+									destinatarios_resumen += value['destinatarios'][2]['contacto_nombre']+" "+value['destinatarios'][2]['contacto_ap_paterno']+" "+value['destinatarios'][2]['contacto_ap_materno']+" ...";
+									row_tabla += '<span title="'+destinatarios_global+'">'+destinatarios_resumen+'</span>';
+								}else{
+									row_tabla += destinatarios_global;
+								}
 							}
+
 							row_tabla += '</td>';
+
 							if (value['correo_estatus'] == 1) {
 								row_tabla += '<td>\
 									<img id='+value['id_correo']+' class="img_editar_correo"\
@@ -59,6 +79,7 @@
 							}else{
 								row_tabla += "<td></td></tr>";
 							}
+
 							$('#tabla_correos tbody').append(row_tabla);
 						});
 					}
@@ -283,6 +304,7 @@
 
 		$("#programar_correo_fecha").prop('disabled', true);
 		$("#programar_correo_hora").prop('disabled', true);
+		
 		$("input[name=envio]").change(function(){
 			if ($('input[name=envio]:checked').val() == 1) {
 				$("#programar_correo_fecha").prop('disabled', false);
@@ -709,52 +731,52 @@
 			</fieldset>
 
 			<form id="frm_enviar_correo" action="<?= site_url('mensajeria/mandar_correo') ?>" method="POST" enctype="multipart/form-data">
-					<fieldset class="seccion_envio_correo">
-						<legend>Detalle del correo
-							<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Cuerpo principal del correo, asunto, archivos y cuerpo del correo." class="icon_tooltip">
-						</legend>
-						<label class="label_nuevo_correo" for="nuevo_correo_plantilla">Usar plantilla
-							<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Se le recomienda revisar la redacción del texto agregado." class="icon_tooltip">
-						</label>
-						<select id="nuevo_correo_plantilla" class="input_envia_correo">
-							<option selected value="">- Seleccione una opci&oacute;n -</option>
-						</select>
+				<fieldset class="seccion_envio_correo">
+					<legend>Detalle del correo
+						<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Cuerpo principal del correo, asunto, archivos y cuerpo del correo." class="icon_tooltip">
+					</legend>
+					<label class="label_nuevo_correo" for="nuevo_correo_plantilla">Usar plantilla
+						<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Se le recomienda revisar la redacción del texto agregado." class="icon_tooltip">
+					</label>
+					<select id="nuevo_correo_plantilla" class="input_envia_correo">
+						<option selected value="">- Seleccione una opci&oacute;n -</option>
+					</select>
+					<br>
+						<label class="label_nuevo_correo" for="nuevo_correo_asunto">Asunto</label>
+						<input type="text" class="input_envia_correo validate[required]" id="nuevo_correo_asunto" size="50" name="asunto">
 						<br>
-							<label class="label_nuevo_correo" for="nuevo_correo_asunto">Asunto</label>
-							<input type="text" class="input_envia_correo validate[required]" id="nuevo_correo_asunto" size="50" name="asunto">
-							<br>
-							<label class="label_nuevo_correo">Datos adjuntos</label>
-							<input type="file" id="nuevo_correo_archivos_adjuntos" name="userfile">
-							<br>
-							<label class="label_nuevo_correo" for="nuevo_correo_contenido">Contenido del correo
-								<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="El texto introducido puede contener etiquetas de HTML." class="icon_tooltip">
-							</label>
-							<textarea spellcheck="false" id="nuevo_correo_contenido" class="textarea_cuerpo_correo validate[required]" data-prompt-position="topLeft" name="contenido"></textarea>
-					</fieldset>
-					<fieldset class="seccion_envio_correo">
-						<legend>Env&iacute;o
-							<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Aquí se puede enviar el correo de inmediato o bien se programa la fecha y hora de su env&iacute;o." class="icon_tooltip">
-						</legend>
-						<div class="programar_envio_correo">
-							<input type="radio" form="frm_enviar_correo" name="envio" id="programar_correo_inmed" class="validate[required] radio" value="0">
-							<label for="programar_correo_inmed">Enviar inmediatamente</label>
-						</div>
-						<div class="programar_envio_correo programar_envio_correo_posterior">
-							<input type="radio" form="frm_enviar_correo" name="envio" id="programar_correo_posterior" class="input_envia_correo validate[required] radio" value="1">
-							<label for="programar_correo_posterior" class="label_programar_posterior">Programar env&iacute;o</label>
-							<br>
-							<label class="label_programar_posterior" for="programar_correo_fecha">* Fecha de env&iacute;o</label>
-							<input class="input_envia_correo" id="programar_correo_fecha" form="frm_enviar_correo" name="fecha_envio" data-prompt-position="topLeft">
-							<br>
-							<label class="label_programar_posterior" for="programar_correo_hora">* Hora de env&iacute;o
-								<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Formato horario de 24 horas.">
-							</label>
-							<input type="time" class="input_envia_correo" id="programar_correo_hora" form="frm_enviar_correo" name="hora_envio" data-prompt-position="topLeft">
-							<br>
-						</div>
-					</fieldset>
-					<input type="submit" form="frm_enviar_correo" id="btn_enviar_correo">
-				</form>
+						<label class="label_nuevo_correo">Datos adjuntos</label>
+						<input type="file" id="nuevo_correo_archivos_adjuntos" name="userfile">
+						<br>
+						<label class="label_nuevo_correo" for="nuevo_correo_contenido">Contenido del correo
+							<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="El texto introducido puede contener etiquetas de HTML." class="icon_tooltip">
+						</label>
+						<textarea spellcheck="false" id="nuevo_correo_contenido" class="textarea_cuerpo_correo validate[required]" data-prompt-position="topLeft" name="contenido"></textarea>
+				</fieldset>
+				<fieldset class="seccion_envio_correo">
+					<legend>Env&iacute;o
+						<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Aquí se puede enviar el correo de inmediato o bien se programa la fecha y hora de su env&iacute;o." class="icon_tooltip">
+					</legend>
+					<div class="programar_envio_correo">
+						<input type="radio" form="frm_enviar_correo" name="envio" id="programar_correo_inmed" class="validate[required] radio" value="0">
+						<label for="programar_correo_inmed">Enviar inmediatamente</label>
+					</div>
+					<div class="programar_envio_correo programar_envio_correo_posterior">
+						<input type="radio" form="frm_enviar_correo" name="envio" id="programar_correo_posterior" class="input_envia_correo validate[required] radio" value="1">
+						<label for="programar_correo_posterior" class="label_programar_posterior">Programar env&iacute;o</label>
+						<br>
+						<label class="label_programar_posterior" for="programar_correo_fecha">* Fecha de env&iacute;o</label>
+						<input class="input_envia_correo" id="programar_correo_fecha" form="frm_enviar_correo" name="fecha_envio" data-prompt-position="topLeft">
+						<br>
+						<label class="label_programar_posterior" for="programar_correo_hora">* Hora de env&iacute;o
+							<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Formato horario de 24 horas.">
+						</label>
+						<input type="time" class="input_envia_correo" id="programar_correo_hora" form="frm_enviar_correo" name="hora_envio" data-prompt-position="topLeft">
+						<br>
+					</div>
+				</fieldset>
+				<input type="submit" form="frm_enviar_correo" id="btn_enviar_correo">
+			</form>
 		</div>
 
 		<div id="tabs-2">

@@ -825,6 +825,11 @@ fieldset > legend{
 	width: 185px;
 }
 
+.fondo_instancia_editable, .fondo_instancia_editable:hover{
+	background-color: dimgrey !important;
+	color: white !important;
+}
+
 /* Inicia error404 */
 
 #mensaje_error{

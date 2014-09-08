@@ -131,12 +131,12 @@
 				</label>
 				<input type="text" id="curso_cupo" name="curso_cupo" maxlength="3" class="input_nuevo_curso_cupo validate[custom[numero]]">
 				<br>
-				<label for="contacto_instancias" class="label_nuevo_curso_textarea label_nuevo_curso">* Instructor a asignar
-					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Señala el o los instructores que estarán asignados para impartir dicho curso.">
+				<label for="contacto_instancias" class="label_nuevo_curso_textarea label_nuevo_curso">* Instructor(es) a asignar
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Señala el o los instructores que estarán asignados para impartir dicho curso. Presiona la tecla Ctrl+">
 				</label>
 
 				<select name="curso_instructor[]" id="curso_instructor" class="validate[required]" size=10 multiple>
-					<option value="" disabled>- Seleccione una opción -</option>
+					<option value="" disabled>- Seleccione una o m&aacute;s opciones -</option>
 				</select>
 				<br>
 				<label for="curso_ubicacion" class="label_nuevo_curso">Ubicaci&oacute;n
@@ -149,7 +149,7 @@
 				</label>
 				<input type="text" id="curso_url_ubicacion" name="curso_url_ubicacion">
 				<br>
-				<label for="curso_telefono" class="label_nuevo_curso">T&eacute;lefono</label>
+				<label for="curso_telefono" class="label_nuevo_curso">Tel&eacute;fono</label>
 				<input type="text" id="curso_telefono" name="curso_telefono" size="10" maxlength="10" class="input_frm_nuevo validate[custom[numero]]">
 				<label for="curso_telefono_extension">ext.</label>
 				<input type="text" id="curso_telefono_extension" name="curso_telefono_extension" size="5" maxlength="5" class="validate[custom[numero]]">

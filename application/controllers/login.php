@@ -46,7 +46,7 @@ class login extends CI_Controller {
         }
     }
 
-    function token() {
+    public function token() {
         $token = md5(uniqid(rand(), true));
         $this->session->set_userdata('token', $token);
         return $token;

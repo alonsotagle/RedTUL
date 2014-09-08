@@ -106,6 +106,8 @@ class curso_model extends CI_Model{
             $this->db->where('curso.curso_fecha_fin <=', $parametros_busqueda['fin_curso']);
         }
 
+        $this->db->distinct();
+
         $query = $this->db->get();
 
         if ($query -> num_rows() > 0)

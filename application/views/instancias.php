@@ -118,14 +118,20 @@
 		});
 
 		$("#despliega_instancias").on("click", "table tbody tr td .editar_instancia", function(event){
+			
 			$(".guardar_instancia").not(this).parent().prev().attr("contenteditable", false);
 			$(".guardar_instancia").not(this).toggleClass("guardar_instancia");
+			
 			var nombre_instancia = $(this).parent().prev();
+
 			if ($(this).hasClass("guardar_instancia")) {
 				nombre_instancia.attr("contenteditable", false);
+				nombre_instancia.removeClass("fondo_instancia_editable");
 			}else{
 				nombre_instancia.attr("contenteditable", true).focus();
+				nombre_instancia.addClass("fondo_instancia_editable");
 			}
+
 			$(this).toggleClass("guardar_instancia");
 		});
 

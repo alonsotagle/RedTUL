@@ -1,14 +1,16 @@
 <script>
     $(document).ready(function(){
 
-    	$( document ).tooltip();
+    	$("#frm_buscar_contacto").validationEngine({promptPosition: "centerRight", scroll: false});
+
+        $("#menu_contactos").addClass("seleccion_menu");
 
     	$.ajax("<?= site_url('contactos/consulta_instancias')?>", {
 			dataType: 'json',
 			type: 'post',
 			success: function(resultado)
 			{
-				if (resultado != null) {
+				if (resultado) {
 
 					var instancias = [];
 
@@ -44,7 +46,7 @@
 		type: 'post',
 		success: function(resultado)
 		{
-			if (resultado != null) {
+			if (resultado) {
 
 				$.each(resultado, function( index, value ) {
 					var url_detalle = "<?= site_url('contactos/detalle_contacto') ?>";
@@ -89,10 +91,6 @@
 				return false;
 			}
 		});
-
-        $("#frm_buscar_contacto").validationEngine({promptPosition: "centerRight", scroll: false});
-
-        $("#menu_contactos").addClass("seleccion_menu");
 
         $("#btn_buscar_contacto").click(function(event){
 			event.preventDefault();

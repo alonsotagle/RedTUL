@@ -247,7 +247,7 @@ body {
 	background: #f6f6f6;
 }
 
-.tables tr:hover td {
+.tables tr:hover:not(.fondo_instancia_editable) td {
 	background: #f2f2f2;
 	background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);	
 	background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
@@ -825,8 +825,11 @@ fieldset > legend{
 	width: 185px;
 }
 
-.fondo_instancia_editable, .fondo_instancia_editable:hover{
+.fondo_instancia_editable{
 	background-color: dimgrey !important;
+}
+
+.fondo_instancia_editable td{
 	color: white !important;
 }
 

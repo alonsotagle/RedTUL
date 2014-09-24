@@ -10,7 +10,7 @@
 				if (resultado != null) {
 					$.each(resultado, function( index, value ) {
 						$('#despliega_instancias table tbody').append('<tr>\
-							<td class="instancias_nombre">'+value['instancia_nombre']+'</td>\
+							<td class="instancias_nombre" spellcheck="false">'+value['instancia_nombre']+'</td>\
 							<td>\
 							<div \
 							class="editar_instancia" id="'+value['id_instancia']+'"></div>\
@@ -53,7 +53,7 @@
 
 							$.each(resultado, function(index, value){
 								$('#despliega_instancias table tbody').append('<tr>\
-									<td class="instancias_nombre">'+value['instancia_nombre']+'</td>\
+									<td class="instancias_nombre" spellcheck="false">'+value['instancia_nombre']+'</td>\
 									<td>\
 									<div \
 									class="editar_instancia" id="'+value['id_instancia']+'"></div>\
@@ -118,19 +118,12 @@
 		});
 
 		$("#despliega_instancias").on("click", "table tbody tr td .editar_instancia", function(event){
-			
 			$(".guardar_instancia").not(this).parent().prev().attr("contenteditable", false);
 			$(".guardar_instancia").not(this).toggleClass("guardar_instancia");
-			
-			var nombre_instancia = $(this).parent().prev();
+			$(".fondo_instancia_editable").removeClass("fondo_instancia_editable");
 
-			if ($(this).hasClass("guardar_instancia")) {
-				nombre_instancia.attr("contenteditable", false);
-				nombre_instancia.removeClass("fondo_instancia_editable");
-			}else{
-				nombre_instancia.attr("contenteditable", true).focus();
-				nombre_instancia.addClass("fondo_instancia_editable");
-			}
+			$(this).parent().prev().attr("contenteditable", true).focus();
+			$(this).parent().parent().addClass("fondo_instancia_editable");
 
 			$(this).toggleClass("guardar_instancia");
 		});
@@ -158,22 +151,24 @@
 
 		$("#btn_registrar_instancia").click(function(event){
 			event.preventDefault();
-			var datos={
-				'instancia_nombre'	: $("#nueva_instancia").val()
-			};
+			if ($("#frm_registrar_instancia").validationEngine('validate')) {
+				var datos={
+					'instancia_nombre'	: $("#nueva_instancia").val()
+				};
 
-			$.ajax("<?= site_url('instancias/registrar')?>",{
-				data: datos,
-				dataType: 'json',
-				type: 'post',
-				complete: function(){
-					$("#frm_registrar_instancia").hide();
-					$("#btn_nueva_instancia").show();
-					alert("La información se guardó satisfactoriamente");
-					$('#despliega_instancias table tbody').find("tr:gt(0)").remove();
-					consulta_instancias();
-				}
-			});
+				$.ajax("<?= site_url('instancias/registrar')?>",{
+					data: datos,
+					dataType: 'json',
+					type: 'post',
+					complete: function(){
+						$("#frm_registrar_instancia").hide();
+						$("#btn_nueva_instancia").show();
+						alert("La información se guardó satisfactoriamente");
+						$('#despliega_instancias table tbody').find("tr:gt(0)").remove();
+						consulta_instancias();
+					}
+				});
+			}
 		});
     }); 
 </script>
@@ -208,7 +203,7 @@
 		<fieldset>
 			<label for="nueva_instancia">Nueva instancia</label>
 			<br>
-			<input type="text" maxlenght="150" id="nueva_instancia">
+			<input type="text" maxlenght="150" id="nueva_instancia" class="validate[required]">
 			<input type="submit" id="btn_registrar_instancia" value="Guardar">
 		</fieldset>
 	</form>

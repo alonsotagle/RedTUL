@@ -260,15 +260,25 @@ class cursos extends CI_Controller {
             $this->load->view('template/footer');
         }else{
 
+            $nombre_archivos_antiguos = $this->curso_model->eliminar_archivos($id_curso);
+
             if ($_FILES['curso_temario']['size'] == 0) {
                 $respuesta_temario = $this->input->post('temario_anterior');
             }else{
+                if ($nombre_archivos_antiguos['curso_temario'] != "") {
+                    $ruta_temario = 'assets/temarios_cursos/'.$nombre_archivos_antiguos['curso_temario'];
+                    unlink($ruta_temario);
+                }
                 $respuesta_temario = $this->subir_temario();
             }
 
             if ($_FILES['curso_flyer']['size'] == 0) {
                 $respuesta_flyer = $this->input->post('flyer_anterior');
             }else{
+                if ($nombre_archivos_antiguos['curso_flyer'] != "") {
+                    $ruta_flyer = 'assets/flyers_cursos/'.$nombre_archivos_antiguos['curso_flyer'];
+                    unlink($ruta_flyer);
+                }
                 $respuesta_flyer = $this->subir_flyer();
             }
 

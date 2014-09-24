@@ -64,7 +64,30 @@ class contacto_model extends CI_Model{
 
     public function eliminar($id_contacto)
     {
+        $this->db->select('contacto_avatar');
+        $this->db->from('contacto');
+        $this->db->where('id_contacto', $id_contacto);
+
+        $query = $this->db->get();
+
+        $nombre_archivo = $query->row_array();
+
         $this->db->delete('contacto', array('id_contacto' => $id_contacto));
+
+        return $nombre_archivo;
+    }
+
+    public function eliminar_archivos($id_contacto)
+    {
+        $this->db->select('contacto_avatar');
+        $this->db->from('contacto');
+        $this->db->where('id_contacto', $id_contacto);
+
+        $query = $this->db->get();
+
+        $nombre_archivo = $query->row_array();
+
+        return $nombre_archivo;
     }
 
     public function consulta_contacto($id_contacto)

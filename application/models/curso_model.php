@@ -61,6 +61,19 @@ class curso_model extends CI_Model{
         return $nombre_archivos;
     }
 
+    public function eliminar_archivos($id_curso)
+    {
+        $this->db->select('curso_flyer, curso_temario');
+        $this->db->from('curso');
+        $this->db->where('id_curso', $id_curso);
+
+        $query = $this->db->get();
+
+        $nombre_archivos = $query->row_array();
+
+        return $nombre_archivos;
+    }
+
     public function buscar($parametros_busqueda)
     {
         $this->db->select('curso.id_curso,

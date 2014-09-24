@@ -138,7 +138,12 @@ class contactos extends CI_Controller {
 
     function eliminar($id_contacto)
     {
-        $this->contacto_model->eliminar($id_contacto);
+        $nombre_avatar = $this->contacto_model->eliminar($id_contacto);
+
+        if ($nombre_avatar['contacto_avatar'] != "") {
+            $ruta_avatar = 'assets/img_avatar/'.$nombre_avatar['contacto_avatar'];
+            unlink($ruta_avatar);
+        }
 
         redirect('contactos');
     }
@@ -155,9 +160,15 @@ class contactos extends CI_Controller {
             $this->load->view('template/footer');
         }else{
 
+            $nombre_avatar = $this->contacto_model->eliminar_archivos($id_contacto);
+
             if ($_FILES['contacto_avatar']['size'] == 0) {
                 $respuesta_avatar = $this->input->post('contacto_avatar_old');;
             }else{
+                if ($nombre_avatar['contacto_avatar'] != "") {
+                    $ruta_avatar = 'assets/img_avatar/'.$nombre_avatar['contacto_avatar'];
+                    unlink($ruta_avatar);
+                }
                 $respuesta_avatar = $this->subir_avatar();
             }
 

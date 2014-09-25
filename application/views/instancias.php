@@ -118,14 +118,15 @@
 		});
 
 		$("#despliega_instancias").on("click", "table tbody tr td .editar_instancia", function(event){
-			$(".guardar_instancia").not(this).parent().prev().attr("contenteditable", false);
-			$(".guardar_instancia").not(this).toggleClass("guardar_instancia");
+			$(".guardar_instancia").parent().prev().attr("contenteditable", false);
+			$(".guardar_instancia").removeClass("guardar_instancia");
 			$(".fondo_instancia_editable").removeClass("fondo_instancia_editable");
 
 			$(this).parent().prev().attr("contenteditable", true).focus();
 			$(this).parent().parent().addClass("fondo_instancia_editable");
 
-			$(this).toggleClass("guardar_instancia");
+			$(this).addClass("guardar_instancia");
+			$(this).removeClass("editar_instancia");
 		});
 
 		$("#despliega_instancias").on("click", "table tbody tr td .guardar_instancia", function(event){
@@ -140,6 +141,11 @@
 				dataType: 'json',
 				type: 'post'
 			});
+
+			$(this).addClass("editar_instancia");
+			$(this).removeClass("guardar_instancia");
+			$(this).parent().prev().attr("contenteditable", false);
+			$(".fondo_instancia_editable").removeClass("fondo_instancia_editable");
 		});
 
 		$("#frm_registrar_instancia").hide();

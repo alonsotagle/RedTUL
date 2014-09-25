@@ -819,6 +819,10 @@ fieldset > legend{
 	background-position: center;
 }
 
+.guardar_instancia:hover{
+	cursor: pointer;
+}
+
 #frm_registrar_instancia{
 	margin-top: 30px;
 	margin-left: 33%;

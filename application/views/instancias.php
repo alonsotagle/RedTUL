@@ -119,6 +119,7 @@
 
 		$("#despliega_instancias").on("click", "table tbody tr td .editar_instancia", function(event){
 			$(".guardar_instancia").parent().prev().attr("contenteditable", false);
+			$(".guardar_instancia").addClass("editar_instancia");
 			$(".guardar_instancia").removeClass("guardar_instancia");
 			$(".fondo_instancia_editable").removeClass("fondo_instancia_editable");
 

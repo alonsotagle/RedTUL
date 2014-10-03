@@ -851,3 +851,8 @@ fieldset > legend{
 	font-weight: bolder;
 	font-size: large;
 }
+
+/* Inicia LOGIN */
+#login_form{
+	text-align: center;
+}

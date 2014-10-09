@@ -421,6 +421,10 @@ fieldset > legend{
   font-size: 10px;
 }
 
+#btn_buscar_curso{
+	float: right;
+}
+
 /* Vista curso.php */
 #conf_contacto_leyenda{
 	background: url('../img/icono_info.png') no-repeat;
@@ -436,19 +440,15 @@ fieldset > legend{
 	float: left;
 	font-size: 15px;
 	font-weight: bold;
-	margin: 0px 0px -10px 20px;
+	width: 300px;
 }
 
 .conf_contacto_valores{
 	margin-bottom: 25px;
-	margin-left: 310px;
 	padding-right: 20px;
 	text-align: justify;
 }
 
-#despliega_cursos{
-	min-height: 140px;
-}
 /* Vista nuevo_curso.php */
 .encabezado_form_nuevo_curso{
 	font-size: 18px;
@@ -848,11 +848,23 @@ fieldset > legend{
 }
 
 #mensaje_error p{
-	font-weight: bolder;
 	font-size: large;
+	font-weight: bolder;
 }
 
 /* Inicia LOGIN */
 #login_form{
+	background-color: #1b5799;
+	border-radius: 25px;
+	border: 1px solid black;
+	box-shadow: 0px 0px 15px black;
+	color: #fff;
+	margin: 40px auto;
+	padding: 40px 0px;
 	text-align: center;
+	width: 330px;
+}
+
+#despliega_cursos_inicio{
+	min-height: 140px;
 }

@@ -12,8 +12,6 @@ class login extends CI_Controller {
         parent::__construct();
         $this->load->model('login_model');
         $this->load->library('form_validation');
-        $this->load->library('session');
-        $this->load->library('encrypt');
     }
 
     public function index() {
@@ -41,8 +39,8 @@ class login extends CI_Controller {
 
             if ($check_user) {
                 $data = array(
-                    'id'    => $check_user->id_usuario,
-                    'logged'   => TRUE
+                    'id'        => $check_user->id_login,
+                    'logged'    => TRUE
                     );
                 $this->session->set_userdata($data);
             }

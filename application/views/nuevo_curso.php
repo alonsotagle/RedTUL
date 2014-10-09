@@ -71,6 +71,7 @@
 		<div id="tabs-1">
 			<form id="frm_nuevo_curso" action="<?= site_url('cursos/registrar_curso')?>" method="POST" enctype="multipart/form-data">
 				<fieldset>
+				<p>Los datos marcados con asterisco son obligatorios.</p>
 				<legend>Nuevo curso</legend>
 				<p class="encabezado_form_nuevo_curso">Datos Generales</p>
 				<label for="curso_titulo" class="label_nuevo_curso">* T&iacute;tulo del curso

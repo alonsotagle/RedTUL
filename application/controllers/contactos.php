@@ -28,9 +28,8 @@ class contactos extends CI_Controller {
     }
 
     function registrar_contacto(){
-        if (!empty($_POST)) {
-
-            if ($_FILES['contacto_avatar']['size'] == 0) {
+        if(!empty($_POST)){
+            if($_FILES['contacto_avatar']['size'] == 0){
                 $respuesta_avatar = "";
             }else{
                 $respuesta_avatar = $this->subir_avatar();
@@ -102,6 +101,12 @@ class contactos extends CI_Controller {
                 $contacto['contacto_avatar'] = $tag_img;
             }else{
                 $contacto['contacto_avatar'] = "";
+            }
+
+            foreach ($contacto as $campo => $valor) {
+                if ($contacto[$campo] == "") {
+                    $contacto[$campo] = "-";
+                }
             }
 
             $this->load->view('template/header');

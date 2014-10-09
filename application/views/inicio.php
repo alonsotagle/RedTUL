@@ -7,7 +7,7 @@
 		success: function(resultado)
 		{
 			if (resultado != null) {
-				$('#despliega_cursos').html("<table class='tables'>\
+				$('#despliega_cursos_inicio').html("<table class='tables'>\
 					<tr>\
 						<td>Nombre curso</td>\
 						<td>Tipo curso</td>\
@@ -19,7 +19,7 @@
 				</table>");
 
 				$.each(resultado, function( index, value ) {
-					$('#despliega_cursos table tbody').append('<tr>\
+					$('#despliega_cursos_inicio table tbody').append('<tr>\
 						<td>'+value['curso_titulo']+'</td>\
 						<td>'+value['curso_tipo']+'</td>\
 						<td>'+value['curso_fecha_inicio']+'</td>\
@@ -29,7 +29,7 @@
 					</tr>');
 				});
 			}else{
-				$('#despliega_cursos').html('No hay cursos próximos');
+				$('#despliega_cursos_inicio').html('No hay cursos próximos');
 			}
 		}
 		});
@@ -42,7 +42,7 @@
 
 	<fieldset>
 		<legend>Cursos pr&oacute;ximos</legend>
-		<div id="despliega_cursos"></div>
+		<div id="despliega_cursos_inicio"></div>
 	</fieldset>
 
 </div>

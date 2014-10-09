@@ -1,7 +1,7 @@
-<script>
-    $(document).ready(function(){
-        $("#menu_contactos").addClass("seleccion_menu");
-    });
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#menu_contactos").addClass("seleccion_menu");
+});
 </script>
 <!-- inicia contenido -->
 <div class="contenido_dinamico">

@@ -212,10 +212,8 @@
 			</tr>
 		</table>
 	</div>
-
 	<a href="<?= site_url('cursos/nuevo')?>">
 		<input type="button" id="btn_nuevo_curso" value="Nuevo curso"/>
 	</a>
-
 </div>
 <!-- termina contenido -->

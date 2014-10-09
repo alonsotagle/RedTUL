@@ -1,8 +1,3 @@
-<script>
-    $(document).ready(function(){
-
-    });
-</script>
 <!-- inicia contenido -->
 <div id="contenido_confirmacion">
 

@@ -180,5 +180,4 @@ class contacto_model extends CI_Model{
             return null;
         }
     }
-
 }

@@ -266,7 +266,7 @@ body {
 
 #frm_buscar_contacto{
 	border: 1px solid black;
-	height: 140px;
+	height: 170px;
 	margin-bottom: 30px;
 	padding: 15px;
 	width: 320px;
@@ -383,7 +383,7 @@ fieldset > legend{
 	height: 190px;
 	margin-bottom: 30px;
 	padding: 15px;
-	width: 350px;
+	width: 470px;
 }
 
 #frm_buscar_curso label{
@@ -397,7 +397,7 @@ fieldset > legend{
 	width: 60%;
 }
 
-#btn_nuevo_curso{
+.btn_nuevo_curso{
 	float: right;
 	margin-right: 30px;
 }
@@ -447,6 +447,10 @@ fieldset > legend{
 	margin-bottom: 25px;
 	padding-right: 20px;
 	text-align: justify;
+}
+
+.curso_acciones a{
+	text-decoration : none;
 }
 
 /* Vista nuevo_curso.php */
@@ -865,6 +869,16 @@ fieldset > legend{
 	width: 330px;
 }
 
+#login_form a{
+	text-decoration: none;
+	font-family: Helvetica;
+	font-size: 30px;
+	color: #FFF;
+}
+
+/* Inicia INICIO */
+
 #despliega_cursos_inicio{
-	min-height: 140px;
+	margin-top: 25px;
+	min-height: 100px;
 }

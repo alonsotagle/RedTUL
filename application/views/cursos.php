@@ -39,15 +39,17 @@
 							<td>'+value['curso_hora_inicio']+' a '+value['curso_hora_fin']+'</td>\
 							<td>'+value['curso_cupo']+'</td>\
 							<td>'+value['curso_cupo_disponible']+'</td>\
-							<td><a \
-							href="'+"<?= site_url('cursos/editar')?>"+"/"+value['id_curso']+'">\
-							<img \
-							src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
-							</a></td>\
-							<td><a \
-							href="'+"<?= site_url('cursos/eliminar')?>"+"/"+value['id_curso']+'" class="eliminar_curso">\
-							<img \
-							src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
+							<td class="curso_acciones"><a href="'+"<?= site_url('cursos/editar')?>"+"/"+value['id_curso']+'">\
+								<img src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'" title="Editar">\
+							</a><br>\
+							<a href="'+"<?= site_url('cursos/eliminar')?>"+"/"+value['id_curso']+'" class="eliminar_curso" >\
+								<img src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'" title="Eliminar">\
+							</a><br>\
+							<a href="'+"<?= site_url('cursos/agregar_material')?>"+"/"+value['id_curso']+'">\
+								<img src="'+"<?= base_url('assets/img/icono_agregar_material.png')?>"+'" title="Añadir material">\
+							</a><br>\
+							<a href="'+"<?= site_url('cursos/lista_asistencia')?>"+"/"+value['id_curso']+'">\
+								<img src="'+"<?= base_url('assets/img/icono_lista_asistencia.png')?>"+'" title="Generar lista de asistencia">\
 							</a></td>\
 						</tr>';
 
@@ -139,15 +141,17 @@
 									<td>'+value['curso_hora_inicio']+' a '+value['curso_hora_fin']+'</td>\
 									<td>'+value['curso_cupo']+'</td>\
 									<td>'+value['curso_cupo_disponible']+'</td>\
-									<td><a \
-									href="'+"<?= site_url('cursos/editar')?>"+"/"+value['id_curso']+'">\
-									<img \
-									src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
-									</a></td>\
-									<td><a \
-									href="'+"<?= site_url('cursos/eliminar')?>"+"/"+value['id_curso']+'" class="eliminar_curso">\
-									<img \
-									src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
+									<td class="curso_acciones"><a href="'+"<?= site_url('cursos/editar')?>"+"/"+value['id_curso']+'">\
+										<img src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'" title="Editar">\
+									</a><br>\
+									<a href="'+"<?= site_url('cursos/eliminar')?>"+"/"+value['id_curso']+'" class="eliminar_curso" >\
+										<img src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'" title="Eliminar">\
+									</a><br>\
+									<a href="'+"<?= site_url('cursos/agregar_material')?>"+"/"+value['id_curso']+'">\
+										<img src="'+"<?= base_url('assets/img/icono_agregar_material.png')?>"+'" title="Añadir material">\
+									</a><br>\
+									<a href="'+"<?= site_url('cursos/lista_asistencia')?>"+"/"+value['id_curso']+'">\
+										<img src="'+"<?= base_url('assets/img/icono_lista_asistencia.png')?>"+'" title="Generar lista de asistencia">\
 									</a></td>\
 								</tr>';
 
@@ -171,35 +175,41 @@
 	</div>
 
 	<form id="frm_buscar_curso" method="POST">
-		<label for="nombre_curso">Nombre curso</label>
-		<input type="text" maxlength="100" id="nombre_curso" name="nombre_curso" class="buscar_curso_textInput validate[groupRequired[buscar_curso]]"/>
-		<label for="tipo_curso">Tipo de curso</label>
+		<label for="tipo_curso">Tipo de curso o evento</label>
 		<select name="tipo_curso" id="tipo_curso" class="buscar_curso_textInput validate[groupRequired[buscar_curso]]">
+			<option selected value="">- Elija un tipo -</option>
+			<option value="0">Interno</option>
+			<option value="1">Externo</option>
+		</select>
+		<label for="nombre_curso">Título de curso o evento</label>
+		<input type="text" maxlength="100" id="nombre_curso" name="nombre_curso" class="buscar_curso_textInput validate[groupRequired[buscar_curso]]"/>
+		<label for="modalidad_curso">Modalidad de curso o evento</label>
+		<select name="modalidad_curso" id="modalidad_curso" class="buscar_curso_textInput validate[groupRequired[buscar_curso]]">
 			<option selected value="">- Elija un tipo -</option>
 			<option value="0">Presencial</option>
 			<option value="1">En l&iacute;nea</option>
 		</select>
-		<label for="instructor_curso">Instructor asignado</label>
+		<label for="instructor_curso">Instructor(es)/Ponentes</label>
 		<input type="text" maxlength="100" id="instructor_curso" name="instructor_curso" class="buscar_curso_textInput validate[groupRequired[buscar_curso]]"/>
-		<label for="estatus_curso">Estatus</label>
+		<label for="estatus_curso">Estatus de curso o evento</label>
 		<select name="estatus_curso" id="estatus_curso" class="buscar_curso_textInput validate[groupRequired[buscar_curso]]">
 			<option selected value="">- Elija un tipo -</option>
 			<option value="1">Vigente</option>
 			<option value="2">Pr&oacute;ximo</option>
 			<option value="3">Finalizado</option>
 		</select>
-		<label for="inicio_curso">Cursos impartidos entre</label>
+		<label for="inicio_curso">Por Fecha</label>
 		<input type="text" id="inicio_curso" name="inicio_curso" size="11" class="buscar_curso_fechas validate[condRequired[fin_curso], groupRequired[buscar_curso]] datepicker"/>
 		y
 		<input type="text" id="fin_curso" name="fin_curso" size="11" class="buscar_curso_fechas validate[condRequired[inicio_curso], groupRequired[buscar_curso]] datepicker"/>
-
+		<br>
 		<input type="submit" id="btn_buscar_curso" value="Buscar"/>
 	</form>
 
 	<div id="despliega_cursos">
 		<table class='tables'>
 			<tr>
-				<td>Nombre</td>
+				<td>T&iacute;tulo</td>
 				<td>Tipo</td>
 				<td>Instructor asignado</td>
 				<td>Estatus</td>
@@ -207,13 +217,15 @@
 				<td>Horario</td>
 				<td>Cupo total</td>
 				<td>Cupo disponible</td>
-				<td>Editar</td>
-				<td>Eliminar</td>
+				<td>Acciones</td>
 			</tr>
 		</table>
 	</div>
-	<a href="<?= site_url('cursos/nuevo')?>">
-		<input type="button" id="btn_nuevo_curso" value="Nuevo curso"/>
+	<a href="<?= site_url('cursos/nuevo_evento')?>">
+		<input type="button" class="btn_nuevo_curso" value="Nuevo evento"/>
+	</a>
+	<a href="<?= site_url('cursos/nuevo_curso')?>">
+		<input type="button" class="btn_nuevo_curso" value="Nuevo curso"/>
 	</a>
 </div>
 <!-- termina contenido -->

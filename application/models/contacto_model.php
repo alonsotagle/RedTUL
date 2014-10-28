@@ -29,12 +29,17 @@ class contacto_model extends CI_Model{
     						contacto.contacto_estatus,
     						instancia.instancia_nombre,
     						contacto.contacto_correo_inst,
-    						contacto.contacto_correo_per');
-        
+                            contacto.contacto_correo_per,
+    						contacto.contacto_IDU,
+                            rol_contacto.rol_contacto_descripcion');
+
 		$this->db->from('contacto');
-		$this->db->join('tipo_contacto', 'contacto.contacto_tipo = tipo_contacto.id_tipo_contacto');
+
+        $this->db->join('tipo_contacto', 'contacto.contacto_tipo = tipo_contacto.id_tipo_contacto');
 		$this->db->join('instancia', 'contacto.contacto_instancia = instancia.id_instancia');
-        $this->db->order_by("contacto.id_contacto", "asc"); 
+        $this->db->join('rol_contacto', 'contacto.contacto_rol = rol_contacto.id_rol_contacto');
+
+        $this->db->order_by("contacto.contacto_ap_paterno", "asc");
 
 		$query = $this->db->get();
 
@@ -124,10 +129,17 @@ class contacto_model extends CI_Model{
                             contacto.contacto_estatus,
                             instancia.instancia_nombre,
                             contacto.contacto_correo_inst,
-                            contacto.contacto_correo_per');
+                            contacto.contacto_correo_per,
+                            contacto.contacto_IDU,
+                            rol_contacto.rol_contacto_descripcion');
+
         $this->db->from('contacto');
+
         $this->db->join('tipo_contacto', 'contacto.contacto_tipo = tipo_contacto.id_tipo_contacto');
         $this->db->join('instancia', 'contacto.contacto_instancia = instancia.id_instancia');
+        $this->db->join('rol_contacto', 'contacto.contacto_rol = rol_contacto.id_rol_contacto');
+
+        $this->db->order_by("contacto.contacto_ap_paterno", "asc"); 
 
         if ($parametros_busqueda['nombre_contacto'] != "") {
             $this->db->like('contacto.contacto_nombre', $parametros_busqueda['nombre_contacto']);
@@ -154,6 +166,10 @@ class contacto_model extends CI_Model{
             $this->db->like('instancia.instancia_nombre', $parametros_busqueda['instancia_contacto']);
         }
 
+        if ($parametros_busqueda['instructor_contacto'] != "") {
+            $this->db->where('contacto.contacto_instructor', $parametros_busqueda['instructor_contacto']);
+        }
+
         $query = $this->db->get();
 
         if ($query -> num_rows() > 0)
@@ -177,6 +193,19 @@ class contacto_model extends CI_Model{
         {
             return $query->row_array();
         } else {
+            return null;
+        }
+    }
+
+    public function consulta_identificador($identificador){
+        $this->db->from('contacto');
+        $this->db->where('contacto_IDU', $identificador);
+
+        $query = $this->db->get();
+
+        if($query->num_rows() == 1){
+            return $query->row();
+        }else{
             return null;
         }
     }

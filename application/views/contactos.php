@@ -59,7 +59,9 @@ $(document).ready(function(){
 				}
 
 				$('#despliega_contactos table tbody').append('<tr>\
+					<td>'+value['contacto_IDU']+'</td>\
 					<td><a href="'+url_detalle+'" class="link_detalle">'+value['contacto_nombre']+' '+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+'</a></td>\
+					<td>'+value['rol_contacto_descripcion']+'</td>\
 					<td>'+value['tipo_contacto_descripcion']+'</td>\
 					<td>'+value['contacto_estatus']+'</td>\
 					<td>'+instancia_nombre+'</td>\
@@ -99,7 +101,8 @@ $(document).ready(function(){
 				'nombre_contacto' 	: $('#nombre_contacto').val(),
 				'correo_contacto' 	: $('#correo_contacto').val(),
 				'tipo_contacto' 	: $('#tipo_contacto').val(),
-				'instancia_contacto': $('#instancia_contacto').val()
+				'instancia_contacto': $('#instancia_contacto').val(),
+				'instructor_contacto': $('#instructor_contacto').val()
 			};
 
 			$.ajax({
@@ -121,24 +124,26 @@ $(document).ready(function(){
 								instancia_nombre = value['instancia_nombre'];
 							}
 
-							$('#despliega_contactos table tbody').append('<tr>\
-								<td><a href="'+url_detalle+'" class="link_detalle">'+value['contacto_nombre']+' '+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+'</a></td>\
-								<td>'+value['tipo_contacto_descripcion']+'</td>\
-								<td>'+value['contacto_estatus']+'</td>\
-								<td>'+instancia_nombre+'</td>\
-								<td>'+value['contacto_correo_inst']+'</td>\
-								<td>'+value['contacto_correo_per']+'</td>\
-								<td><a \
-								href="'+"<?= site_url('contactos/editar')?>"+"/"+value['id_contacto']+'">\
-								<img \
-								src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
-								</a></td>\
-								<td><a \
-								href="'+"<?= site_url('contactos/eliminar')?>"+"/"+value['id_contacto']+'" class="eliminar_contacto">\
-								<img \
-								src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
-								</a></td>\
-							</tr>');
+						$('#despliega_contactos table tbody').append('<tr>\
+							<td>'+value['contacto_IDU']+'</td>\
+							<td><a href="'+url_detalle+'" class="link_detalle">'+value['contacto_nombre']+' '+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+'</a></td>\
+							<td>'+value['rol_contacto_descripcion']+'</td>\
+							<td>'+value['tipo_contacto_descripcion']+'</td>\
+							<td>'+value['contacto_estatus']+'</td>\
+							<td>'+instancia_nombre+'</td>\
+							<td>'+value['contacto_correo_inst']+'</td>\
+							<td>'+value['contacto_correo_per']+'</td>\
+							<td><a \
+							href="'+"<?= site_url('contactos/editar')?>"+"/"+value['id_contacto']+'">\
+							<img \
+							src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
+							</a></td>\
+							<td><a \
+							href="'+"<?= site_url('contactos/eliminar')?>"+"/"+value['id_contacto']+'" class="eliminar_contacto">\
+							<img \
+							src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
+							</a></td>\
+						</tr>');
 						});
 					}else{
 						$('#despliega_contactos table tbody').find("tr:gt(0)").remove();
@@ -162,24 +167,30 @@ $(document).ready(function(){
 		<input type="text" id="nombre_contacto" maxlength="50" name="nombre_contacto" class="buscar_contacto_textInput validate[groupRequired[buscar_contacto]]"/>
 		<label for="correo_contacto">Correo electr&oacute;nico</label>
 		<input type="text" id="correo_contacto" maxlength="100" name="correo_contacto" class="buscar_contacto_textInput validate[groupRequired[buscar_contacto]]"/>
-		<label for="tipo_contacto">Tipo de contacto</label>
+		<label for="tipo_contacto">Tipo de usuario</label>
 		<select name="tipo_contacto" id="tipo_contacto" class="buscar_contacto_textInput validate[groupRequired[buscar_contacto]]">
 			<option selected value="">- Elija un tipo -</option>
-			<option value="1">Webmaster</option>
-			<option value="2">Responsable de comunicación</option>
-			<option value="3">Responsable técnico</option>
-			<option value="4">Otros</option>
+			<option value="0">Responsable técnico</option>
+			<option value="1">Responsable de comunicación</option>
 		</select>
 		<label for="instancia_contacto">Instancia</label>
 		<input type="text" id="instancia_contacto" name="instancia_contacto" class="buscar_contacto_textInput validate[groupRequired[buscar_contacto]"/>
+		<label for="instructor_contacto">Instructores postulados</label>
+		<select name="instructor_contacto" id="instructor_contacto" class="buscar_contacto_textInput validate[groupRequired[buscar_contacto]]">
+			<option selected value="">- Elija un tipo -</option>
+			<option value="1">Sí</option>
+			<option value="0">No</option>
+		</select>
 		<input type="submit" id="btn_buscar_contacto" value="Buscar"/>
 	</form>
 
 	<div id="despliega_contactos">
 		<table class='tables'>
 			<tr>
+				<td>Identificador Universitario (IDU)</td>
 				<td>Nombre completo</td>
-				<td>Tipo de contacto</td>
+				<td>Rol</td>
+				<td>Tipo de usuario</td>
 				<td>Estatus</td>
 				<td>Instancia</td>
 				<td>Correo institucional</td>

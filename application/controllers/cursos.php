@@ -21,10 +21,17 @@ class cursos extends CI_Controller {
         $this->load->view('template/footer');
     }
 
-    public function nuevo() {
+    public function nuevo_curso() {
         $this->load->view('template/header');
         $this->load->view('template/menu');
         $this->load->view('nuevo_curso');
+        $this->load->view('template/footer');
+    }
+
+    public function nuevo_evento() {
+        $this->load->view('template/header');
+        $this->load->view('template/menu');
+        $this->load->view('nuevo_evento');
         $this->load->view('template/footer');
     }
 
@@ -39,24 +46,28 @@ class cursos extends CI_Controller {
                 $respuesta_flyer = $this->subir_flyer();
             }
 
-            if ($respuesta_temario != "error_subida" && $respuesta_flyer != "error_subida") {
+            if($respuesta_temario != "error_subida" && $respuesta_flyer != "error_subida") {
                 $nuevo_curso = array(
-                    'curso_titulo' => $this->input->post('curso_titulo'),
-                    'curso_flyer' => $respuesta_flyer,
-                    'curso_tipo' => $this->input->post('curso_tipo'),
-                    'curso_descripcion' => $this->input->post('curso_descripcion'),
-                    'curso_objetivos' => $this->input->post('curso_objetivos'),
-                    'curso_temario' => $respuesta_temario,
-                    'curso_fecha_inicio' => $this->input->post('curso_fecha_inicio'),
-                    'curso_fecha_fin' => $this->input->post('curso_fecha_fin'),
-                    'curso_hora_inicio' => $this->input->post('curso_hora_inicio'),
-                    'curso_hora_fin' => $this->input->post('curso_hora_fin'),
-                    'curso_cupo' => $this->input->post('curso_cupo'),
-                    'curso_ubicacion' => $this->input->post('curso_ubicacion'),
-                    'curso_mapa_url' => $this->input->post('curso_url_ubicacion'),
-                    'curso_telefono' => $this->input->post('curso_telefono'),
-                    'curso_telefono_extension' => $this->input->post('curso_telefono_extension'),
-                    'curso_estatus' => 2
+                    'curso_titulo'              => $this->input->post('curso_titulo'),
+                    'curso_flyer'               => $respuesta_flyer,
+                    'curso_tipo'                => $this->input->post('curso_tipo'),
+                    'curso_descripcion'         => $this->input->post('curso_descripcion'),
+                    'curso_objetivos'           => $this->input->post('curso_objetivos'),
+                    'curso_temario'             => $respuesta_temario,
+                    'curso_fecha_inicio'        => $this->input->post('curso_fecha_inicio'),
+                    'curso_fecha_fin'           => $this->input->post('curso_fecha_fin'),
+                    'curso_hora_inicio'         => $this->input->post('curso_hora_inicio'),
+                    'curso_hora_fin'            => $this->input->post('curso_hora_fin'),
+                    'curso_cupo'                => $this->input->post('curso_cupo'),
+                    'curso_ubicacion'           => $this->input->post('curso_ubicacion'),
+                    'curso_mapa_url'            => $this->input->post('curso_url_ubicacion'),
+                    'curso_telefono'            => $this->input->post('curso_telefono'),
+                    'curso_telefono_extension'  => $this->input->post('curso_telefono_extension'),
+                    'curso_estatus'             => 2,
+                    'curso_evento'              => $this->input->post('curso_evento'),
+                    'curso_modalidad'           => $this->input->post('curso_modalidad'),
+                    'curso_entidad'             => $this->input->post('curso_entidad'),
+                    'curso_costo'               => $this->input->post('curso_costo')
                 );
 
                 if ($nuevo_curso['curso_cupo'] == "") {
@@ -65,14 +76,20 @@ class cursos extends CI_Controller {
 
                 $id_curso_creado = $this->curso_model->registrar_curso($nuevo_curso);
 
-                foreach ($this->input->post('curso_instructor') as $key => $value) {
-                    $this->curso_model->registrar_instructor_curso($id_curso_creado, $value);
+                if ($this->input->post('curso_instructor')) {
+                    foreach ($this->input->post('curso_instructor') as $key => $value) {
+                        $this->curso_model->registrar_instructor_curso($id_curso_creado, $value);
+                    }
                 }
 
                 $_POST = array();
 
-                $this->editar($id_curso_creado);
+                $enviar = array('id_curso' => $id_curso_creado);
+
+                $this->editar($enviar);
             }
+        }else{
+            redirect(site_url("error404"));
         }
     }
 
@@ -125,9 +142,9 @@ class cursos extends CI_Controller {
             {
                 if ($curso['curso_tipo'] == '0')
                 {
-                    $curso['curso_tipo'] = 'Presencial';
+                    $curso['curso_tipo'] = 'Interno';
                 }else{
-                    $curso['curso_tipo'] = 'En línea';
+                    $curso['curso_tipo'] = 'Externo';
                 }
 
                 if ($curso['curso_cupo'] == '0') {
@@ -141,7 +158,6 @@ class cursos extends CI_Controller {
                 $curso['curso_instructor'] = $this->curso_model->consulta_instructores_nombre_curso($curso['id_curso']);
             }
         }
-
         print_r(json_encode($cursos));
     }
 
@@ -167,11 +183,12 @@ class cursos extends CI_Controller {
         if (!empty($_POST)) {
 
             $parametros_busqueda = array(
-                'nombre_curso'  => $this->input->post('nombre_curso'),
-                'tipo_curso'    => $this->input->post('tipo_curso'),
-                'estatus_curso' => $this->input->post('estatus_curso'),
-                'inicio_curso'  => $this->input->post('inicio_curso'),
-                'fin_curso'     => $this->input->post('fin_curso')
+                'nombre_curso'      => $this->input->post('nombre_curso'),
+                'tipo_curso'        => $this->input->post('tipo_curso'),
+                'estatus_curso'     => $this->input->post('estatus_curso'),
+                'inicio_curso'      => $this->input->post('inicio_curso'),
+                'fin_curso'         => $this->input->post('fin_curso'),
+                'modalidad_curso'   => $this->input->post('tipo_curso')
             );
 
             $nombre_completo = $this->input->post('instructor_curso');
@@ -223,9 +240,9 @@ class cursos extends CI_Controller {
                 {
                     if ($curso['curso_tipo'] == '0')
                     {
-                        $curso['curso_tipo'] = 'Presencial';
+                        $curso['curso_tipo'] = 'Interno';
                     }else{
-                        $curso['curso_tipo'] = 'En línea';
+                        $curso['curso_tipo'] = 'Externo';
                     }
                     $curso['curso_instructor'] = $this->curso_model->consulta_instructores_nombre_curso($curso['id_curso']);
 
@@ -238,20 +255,19 @@ class cursos extends CI_Controller {
                     }
                 }
             }
-
             print_r(json_encode($cursos));
-
         }
     }
 
     function editar($id_curso)
     {
         if (empty($_POST)) {
+
             if (is_array($id_curso)) {
                 $var_id = $id_curso;
-                $var_id["nuevo"] = 1;
+                $var_id["mensaje_guardado"] = 1;
             }else{
-                $var_id = array('id_curso' => $id_curso, 'nuevo' => 0);
+                $var_id = array('id_curso' => $id_curso, 'mensaje_guardado' => 0);
             }
 
             $this->load->view('template/header');
@@ -283,22 +299,25 @@ class cursos extends CI_Controller {
             }
 
             $editar_curso = array(
-                'curso_titulo' => $this->input->post('curso_titulo'),
-                'curso_flyer' => $respuesta_flyer,
-                'curso_tipo' => $this->input->post('curso_tipo'),
-                'curso_descripcion' => $this->input->post('curso_descripcion'),
-                'curso_objetivos' => $this->input->post('curso_objetivos'),
-                'curso_temario' => $respuesta_temario,
-                'curso_fecha_inicio' => $this->input->post('curso_fecha_inicio'),
-                'curso_fecha_fin' => $this->input->post('curso_fecha_fin'),
-                'curso_hora_inicio' => $this->input->post('curso_hora_inicio'),
-                'curso_hora_fin' => $this->input->post('curso_hora_fin'),
-                'curso_cupo' => $this->input->post('curso_cupo'),
-                'curso_ubicacion' => $this->input->post('curso_ubicacion'),
-                'curso_mapa_url' => $this->input->post('curso_url_ubicacion'),
-                'curso_telefono' => $this->input->post('curso_telefono'),
-                'curso_telefono_extension' => $this->input->post('curso_telefono_extension'),
-                'curso_estatus' => 2
+                'curso_titulo'              => $this->input->post('curso_titulo'),
+                'curso_flyer'               => $respuesta_flyer,
+                'curso_tipo'                => $this->input->post('curso_tipo'),
+                'curso_descripcion'         => $this->input->post('curso_descripcion'),
+                'curso_objetivos'           => $this->input->post('curso_objetivos'),
+                'curso_temario'             => $respuesta_temario,
+                'curso_fecha_inicio'        => $this->input->post('curso_fecha_inicio'),
+                'curso_fecha_fin'           => $this->input->post('curso_fecha_fin'),
+                'curso_hora_inicio'         => $this->input->post('curso_hora_inicio'),
+                'curso_hora_fin'            => $this->input->post('curso_hora_fin'),
+                'curso_cupo'                => $this->input->post('curso_cupo'),
+                'curso_ubicacion'           => $this->input->post('curso_ubicacion'),
+                'curso_mapa_url'            => $this->input->post('curso_url_ubicacion'),
+                'curso_telefono'            => $this->input->post('curso_telefono'),
+                'curso_telefono_extension'  => $this->input->post('curso_telefono_extension'),
+                'curso_evento'              => $this->input->post('curso_evento'),
+                'curso_modalidad'           => $this->input->post('curso_modalidad'),
+                'curso_entidad'             => $this->input->post('curso_entidad'),
+                'curso_costo'               => $this->input->post('curso_costo')
             );
 
             $editar_curso['id_curso'] = $id_curso;
@@ -306,6 +325,7 @@ class cursos extends CI_Controller {
             $this->curso_model->editar_curso($editar_curso);
 
             $this->curso_model->borrar_instructor_curso($id_curso);
+
             foreach ($this->input->post('curso_instructor') as $key => $value) {
                 $this->curso_model->registrar_instructor_curso($id_curso, $value);
             }
@@ -465,9 +485,21 @@ class cursos extends CI_Controller {
         }
 
         if ($curso['curso_tipo'] == 0) {
-            $curso['curso_tipo'] = "Presencial";
+            $curso['curso_tipo'] = "Interno";
         }else{
-            $curso['curso_tipo'] = "En línea";
+            $curso['curso_tipo'] = "Externo";
+        }
+
+        if ($curso['curso_modalidad'] == 0) {
+            $curso['curso_modalidad'] = "Presencial";
+        }else{
+            $curso['curso_modalidad'] = "En línea";
+        }
+
+        if ($curso['curso_costo'] == 0) {
+            $curso['curso_costo'] = "No";
+        }else{
+            $curso['curso_costo'] = "Sí";
         }
 
         $tag_a = "<a href=".base_url('assets/temarios_cursos/')."/".$curso['curso_temario']." target='_blank'>Ver temario</a>";
@@ -550,7 +582,10 @@ class cursos extends CI_Controller {
             'registro_texto_registro'           => $this->input->post('configuracion_texto_registro'),
             'registro_texto_confirmacion'       => $this->input->post('configuracion_texto_confirmacion'),
             'registro_texto_agradecimientos'    => $this->input->post('configuracion_texto_agradecimientos'),
-            'registro_curso_id'                 => $this->input->post('configuracion_curso_id')
+            'registro_curso_id'                 => $this->input->post('configuracion_curso_id'),
+            'registro_curso_modalidad'          => $this->input->post('configuracion_curso_modalidad'),
+            'registro_curso_entidad'            => $this->input->post('configuracion_curso_entidad'),
+            'registro_curso_costo'              => $this->input->post('configuracion_curso_costo')
         );
 
         foreach ($parametros as $key => $value) {
@@ -582,4 +617,13 @@ class cursos extends CI_Controller {
         print_r(json_encode($registro_curso));
     }
 
+    function lista_asistencia($id_curso)
+    {
+        $curso = $this->curso_model->consulta_detalle_curso($id_curso);
+
+        $this->load->view('template/header');
+        $this->load->view('template/menu');
+        $this->load->view('lista_asistencia', $curso);
+        $this->load->view('template/footer');
+    }
 }

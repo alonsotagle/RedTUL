@@ -5,12 +5,12 @@
 	<ul id="lista_menu">
 		<li id="menu_contactos" class="elemento_menu">
 			<a href="<?= site_url('contactos')?>">
-				<span>Administrar contactos</span>
+				<span>Administrar usuarios</span>
 			</a>
 		</li>
 		<li id="menu_cursos" class="elemento_menu">
 			<a href="<?= site_url('cursos')?>">
-				<span>Administrar cursos</span>
+				<span>Administrar cursos y eventos</span>
 			</a>
 		</li>
 		<li id="menu_instancia" class="elemento_menu">

@@ -11,48 +11,72 @@ class login extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('login_model');
-        $this->load->library('form_validation');
+        $this->load->library('Idu');
     }
 
     public function index() {
         if ($this->session->userdata('logged')) {
             redirect('inicio');
         }else{
-            $data['token'] = $this->token();
             $this->load->view('template/header');
-            $this->load->view('login_view', $data);
+            $this->load->view('login_view');
             $this->load->view('template/footer');
         }
     }
 
-    public function token() {
-        $token = md5(uniqid(rand(), true));
-        $this->session->set_userdata('token', $token);
-        return $token;
-    }
+    public function idaut() {
 
-    public function autenticacion() {
+        $identificador = null;
+        $datosUsuario = null;
 
-        if (isset($_POST['usr_nombre']) && isset($_POST['usr_password'])) {
+        $this->Idu = new Idu();
+        $ticket = $this->input->get('ticket');
+        $app_validate_url = site_url('login/idaut');
 
-            $check_user = $this->login_model->login_user(md5($_POST['usr_nombre']), md5($_POST['usr_password']));
+        try{
+            $id_idu = $this->Idu->getIdentificadorIDU($ticket, $app_validate_url);
+            $datosUsuario = $this->Idu->consultaPorIdu($id_idu);
+            
+            $identificador = $id_idu;
+            $datosUsuario = $datosUsuario;
 
-            if ($check_user) {
-                $data = array(
-                    'id'        => $check_user->id_login,
-                    'logged'    => TRUE
-                    );
-                $this->session->set_userdata($data);
-            }
-            redirect('/login');
-        }else{
-            redirect('/login');
+            $data = array(
+                'id'        => $identificador,
+                'logged'    => TRUE
+            );
+
+            $this->session->set_userdata($data);
+            //$this->verificarDatos($identificador, $datosUsuario);
+            $this->verificarDatos($identificador);
+        }catch(IduException $exception){
+            //Redirect al login
+            redirect($this->Idu->getIduLoginURL($app_validate_url));
         }
     }
 
     public function logout() {
-
         $this->session->sess_destroy();
-        redirect('/login');
+
+        $this->Idu = new Idu();
+        $app_login_url = site_url('login');
+
+        $iduLogoutURL = $this->Idu->getIduLogoutURL($app_login_url);
+        redirect($iduLogoutURL);
+    }
+
+    public function verificarDatos($identificador){
+        $contacto = $this->login_model->consulta_identificador($identificador);
+
+        if (is_null($contacto)) {
+            /*
+            $this->session->sess_destroy();
+            $this->load->view('template/header');
+            $this->load->view('usuario_invalido');
+            $this->load->view('template/footer');
+            */
+            $this->logout();
+        }else{
+            redirect('inicio');
+        }
     }
 }

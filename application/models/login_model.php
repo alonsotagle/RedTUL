@@ -13,11 +13,7 @@ class login_model extends CI_Model{
         parent::__construct();
         $this->load->database();
     }
-    /*Funcion para autenticación del usuario
-     * donde:
-     * usr_estado -> comprueba que el usuario este activo, si no esta activo no 
-     * permitirá entrar
-     */
+
     public function login_user($usuario,$password){
         $this->db->from('login');
         $this->db->where('login_usuario', $usuario);
@@ -30,6 +26,19 @@ class login_model extends CI_Model{
         }else{
             $this->session->set_flashdata('usuario_incorrecto','Los datos de acceso son incorrectos.');
             redirect('login','refresh');
+        }
+    }
+
+    public function consulta_identificador($identificador){
+        $this->db->from('contacto');
+        $this->db->where('contacto_IDU', $identificador);
+
+        $query = $this->db->get();
+
+        if($query->num_rows() == 1){
+            return $query->row();
+        }else{
+            return null;
         }
     }
 }

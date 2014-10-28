@@ -10,6 +10,11 @@
 		<a href="<?= site_url('contactos')?>">Administrar contactos</a> > Detalle de contacto
 	</div>
 
+	<span class="conf_contacto_campos">Identificador Universitario (IDU)</span>
+	<span class="conf_contacto_valores">
+		<?= $contacto_IDU; ?>
+	</span>
+	<br><br>
 	<span class="conf_contacto_campos">Estatus</span>
 	<span class="conf_contacto_valores">
 		<?= $contacto_estatus; ?>

@@ -7,9 +7,7 @@ $(document).ready(function(){
     $("#frm_buscar_invitados").validationEngine({promptPosition: "centerRight"});
     $("#frm_configuracion_linea").validationEngine({promptPosition: "centerRight"});
 
-	$(function() {
-	    $( "#tabs" ).tabs();
-	});
+    $( "#tabs" ).tabs();
 
 	$(document).tooltip();
 
@@ -32,7 +30,8 @@ $(document).ready(function(){
 		dataType: 'json',
 		type: 'post',
 		success: function(resultado) {
-			if (resultado != null) {				
+			if (resultado != null) {		
+				console.log(resultado);
 				$('#curso_titulo').val(resultado['curso_titulo']);
 				$('#configuracion_titulo_curso').text(resultado['curso_titulo']);
 				$("#curso_tipo option[value="+resultado['curso_tipo']+"]").prop('selected', true);
@@ -47,7 +46,17 @@ $(document).ready(function(){
 				$('#curso_url_ubicacion').val(resultado['curso_mapa_url']);
 				$('#curso_telefono').val(resultado['curso_telefono']);
 				$('#curso_telefono_extension').val(resultado['curso_telefono_extension']);
-				
+				$("#curso_modalidad option[value="+resultado['curso_modalidad']+"]").prop('selected', true);
+				$('#curso_entidad').val(resultado['curso_entidad']);
+				$('#curso_evento').val(resultado['curso_evento']);
+				$("input:radio[name=curso_costo][value="+resultado['curso_costo']+"]").prop('checked', true);
+
+				if (resultado['curso_evento'] == "0") {
+					$(".tipo_curso_evento").html("curso");
+				}else{
+					$(".tipo_curso_evento").html("evento");
+				}
+
 				if (resultado['curso_flyer'] != "") {
 					$("#flyer_anterior").val(resultado['curso_flyer']);
 
@@ -180,9 +189,9 @@ $(document).ready(function(){
 		}
 	});
 
-	if (<?= $nuevo ?>) {
+	if (<?= $mensaje_guardado ?>) {
 		$.blockUI({ 
-			message: "<h3>Guardado correctamente</h3>",
+			message: "<h3>La información se guardó satisfactoriamente.</h3>",
 			css: { 
 				backgroundColor: '#54DF0E',
 				color: '#fff',
@@ -223,8 +232,6 @@ $(document).ready(function(){
 
 							$('#despliega_contactos table tbody').append('<tr>\
 								<td>'+value['contacto_nombre']+' '+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+'</td>\
-								<td>'+value['contacto_correo_inst']+' '+value['contacto_correo_per']+'</td>\
-								<td>'+value['contacto_telefono']+'</td>\
 								<td>'+value['tipo_contacto_descripcion']+'</td>\
 								<td>'+instancia_nombre+'</td>\
 								<td>\
@@ -246,10 +253,8 @@ $(document).ready(function(){
 		event.preventDefault();
 		var datos = {
 			'id_curso'		: <?= $id_curso ?>,
-			'webmaster' 	: $('input[name=tipo_invitado_webmaster]:checked').val(),
-			'comunicacion' 	: $('input[name=tipo_invitado_comunicacion]:checked').val(),
 			'tecnico' 		: $('input[name=tipo_invitado_tecnico]:checked').val(),
-			'otros' 		: $('input[name=tipo_invitado_otros]:checked').val(),
+			'comunicacion' 	: $('input[name=tipo_invitado_comunicacion]:checked').val(),
 			'invitados' 	: new Array()
 		};
 
@@ -356,7 +361,10 @@ $(document).ready(function(){
 				'configuracion_ocultar_registro'		: $('#configuracion_ocultar_registro_curso').prop('checked'),
 				'configuracion_texto_registro'			: $('#configuracion_texto_registro').val(),
 				'configuracion_texto_confirmacion'		: $('#configuracion_texto_confirmacion').val(),
-				'configuracion_texto_agradecimientos'	: $('#configuracion_texto_agradecimientos').val()
+				'configuracion_texto_agradecimientos'	: $('#configuracion_texto_agradecimientos').val(),
+				'configuracion_curso_modalidad'			: $('#configuracion_modalidad_curso').prop('checked'),
+				'configuracion_curso_entidad'			: $('#configuracion_entidad_curso').prop('checked'),
+				'configuracion_curso_costo'				: $('#configuracion_costo_curso').prop('checked')
 			};
 
 			$.ajax({
@@ -415,42 +423,52 @@ $(document).ready(function(){
 <div class="contenido_dinamico">
 	<div id="migaDePan">
 		<a href="<?= base_url()?>">Inicio</a> > 
-		<a href="<?= site_url('cursos')?>">Administrar Cursos</a> > Editar curso
+		<a href="<?= site_url('cursos')?>">Administrar Cursos y Eventos</a> > Editar <span class="tipo_curso_evento"></span>
 	</div>
 
 	<div id="tabs">
 		<ul>
 			<li><a href="#tabs-1">Datos Generales</a></li>
 			<li><a href="#tabs-2">Administrar Invitados</a></li>
-			<li><a href="#tabs-3">Configuración Registro en L&iacute;nea</a></li>
+			<li><a href="#tabs-3">Configurar publicaci&oacute;n en el portal</a></li>
 		</ul>
 		<div id="tabs-1">
 			<form id="frm_editar_curso" action="<?= site_url('cursos/editar').'/'.$id_curso?>" method="POST" enctype="multipart/form-data">
 				<fieldset>
-				<legend>Editar curso</legend>
+				<p>Los datos marcados con asterisco son obligatorios.</p>
+				<legend id="editar_curso_titulo">Editar <span class="tipo_curso_evento"></span></legend>
 				<p class="encabezado_form_nuevo_curso">Datos Generales</p>
-				<label for="curso_titulo" class="label_nuevo_curso">* T&iacute;tulo del curso
+				<label for="curso_titulo" class="label_nuevo_curso">* T&iacute;tulo del <span class="tipo_curso_evento"></span>
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Nombre alusivo al curso que será impartido.">
 				</label>
 				<input type="text" maxlength="255" id="curso_titulo" name="curso_titulo" class="validate[required]">
 				<br>
-				<label for="curso_flyer" class="label_nuevo_curso">Flyer del curso
+				<label for="curso_flyer" class="label_nuevo_curso">Imagen del <span class="tipo_curso_evento"></span>
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Imagen promocional del curso.">
 				</label>
 				<input type="file" id="curso_flyer" name="curso_flyer" class="validate[checkFileType[jpg|jpeg|gif|JPG|JPEG|GIF]]"/>
 				<br><span class="descripcion_archivos">Formatos permitidos .jpg y .gif</span><br><br>
 				<input type="hidden" id="flyer_anterior" name="flyer_anterior">
 				<br>
-				<label for="curso_tipo" class="label_nuevo_curso">* Tipo de curso
+				<label for="curso_modalidad" class="label_nuevo_curso">* Modalidad de <span class="tipo_curso_evento"></span>
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica la modalidad en que se llevará a cabo dicho curso.">
 				</label>
-				<select name="curso_tipo" id="curso_tipo" class="validate[required]">
+				<select name="curso_modalidad" id="curso_modalidad" class="validate[required]">
 					<option selected disabled>- Elija un tipo -</option>
 					<option value="0">Presencial</option>
 					<option value="1">En l&iacute;nea</option>
 				</select>
 				<br>
-				<label for="curso_descripcion" class="label_nuevo_curso label_nuevo_curso_textarea">* Descripci&oacute;n del curso
+				<label for="curso_tipo" class="label_nuevo_curso">* Tipo de <span class="tipo_curso_evento"></span>
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica la modalidad en que se llevará a cabo dicho curso.">
+				</label>
+				<select name="curso_tipo" id="curso_tipo" class="validate[required]">
+					<option selected disabled>- Elija un tipo -</option>
+					<option value="0">Interno</option>
+					<option value="1">Externo</option>
+				</select>
+				<br>
+				<label for="curso_descripcion" class="label_nuevo_curso label_nuevo_curso_textarea">* Descripci&oacute;n del <span class="tipo_curso_evento label_nuevo_curso_textarea"></span>
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Explicación detallada del contenido del curso así como del público a quien va dirigido.">
 				</label>
 				<textarea id="curso_descripcion" name="curso_descripcion" cols="40" rows="4" maxlength="500" placeholder="Ingrese una breve descripción de dicho curso." class="validate[required]"></textarea>
@@ -466,28 +484,28 @@ $(document).ready(function(){
 				<input type="hidden" id="temario_anterior" name="temario_anterior">
 				<br>
 
-				<p class="encabezado_form_nuevo_curso">Datos del curso o evento</p>
+				<p class="encabezado_form_nuevo_curso">Datos del <span class="tipo_curso_evento"></span></p>
 
-				<label for="curso_fecha_inicio" class="label_nuevo_curso">* Inicio de curso
+				<label for="curso_fecha_inicio" class="label_nuevo_curso">* Inicio de <span class="tipo_curso_evento"></span>
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Periodo de tiempo en el que se impartirá el curso.">
 				</label>
 				<input type="text" id="curso_fecha_inicio" name="curso_fecha_inicio" class="validate[required] datepicker"/>
 				<br>
-				<label for="curso_fecha_fin" class="label_nuevo_curso">* Fin de curso
+				<label for="curso_fecha_fin" class="label_nuevo_curso">* Fin de <span class="tipo_curso_evento"></span>
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Periodo de tiempo en el que se impartirá el curso.">
 				</label>
 				<input type="text" id="curso_fecha_fin" name="curso_fecha_fin" class="validate[required] datepicker"/>
 				<br>
-				<label for="curso_hora_inicio" class="label_nuevo_curso">* Horario de impartición del curso
+				<label for="curso_hora_inicio" class="label_nuevo_curso">* Horario de impartición del <span class="tipo_curso_evento"></span>
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Duración de cada sesión del curso.">
 				</label>
 				<input type="time" id="curso_hora_inicio" name="curso_hora_inicio" maxlength="5" class="validate[required,custom[hora]]"> a
 				<input type="time" id="curso_hora_fin" name="curso_hora_fin" maxlength="5" class="validate[required,custom[hora]]">
 				<br>
-				<label for="curso_cupo" class="label_nuevo_curso">Cupo total
+				<label for="curso_cupo" class="label_nuevo_curso">* Cupo total
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Número máximo de participantes en un curso.">
 				</label>
-				<input type="text" id="curso_cupo" name="curso_cupo" maxlength="3" class="input_nuevo_curso_cupo validate[custom[numero]]">
+				<input type="text" id="curso_cupo" name="curso_cupo" maxlength="3" class="input_nuevo_curso_cupo validate[required, custom[numero]]">
 				<br>
 				<label for="contacto_instancias" class="label_nuevo_curso_textarea label_nuevo_curso">* Instructor(es) a asignar
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Señala el o los instructores que estarán asignados para impartir dicho curso. Presiona la tecla Ctrl+">
@@ -506,10 +524,23 @@ $(document).ready(function(){
 				</label>
 				<input type="text" id="curso_url_ubicacion" name="curso_url_ubicacion">
 				<br>
-				<label for="curso_telefono" class="label_nuevo_curso">Tel&eacute;fono</label>
-				<input type="text" id="curso_telefono" name="curso_telefono" size="10" maxlength="10" class="input_frm_nuevo validate[custom[numero]]">
+				<label for="curso_telefono" class="label_nuevo_curso">* Tel&eacute;fono</label>
+				<input type="text" id="curso_telefono" name="curso_telefono" size="10" maxlength="10" class="input_frm_nuevo validate[required, custom[numero]]">
 				<label for="curso_telefono_extension">ext.</label>
 				<input type="text" id="curso_telefono_extension" name="curso_telefono_extension" size="5" maxlength="5" class="validate[custom[numero]]">
+				<br>
+				<label for="curso_entidad" class="label_nuevo_curso">* Entidad u organización
+				<!-- <img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica el lugar exacto en el que se llevará a cabo el curso, por ejemplo entidad, edificio, salón, etc."> -->
+				</label>
+				<input type="text" maxlength="100" id="curso_entidad" name="curso_entidad"  class="validate[required]">
+				<br>
+				<label class="label_nuevo_curso">* Costo
+				<!-- <img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica el lugar exacto en el que se llevará a cabo el curso, por ejemplo entidad, edificio, salón, etc."> -->
+				</label>
+				<input type="radio" name="curso_costo" value="1" class="validate[required]">Si
+				<input type="radio" name="curso_costo" value="0" class="validate[required]">No
+				<input type="hidden" name="curso_evento" id="curso_evento">
+				<br>
 
 				<div id="botones_envio">
 					<input type="submit" id="btn_guardar" value="Guardar">
@@ -526,18 +557,12 @@ $(document).ready(function(){
 				<legend>Añadir participantes por tipo de contacto
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Se enviará invitación al grupo de contactos seleccionado.">
 				</legend>
-				<input type="checkbox" name="tipo_invitado_webmaster" id="tipo_invitado_webmaster" class="checkbox_tipo_invitado" value="1">
-				<label for="tipo_invitado_webmaster">Webmaster</label>
-				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Webmaster.">
-				<input type="checkbox" name="tipo_invitado_comunicacion" id="tipo_invitado_comunicacion" class="checkbox_tipo_invitado" value="2">
-				<label for="tipo_invitado_comunicacion">Responsable de comunicación</label>
-				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Responsable de comunicación.">
 				<input type="checkbox" name="tipo_invitado_tecnico" id="tipo_invitado_tecnico" class="checkbox_tipo_invitado" value="3">
 				<label for="tipo_invitado_tecnico">Responsable Técnico</label>
 				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Responsable técnico.">
-				<input type="checkbox" name="tipo_invitado_otros" id="tipo_invitado_otros" class="checkbox_tipo_invitado" value="4">
-				<label for="tipo_invitado_otros">Otros</label>
-				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Otros.">
+				<input type="checkbox" name="tipo_invitado_comunicacion" id="tipo_invitado_comunicacion" class="checkbox_tipo_invitado" value="2">
+				<label for="tipo_invitado_comunicacion">Responsable de comunicación</label>
+				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Responsable de comunicación.">
 			</fieldset>
 
 			<fieldset>
@@ -562,8 +587,6 @@ $(document).ready(function(){
 					<table class='tables'>
 						<tr>
 							<td>Nombre completo</td>
-							<td>Correo electr&oacute;nico</td>
-							<td>Tel&eacute;fono</td>
 							<td>Tipo de contacto</td>
 							<td>Instancia</td>
 							<td>Añadir</td>
@@ -590,20 +613,24 @@ $(document).ready(function(){
 		<div id="tabs-3">
 			<form id="frm_configuracion_linea">
 				<fieldset>
-					<legend>Registro en línea</legend>
+					<legend>Configurar publicaci&oacute;n en el portal</legend>
+					<p>Los datos marcados con asterisco son obligatorios.</p>
 					<p class="encabezado_form_nuevo_curso" id="configuracion_titulo_curso"></p>
 					<p>Datos que se mostrar&aacute;n en la p&aacute;gina de registro en l&iacute;nea:
 						<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Imagen promocional del curso.">
 					</p>
 					<div id="configuracion_col-izq">
 						<input type="checkbox" name="configuracion_nombre_curso" id="configuracion_nombre_curso" value="1">
-						<label for="configuracion_nombre_curso">Nombre del curso o evento</label>
+						<label for="configuracion_nombre_curso">Nombre del <span class="tipo_curso_evento"></span></label>
 						<br>
 						<input type="checkbox" name="configuracion_flyer_curso" id="configuracion_flyer_curso" value="1">
-						<label for="configuracion_flyer_curso">Flyer</label>
+						<label for="configuracion_flyer_curso">Imagen</label>
 						<br>
 						<input type="checkbox" name="configuracion_tipo_curso" id="configuracion_tipo_curso" value="1">
 						<label for="configuracion_tipo_curso">Tipo</label>
+						<br>
+						<input type="checkbox" name="configuracion_modalidad_curso" id="configuracion_modalidad_curso" value="1">
+						<label for="configuracion_modalidad_curso">Modalidad</label>
 						<br>
 						<input type="checkbox" name="configuracion_descripcion_curso" id="configuracion_descripcion_curso" value="1">
 						<label for="configuracion_descripcion_curso">Descripci&oacute;n</label>
@@ -615,8 +642,7 @@ $(document).ready(function(){
 						<label for="configuracion_temario_curso">Temario</label>
 						<br>
 						<input type="checkbox" name="configuracion_fecha_curso" id="configuracion_fecha_curso" value="1">
-						<label for="configuracion_fecha_curso">Fecha del curso</label>
-						<br>
+						<label for="configuracion_fecha_curso">Fecha del <span class="tipo_curso_evento"></span></label>
 					</div>
 					<div id="configuracion_col-der">
 						<input type="checkbox" name="configuracion_horario_curso" id="configuracion_horario_curso" value="1">
@@ -636,6 +662,12 @@ $(document).ready(function(){
 						<br>
 						<input type="checkbox" name="configuracion_telefono_curso" id="configuracion_telefono_curso" value="1">
 						<label for="configuracion_telefono_curso">Tel&eacute;fono de contacto</label>
+						<br>
+						<input type="checkbox" name="configuracion_entidad_curso" id="configuracion_entidad_curso" value="1">
+						<label for="configuracion_entidad_curso">Entidad u organizaci&oacute;n</label>
+						<br>
+						<input type="checkbox" name="configuracion_costo_curso" id="configuracion_costo_curso" value="1">
+						<label for="configuracion_costo_curso">Costo</label>
 					</div>
 					<br>
 					<p class="encabezado_form_nuevo_curso" id="configuracion_visibilidad">Visibilidad de registro en l&iacute;nea</p>

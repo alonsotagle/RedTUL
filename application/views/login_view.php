@@ -6,22 +6,8 @@
 <!-- inicia contenido -->
 <div id="contenido">
 	<div id="login_form">
-		<form id="frm_login" action="<?=  base_url('index.php/login/autenticacion')?>" method="POST">
-			<label for="usuario">Usuario</label>
-			<br>
-			<input type="text" id="usr_nombre" name="usr_nombre" class="input validate[required]" spellcheck="false"/>
-			<br><br>
-			<label for="contrase">Contraseña</label>
-			<br>
-			<input type="password" id="usr_password" name="usr_password" class="input validate[required]"/>
-			<input type="hidden" name="token" value="<?=$token?>">
-			<p class="error"><?=$this->session->flashdata('usuario_incorrecto')?></p>     
-			<br>
-			<input type="submit"  class="button" value="Entrar" />
-			<?php
-				if($this->session->flashdata('usuario_incorrecto')){
-				}
-			?>
-		</form>
+		<a href="http://132.248.63.219:8082/SIU/login?service=<?= site_url('login/idaut'); ?>">
+			Ingreso al sistema a trav&eacute;s de IDU
+		</a>
 	</div>
 <!-- termina contenido -->

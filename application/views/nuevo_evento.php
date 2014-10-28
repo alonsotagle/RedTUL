@@ -59,7 +59,7 @@
 <div class="contenido_dinamico">
 	<div id="migaDePan">
 		<a href="<?= base_url()?>">Inicio</a> > 
-		<a href="<?= site_url('cursos')?>">Administrar Cursos y Eventos</a> > Nuevo curso
+		<a href="<?= site_url('cursos')?>">Administrar Cursos y Eventos</a> > Nuevo evento
 	</div>
 
 	<div id="tabs">
@@ -71,21 +71,21 @@
 		<div id="tabs-1">
 			<form id="frm_nuevo_curso" action="<?= site_url('cursos/registrar_curso')?>" method="POST" enctype="multipart/form-data">
 				<fieldset>
-				<legend>Nuevo curso</legend>
 				<p>Los datos marcados con asterisco son obligatorios.</p>
+				<legend>Nuevo evento</legend>
 				<p class="encabezado_form_nuevo_curso">Datos Generales</p>
-				<label for="curso_titulo" class="label_nuevo_curso">* T&iacute;tulo del curso
+				<label for="curso_titulo" class="label_nuevo_curso">* T&iacute;tulo del evento
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Nombre alusivo al curso que será impartido.">
 				</label>
 				<input type="text" maxlength="255" id="curso_titulo" name="curso_titulo" class="validate[required]">
 				<br>
-				<label for="curso_flyer" class="label_nuevo_curso">Imagen del curso
+				<label for="curso_flyer" class="label_nuevo_curso">Imagen del evento
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Imagen promocional del curso.">
 				</label>
 				<input type="file" id="curso_flyer" name="curso_flyer" class="validate[checkFileType[jpg|jpeg|gif|JPG|JPEG|GIF]]"/>
 				<br><span class="descripcion_archivos">Formatos permitidos .jpg y .gif</span><br>
 				<br>
-				<label for="curso_modalidad" class="label_nuevo_curso">* Modalidad de curso
+				<label for="curso_modalidad" class="label_nuevo_curso">* Modalidad del evento
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica la modalidad en que se llevará a cabo dicho curso.">
 				</label>
 				<select name="curso_modalidad" id="curso_modalidad" class="validate[required]">
@@ -94,7 +94,7 @@
 					<option value="1">En l&iacute;nea</option>
 				</select>
 				<br>
-				<label for="curso_tipo" class="label_nuevo_curso">* Tipo de curso
+				<label for="curso_tipo" class="label_nuevo_curso">* Tipo del evento
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica la modalidad en que se llevará a cabo dicho curso.">
 				</label>
 				<select name="curso_tipo" id="curso_tipo" class="validate[required]">
@@ -103,7 +103,7 @@
 					<option value="1">Externo</option>
 				</select>
 				<br>
-				<label for="curso_descripcion" class="label_nuevo_curso label_nuevo_curso_textarea">* Descripci&oacute;n del curso
+				<label for="curso_descripcion" class="label_nuevo_curso label_nuevo_curso_textarea">* Descripci&oacute;n del evento
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Explicación detallada del contenido del curso así como del público a quien va dirigido.">
 				</label>
 				<textarea id="curso_descripcion" name="curso_descripcion" cols="40" rows="4" maxlength="500" placeholder="Ingrese una breve descripción de dicho curso." class="validate[required]"></textarea>
@@ -111,26 +111,26 @@
 				<label for="curso_objetivos" class="label_nuevo_curso label_nuevo_curso_textarea">* Objetivos</label>
 				<textarea id="curso_objetivos" name="curso_objetivos" cols="40" rows="4" maxlength="250" placeholder="Ingrese el fin al que se desea llegar, la meta que se pretende lograr con la impartición de dicho curso." class="validate[required]"></textarea>
 				<br>
-				<label for="curso_temario" class="label_nuevo_curso">* Temario
+				<label for="curso_temario" class="label_nuevo_curso">* Agenda
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Archivo con el listado del contenido a abordar durante el curso.">
 				</label>
 				<input type="file" id="curso_temario" name="curso_temario" class="validate[required, checkFileType[pdf]]"/>
 				<br><span class="descripcion_archivos">Formatos permitidos .pdf</span>
 				<br>
 
-				<p class="encabezado_form_nuevo_curso">Datos del curso</p>
+				<p class="encabezado_form_nuevo_curso">Datos del evento</p>
 
-				<label for="curso_fecha_inicio" class="label_nuevo_curso">* Inicio de curso
+				<label for="curso_fecha_inicio" class="label_nuevo_curso">* Inicio del evento
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Periodo de tiempo en el que se impartirá el curso.">
 				</label>
 				<input type="text" id="curso_fecha_inicio" name="curso_fecha_inicio" class="input_nuevo_curso_centrado validate[required] datepicker"/>
 				<br>
-				<label for="curso_fecha_fin" class="label_nuevo_curso">* Fin de curso
+				<label for="curso_fecha_fin" class="label_nuevo_curso">* Fin del evento
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Periodo de tiempo en el que se impartirá el curso.">
 				</label>
 				<input type="text" id="curso_fecha_fin" name="curso_fecha_fin" class="input_nuevo_curso_centrado validate[required] datepicker"/>
 				<br>
-				<label for="curso_hora_inicio" class="label_nuevo_curso">* Horario de impartición del curso
+				<label for="curso_hora_inicio" class="label_nuevo_curso">* Horario de impartición del evento
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Duración de cada sesión del curso.">
 				</label>
 				<input type="time" id="curso_hora_inicio" name="curso_hora_inicio" maxlength="5" class="validate[required,custom[hora]]"> a
@@ -173,7 +173,7 @@
 				</label>
 				<input type="radio" name="curso_costo" value="1" class="validate[required]">Si
 				<input type="radio" name="curso_costo" value="0" class="validate[required]">No
-				<input type="hidden" name="curso_evento" value="0">
+				<input type="hidden" name="curso_evento" value="1">
 				<br>
 				<div id="botones_envio">
 					<input type="submit" id="btn_guardar" value="Guardar">
@@ -186,5 +186,6 @@
 		<div id="tabs-3">
 		</div>
 	</div>
+
 </div>
 <!-- termina contenido -->

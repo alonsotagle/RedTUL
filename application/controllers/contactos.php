@@ -52,6 +52,8 @@ class contactos extends CI_Controller {
                     'contacto_correo_per' => $this->input->post('contacto_correopers'),
                     'contacto_avatar' => $respuesta_avatar,
                     'contacto_comunicacion' => $this->input->post('comunicacion_contacto'),
+                    'contacto_rol' => $this->input->post('rol_contacto'),
+                    'contacto_IDU' => $this->input->post('contacto_idu')
                 );
                 $this->contacto_model->registrar_contacto($nuevo_contacto);
 
@@ -93,7 +95,7 @@ class contactos extends CI_Controller {
             if ($contacto['contacto_comunicacion'] == 0) {
                 $contacto['contacto_comunicacion'] = "Vía telefónica";
             }else{
-                $contacto['contacto_comunicacion'] = "Vía e-mail";
+                $contacto['contacto_comunicacion'] = "Vía correo electrónico";
             }
 
             if (($contacto['contacto_avatar']) != "") {
@@ -240,9 +242,10 @@ class contactos extends CI_Controller {
         if (!empty($_POST)) {
 
             $parametros_busqueda = array(
-                'correo_contacto'   => $this->input->post('correo_contacto'),
-                'tipo_contacto'     => $this->input->post('tipo_contacto'),
-                'instancia_contacto'=> $this->input->post('instancia_contacto')
+                'correo_contacto'       => $this->input->post('correo_contacto'),
+                'tipo_contacto'         => $this->input->post('tipo_contacto'),
+                'instancia_contacto'    => $this->input->post('instancia_contacto'),
+                'instructor_contacto'   => $this->input->post('instructor_contacto')
             );
 
             $nombre_completo = $this->input->post('nombre_contacto');
@@ -362,4 +365,30 @@ class contactos extends CI_Controller {
         $this->load->view('template/footer');
     }
 
+    function verificar_idu(){
+        $this->load->library('Idu');
+        $idu = $this->input->post('idu');
+
+        $verificar_idu_interno = $this->contacto_model->consulta_identificador($idu);
+
+        if (!is_null($verificar_idu_interno)) {
+            $datos_ws = "EXISTE";
+        }else{
+            $this->Idu = new Idu();
+            $datos_ws = $this->Idu->consultaPorIdu($idu);
+
+            if (count($datos_ws)>1) {
+                $contacto = array('contacto_nombre'     => ucwords(strtolower($datos_ws["dgNombre"])),
+                                'contacto_ap_paterno'   => ucwords(strtolower($datos_ws["dgPrimerApellido"])),
+                                'contacto_ap_materno'   => ucwords(strtolower($datos_ws["dgSegundoApellido"])),
+                                'contacto_correo_inst'  => $datos_ws["lstIdentificadores"][0]["idIdSecundario"],
+                                );
+                $datos_ws = $contacto;
+            }else{
+                $datos_ws = null;
+            }
+        }
+
+        print_r(json_encode($datos_ws));
+    }
 }

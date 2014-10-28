@@ -119,6 +119,10 @@ class curso_model extends CI_Model{
             $this->db->where('curso.curso_fecha_fin <=', $parametros_busqueda['fin_curso']);
         }
 
+        if ($parametros_busqueda['modalidad_curso'] != "") {
+            $this->db->where('curso.curso_modalidad', $parametros_busqueda['modalidad_curso']);
+        }
+
         $this->db->distinct();
 
         $query = $this->db->get();
@@ -178,9 +182,6 @@ class curso_model extends CI_Model{
                             contacto.contacto_nombre,
                             contacto.contacto_ap_paterno,
                             contacto.contacto_ap_materno,
-                            contacto.contacto_correo_inst,
-                            contacto.contacto_correo_per,
-                            contacto.contacto_telefono,
                             tipo_contacto.tipo_contacto_descripcion,
                             instancia.instancia_nombre');
         $this->db->from('contacto');
@@ -469,11 +470,12 @@ class curso_model extends CI_Model{
 
         if ($query -> num_rows() > 0)
         {
-            unset($configuracion_registro['registro_curso_id']);
+            $this->db->where('registro_curso_id', $configuracion_registro['registro_curso_id']);
             $this->db->update('registro', $configuracion_registro);
         } else {
             $this->db->insert('registro', $configuracion_registro);
         }
+        echo($this->db->last_query());
     }
 
     public function consulta_registro_curso($id_curso)

@@ -492,4 +492,49 @@ class curso_model extends CI_Model{
             return null;
         }
     }
+
+    public function consulta_lista_asistencia($id_curso)
+    {
+        $this->db->select('id_curso,
+                            curso_titulo,
+                            curso_hora_inicio,
+                            curso_hora_fin,
+                            curso_fecha_inicio,
+                            curso_fecha_fin');
+        $this->db->from('curso');
+        $this->db->where('id_curso', $id_curso);
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->row_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function consulta_inscritos_lista($id_curso)
+    {
+        $this->db->select('contacto.contacto_nombre,
+                            contacto.contacto_ap_paterno,
+                            contacto.contacto_ap_materno,
+                            instancia.instancia_nombre');
+        $this->db->from('curso_inscrito');
+        $this->db->join('contacto', 'contacto.id_contacto = curso_inscrito.id_contacto');
+        $this->db->join('instancia', 'instancia.id_instancia = contacto.contacto_instancia');
+
+        $this->db->where('curso_inscrito.id_curso', $id_curso);
+
+        $this->db->order_by('contacto.contacto_ap_paterno', 'asc');
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
 }

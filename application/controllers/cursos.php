@@ -619,11 +619,25 @@ class cursos extends CI_Controller {
 
     function lista_asistencia($id_curso)
     {
-        $curso = $this->curso_model->consulta_detalle_curso($id_curso);
+        $curso = $this->curso_model->consulta_lista_asistencia($id_curso);
+        $curso['profesor'] = $this->curso_model->consulta_instructores_nombre_curso($id_curso);
+
+        $fecha_inicio = explode("-", $curso['curso_fecha_inicio']);
+        $curso['curso_fecha_inicio'] = $fecha_inicio[2]."/".$fecha_inicio[1]."/".$fecha_inicio[0];
+
+        $fecha_fin = explode("-", $curso['curso_fecha_fin']);
+        $curso['curso_fecha_fin'] = $fecha_fin[2]."/".$fecha_fin[1]."/".$fecha_fin[0];
 
         $this->load->view('template/header');
         $this->load->view('template/menu');
         $this->load->view('lista_asistencia', $curso);
         $this->load->view('template/footer');
+    }
+
+    function usuarios_lista($id_curso)
+    {
+        $usuarios = $this->curso_model->consulta_inscritos_lista($id_curso);
+
+        print_r(json_encode($usuarios));
     }
 }

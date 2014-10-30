@@ -606,6 +606,7 @@
 							$('#tabla_invitados_curso tbody').find("tr:gt(0)").remove();
 							$("#invitados_curso").find("h2").remove();
 							$.each(resultado, function(index, value) {
+								var constancia = "<?= site_url('mensajeria/constancia') ?>"+"/"+$("#lista_cursos").val()+"/"+value['id_contacto'];
 								$('#tabla_invitados_curso tbody').append('<tr>\
 									<td>'+value['contacto_nombre']+' '+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+'</td>\
 									<td>'+value['contacto_correo_inst']+' '+value['contacto_correo_per']+'</td>\
@@ -615,6 +616,10 @@
 									<td>\
 										<input type="checkbox" name="curso_invitados[]" value="'+value['id_contacto']+'" checked>\
 									</td>\
+									<td><a href="'+constancia+'">\
+									<img \
+									src="'+"<?= base_url('assets/img/icono_constancia.png')?>"+'">\
+									</a></td>\
 								</tr>');
 							});
 						} else {
@@ -667,9 +672,10 @@
 								<td>Nombre completo</td>
 								<td>Correo electr&oacute;nico</td>
 								<td>Tel&eacute;fono</td>
-								<td>Tipo de contacto</td>
+								<td>Tipo de usuario</td>
 								<td>Instancia</td>
 								<td>Añadir</td>
+								<td>Generar constancia</td>
 							</tr>
 						</table>
 					</div>
@@ -679,18 +685,12 @@
 					<p>Tipo de Contacto
 						<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="El sistema permite elegir destinatarios por tipo de contacto." class="icon_tooltip">
 					</p>
-					<input type="checkbox" name="tipo_invitado_webmaster" id="tipo_invitado_webmaster" class="checkbox_tipo_invitado_correo" value="1">
-					<label for="tipo_invitado_webmaster">Webmaster</label>
-					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Webmaster.">
-					<input type="checkbox" name="tipo_invitado_comunicacion" id="tipo_invitado_comunicacion" class="checkbox_tipo_invitado_correo" value="2">
-					<label for="tipo_invitado_comunicacion">Responsable de comunicación</label>
-					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Responsable de comunicación.">
-					<input type="checkbox" name="tipo_invitado_tecnico" id="tipo_invitado_tecnico" class="checkbox_tipo_invitado_correo" value="3">
+					<input type="checkbox" name="tipo_invitado_tecnico" id="tipo_invitado_tecnico" class="checkbox_tipo_invitado" value="0">
 					<label for="tipo_invitado_tecnico">Responsable Técnico</label>
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Responsable técnico.">
-					<input type="checkbox" name="tipo_invitado_otros" id="tipo_invitado_otros" class="checkbox_tipo_invitado_correo" value="4">
-					<label for="tipo_invitado_otros">Otros</label>
-					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Otros.">
+					<input type="checkbox" name="tipo_invitado_comunicacion" id="tipo_invitado_comunicacion" class="checkbox_tipo_invitado" value="1">
+					<label for="tipo_invitado_comunicacion">Responsable de comunicación</label>
+					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Responsable de comunicación.">
 				</div>
 
 				<div id="fieldset_destinatarios_contacto" class="fieldset_destinatarios">
@@ -701,10 +701,8 @@
 						<label for="tipo_contacto">Tipo de contacto</label>
 						<select name="tipo_contacto" value="" id="tipo_contacto" class="input_correo_buscar_destinatario validate[groupRequired[buscar_destinatario_contacto]]" form="frm_correo_destinatarios">
 							<option selected value="">- Elija un tipo -</option>
-							<option value="1">Webmaster</option>
-							<option value="2">Responsable de comunicaci&oacute;n</option>
-							<option value="3">Responsable técnico</option>
-							<option value="4">Otros</option>
+							<option value="0">Responsable técnico</option>
+							<option value="1">Responsable de comunicación</option>
 						</select>
 						<label for="nombre_contacto">Nombre</label>
 						<input type="text" id="nombre_contacto" maxlength="100" name="nombre_contacto" class="input_correo_buscar_destinatario validate[groupRequired[buscar_destinatario_contacto]]" form="frm_correo_destinatarios">
@@ -720,13 +718,23 @@
 								<td>Nombre completo</td>
 								<td>Correo electr&oacute;nico</td>
 								<td>Tel&eacute;fono</td>
-								<td>Tipo de contacto</td>
+								<td>Tipo de usuario</td>
 								<td>Instancia</td>
 								<td>Añadir</td>
 							</tr>
 						</table>
 					</div>
 				</div>
+
+				<div id="" class="fieldset_destinatarios">
+					<p>Subsistema
+						<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Un subsistema es un conjunto de entidades o instancias de la UNAM que cumplen con un objetivo similar o actividades semejantes." class="icon_tooltip">
+					</p>
+					<select name="subsitema_destinatarios" value="" id="subsitema_destinatarios" class="input_correo_buscar_destinatario validate[groupRequired[buscar_destinatario_contacto]]" form="frm_correo_destinatarios">
+						<option selected value="">- Elija un tipo -</option>
+					</select>
+				</div>
+
 				<input type="submit" id="btn_correo_anadir_destinatarios" value="Añadir destinatarios">
 			</fieldset>
 

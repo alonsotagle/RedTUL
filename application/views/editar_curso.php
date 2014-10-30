@@ -557,10 +557,10 @@ $(document).ready(function(){
 				<legend>Añadir participantes por tipo de contacto
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Se enviará invitación al grupo de contactos seleccionado.">
 				</legend>
-				<input type="checkbox" name="tipo_invitado_tecnico" id="tipo_invitado_tecnico" class="checkbox_tipo_invitado" value="3">
+				<input type="checkbox" name="tipo_invitado_tecnico" id="tipo_invitado_tecnico" class="checkbox_tipo_invitado" value="0">
 				<label for="tipo_invitado_tecnico">Responsable Técnico</label>
 				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Responsable técnico.">
-				<input type="checkbox" name="tipo_invitado_comunicacion" id="tipo_invitado_comunicacion" class="checkbox_tipo_invitado" value="2">
+				<input type="checkbox" name="tipo_invitado_comunicacion" id="tipo_invitado_comunicacion" class="checkbox_tipo_invitado" value="1">
 				<label for="tipo_invitado_comunicacion">Responsable de comunicación</label>
 				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Responsable de comunicación.">
 			</fieldset>

@@ -458,4 +458,10 @@ class mensajeria extends CI_Controller {
             $this->mensajeria_model->registrar_invitados_correo($id_curso, $value);
         }
     }
+
+    function constancia($id_curso, $id_contacto){
+        echo $id_curso;
+        echo "<br>";
+        echo $id_contacto;
+    }
 }

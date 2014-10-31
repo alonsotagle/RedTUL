@@ -20,7 +20,7 @@ class instancia_model extends CI_Model{
 
 		$this->db->from('instancia');
 
-        $this->db->order_by('instancia_nombre', 'asc');
+        $this->db->order_by('instancia_fecha', 'desc');
 		
 		$query = $this->db->get();
 
@@ -39,7 +39,7 @@ class instancia_model extends CI_Model{
 
         $this->db->like('instancia_nombre', $parametros['instancia_nombre']);
 
-        $this->db->order_by('instancia_nombre', 'asc');
+        $this->db->order_by('instancia_fecha', 'desc');
 
         $query = $this->db->get();
 
@@ -61,6 +61,8 @@ class instancia_model extends CI_Model{
         $this->db->where('id_instancia', $instancia['id_instancia']);
         unset($instancia['id_instancia']);
 
+        $instancia['instancia_fecha'] = date('Y-m-d H:i:s');
+
         $this->db->update('instancia', $instancia);
     }
 
@@ -69,4 +71,19 @@ class instancia_model extends CI_Model{
         $this->db->insert('instancia', $nueva_instancia);
     }
 
+    public function verificar_relacion_eliminar($id_instancia)
+    {
+        $this->db->select('id_contacto');
+        $this->db->from('contacto');
+        $this->db->where('contacto_instancia', $id_instancia);
+        
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
 }

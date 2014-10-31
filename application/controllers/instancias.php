@@ -24,6 +24,12 @@ class instancias extends CI_Controller {
     {
         $instancias = $this->instancia_model->consulta_instancias();
 
+        if ($instancias) {
+            foreach ($instancias as $llave => &$valor) {
+                $valor['instancia_eliminar'] = $this->instancia_model->verificar_relacion_eliminar($valor['id_instancia']);
+            }
+        }
+
         print_r(json_encode($instancias));
     }
 
@@ -52,10 +58,10 @@ class instancias extends CI_Controller {
 
     function registrar(){
         $nueva_instancia = array(
-            'instancia_nombre' => $this->input->post('instancia_nombre')
+            'instancia_nombre'  => $this->input->post('instancia_nombre'),
+            'instancia_fecha'   => date('Y-m-d H:i:s')
         );
 
         $this->instancia_model->registrar($nueva_instancia);
     }
-
 }

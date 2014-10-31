@@ -424,8 +424,8 @@
 
 			if ($("#lista_cursos").val() != "") {
 				$("#nuevo_correo_plantilla").append('<option value="generales" class="plantillas_curso">Datos generales</option>');
-				$("#nuevo_correo_plantilla").append('<option value="invitacion" class="plantillas_curso">Invitación al evento</option>');
-				$("#nuevo_correo_plantilla").append('<option value="evaluacion" class="plantillas_curso">Evaluación del evento</option>');
+				$("#nuevo_correo_plantilla").append('<option value="invitacion" class="plantillas_curso">Invitación al curso o evento</option>');
+				$("#nuevo_correo_plantilla").append('<option value="evaluacion" class="plantillas_curso">Evaluación del curso o evento</option>');
 				$("#nuevo_correo_plantilla").append('<option value="constancia" class="plantillas_curso">Envío de constancia</option>');
 			}else{
 				$(".plantillas_curso").remove();
@@ -733,6 +733,19 @@
 					<select name="subsitema_destinatarios" value="" id="subsitema_destinatarios" class="input_correo_buscar_destinatario validate[groupRequired[buscar_destinatario_contacto]]" form="frm_correo_destinatarios">
 						<option selected value="">- Elija un tipo -</option>
 					</select>
+					<br>
+					<div id="invitados_subsistema">
+						<table id="tabla_invitados_subsistema" class='tables'>
+							<tr>
+								<td>Nombre completo</td>
+								<td>Correo electr&oacute;nico</td>
+								<td>Tel&eacute;fono</td>
+								<td>Tipo de usuario</td>
+								<td>Instancia</td>
+								<td>Añadir</td>
+							</tr>
+						</table>
+					</div>
 				</div>
 
 				<input type="submit" id="btn_correo_anadir_destinatarios" value="Añadir destinatarios">

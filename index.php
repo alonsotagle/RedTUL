@@ -201,5 +201,7 @@ if (defined('ENVIRONMENT'))
  */
 require_once BASEPATH.'core/CodeIgniter.php';
 
+date_default_timezone_set('America/Mexico_City');
+
 /* End of file index.php */
 /* Location: ./index.php */

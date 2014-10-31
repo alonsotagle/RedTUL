@@ -9,19 +9,52 @@
 			{
 				if (resultado != null) {
 					$.each(resultado, function( index, value ) {
+						var etiqueta_eliminar;
+						if (value['instancia_eliminar']) {
+							etiqueta_eliminar = '<a \
+							href="'+"<?= site_url('instancias/eliminar')?>"+"/"+value['id_instancia']+'" class="eliminar_instancia" title="Eliminar">\
+							<img \
+							src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
+							</a>';
+						} else{
+							etiqueta_eliminar = '<img src="'+"<?= base_url('assets/img/icono_no_eliminar.png')?>"+'" title="La entidad no se puede eliminar porque tiene contactos asociados.">';
+						}
+
 						$('#despliega_instancias table tbody').append('<tr>\
 							<td class="instancias_nombre" spellcheck="false">'+value['instancia_nombre']+'</td>\
 							<td>\
 							<div \
 							class="editar_instancia" id="'+value['id_instancia']+'"></div>\
 							</td>\
-							<td><a \
-							href="'+"<?= site_url('instancias/eliminar')?>"+"/"+value['id_instancia']+'" class="eliminar_instancia">\
-							<img \
-							src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
-							</a></td>\
+							<td>'+etiqueta_eliminar+'</td>\
 						</tr>');
 					});
+
+					var instancias = [];
+
+					$.each(resultado, function( index, value ){
+						instancias.push({
+							label : value['instancia_nombre'],
+							value : value['id_instancia']
+						});
+					});
+
+					$('#nombre_instancia').autocomplete({
+						source: instancias,
+						change: function(event, ui) {
+							if(!ui.item){
+								$("#nombre_instancia").val("");
+							}
+						},
+						focus: function(event, ui) {
+							return false;
+						},
+						select: function(event, ui) {
+							$("#nombre_instancia").val( ui.item.label );
+							return false;
+						}
+					});
+
 				}else{
 					$('#despliega_instancias').html('No hay instancias registradas');
 				}
@@ -73,41 +106,6 @@
 			}
 		});
 
-		$.ajax("<?= site_url('instancias/consulta_instancias')?>",{
-			dataType: 'json',
-			type: 'post',
-			success: function(resultado)
-			{
-				if (resultado != null) {
-
-					var instancias = [];
-
-					$.each(resultado, function( index, value ){
-						instancias.push({
-							label : value['instancia_nombre'],
-							value : value['id_instancia']
-						});
-					});
-
-					$('#nombre_instancia').autocomplete({
-						source: instancias,
-						change: function(event, ui) {
-							if(!ui.item){
-								$("#nombre_instancia").val("");
-							}
-						},
-						focus: function(event, ui) {
-							return false;
-						},
-						select: function(event, ui) {
-							$("#nombre_instancia").val( ui.item.label );
-							return false;
-						}
-					});
-				}
-			}
-		});
-
 		$("#despliega_instancias").on("click", "table tbody tr td .eliminar_instancia", function(){
 			var eliminar = confirm("¿Está seguro de eliminar la instancia?");
 			if (eliminar) {
@@ -132,7 +130,7 @@
 
 		$("#despliega_instancias").on("click", "table tbody tr td .guardar_instancia", function(event){
 			var nombre_instancia = $(this).parent().prev();
-			var datos={
+			var datos = {
 				'id_instancia'		: $(this).attr("id"),
 				'instancia_nombre'	: nombre_instancia.text()
 			};
@@ -142,6 +140,8 @@
 				dataType: 'json',
 				type: 'post'
 			});
+
+			alert("La información se guardó satisfactoriamente.");
 
 			$(this).addClass("editar_instancia");
 			$(this).removeClass("guardar_instancia");
@@ -170,7 +170,7 @@
 					complete: function(){
 						$("#frm_registrar_instancia").hide();
 						$("#btn_nueva_instancia").show();
-						alert("La información se guardó satisfactoriamente");
+						alert("Recuerde que si agrega una instancia debe notificar al Administrador del 'Portal de TUL'");
 						$('#despliega_instancias table tbody').find("tr:gt(0)").remove();
 						consulta_instancias();
 					}

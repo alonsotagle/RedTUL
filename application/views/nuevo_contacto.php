@@ -62,14 +62,14 @@
 	    	$("#contacto_telefono").validationEngine('validate');
 	    });
 
-	    $("#contacto_idu").change(function(){
+		$("#contacto_idu").change(function(){
 
-	    	$("#estado_idu").show();
-	    	$("#estado_idu").attr("src", "<?= base_url('assets/img/loading.gif') ?>");
+			$("#estado_idu").show();
+			$("#estado_idu").attr("src", "<?= base_url('assets/img/loading.gif') ?>");
 
-	    	var datos = {"idu" : $(this).val()}
-	    	
-	    	$.ajax("<?= site_url('contactos/verificar_idu')?>", {
+			var datos = {"idu" : $(this).val()}
+			
+			$.ajax("<?= site_url('contactos/verificar_idu')?>", {
 				dataType: 'json',
 				data: datos,
 				type: 'post',
@@ -96,7 +96,7 @@
 					}
 				}
 			});
-	    });
+		});
     });
 </script>
 <!-- inicia contenido -->

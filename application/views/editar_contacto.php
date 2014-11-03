@@ -25,6 +25,8 @@
 					$("input[name=tipo_contacto][value="+resultado['contacto_tipo']+"]").prop('checked', true);
 					$("input[name=instructor_candidato][value="+resultado['contacto_instructor']+"]").prop('checked', true);
 					$("input[name=comunicacion_contacto][value="+resultado['contacto_comunicacion']+"]").prop('checked', true);
+					$('#contacto_idu').val(resultado['contacto_IDU']);
+					$("input[name=rol_contacto][value="+resultado['contacto_rol']+"]").prop('checked', true);
 
 					$('#contacto_avatar_old').val(resultado['contacto_avatar']);
 
@@ -82,6 +84,8 @@
 
 		$(document).tooltip();
 
+		$("#estado_idu").hide();
+
 		$("#contacto_avatar").change(function(){
 	        if (this.files && this.files[0]) {
 	            var reader = new FileReader();
@@ -103,6 +107,38 @@
 	    	$("#contacto_telefono").validationEngine('validate');
 	    });
 
+	    $("#contacto_idu").change(function(){
+
+			$("#estado_idu").show();
+			$("#estado_idu").attr("src", "<?= base_url('assets/img/loading.gif') ?>");
+
+			var datos = {"idu" : $(this).val()}
+			
+			$.ajax("<?= site_url('contactos/verificar_idu')?>", {
+				dataType: 'json',
+				data: datos,
+				type: 'post',
+				success: function(resultado)
+				{
+					if (resultado) {
+						if (resultado == "EXISTE") {
+							$("#estado_idu").attr("src", "<?= base_url('assets/img/idu_warning.png') ?>");
+							alert("El usuario ya se encuentra registrado.");
+						}else{
+							$("#estado_idu").attr("src", "<?= base_url('assets/img/idu_true.png') ?>");
+							$('#contacto_nombre').val(resultado['contacto_nombre']);
+							$('#contacto_paterno').val(resultado['contacto_ap_paterno']);
+							$('#contacto_materno').val(resultado['contacto_ap_materno']);
+							$('#contacto_correoinst').val(resultado['contacto_correo_inst']);
+						}
+					}else{
+						$("#estado_idu").attr("src", "<?= base_url('assets/img/idu_false.png') ?>");
+						alert("No se encontraron coincidencias con el Identificador Universitario (IDU).");
+					}
+				}
+			});
+		});
+
     });
 </script>
 <!-- inicia contenido -->
@@ -118,6 +154,34 @@
 		<div class="contenedor_seccion_formulario">
 			<p>Los datos marcados con asterisco son obligatorios.</p>
 			<br>
+			<label class="etiqueta_frm" for="contacto_idu">Identificador Universitario (IDU)</label>
+			<input type="text" maxlength="50" id="contacto_idu" name="contacto_idu" class="validate[required]">
+			<img src="<?= base_url('assets/img/loading.gif') ?>" width="20" height="20" id="estado_idu">
+			<br>
+			<div id="contenedor_imagen">
+				<img src="<?= base_url('assets/img/avatar.jpg') ?>" id="contacto_imagen">
+				<input type="file" id="contacto_avatar" name="contacto_avatar" class="validate[checkFileType[jpg|jpeg|gif|JPG|JPEG|GIF]]" data-prompt-position="topLeft">
+				<br><span>Formatos permitidos .jpg y .gif</span>
+				<input type="hidden" id="contacto_avatar_old" name="contacto_avatar_old">
+			</div>
+			<p class="encabezado_form_nuevo_contacto">Datos Generales</p>
+			<label class="etiqueta_frm" for="contacto_nombre">* Nombre</label>
+			<input type="text" maxlength="50" id="contacto_nombre" name="contacto_nombre" class="validate[required]">
+			<br>
+			<label class="etiqueta_frm" for="contacto_paterno">* Apellido paterno</label>
+			<input type="text" maxlength="50" id="contacto_paterno" name="contacto_apaterno" class="input_frm_nuevo validate[required]">
+			<br>
+			<label class="etiqueta_frm" for="contacto_materno">* Apellido materno</label>
+			<input type="text" maxlength="50" id="contacto_materno" name="contacto_amaterno" class="validate[required]">
+			<br><br>
+			<label>* Rol</label>
+			<br>
+			<input type="radio" name="rol_contacto" value="0" id="rol_adm" class="validate[required]">
+			<label for="rol_adm">Administrador</label>
+			<br>
+			<input type="radio" name="rol_contacto" value="1" id="rol_tec" class="validate[required]">
+			<label for="rol_tec">Responsable t&eacute;cnico</label>
+			<br><br>
 			<label>Estatus</label>
 			<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica el estado en el que se encuentra la cuenta del usuario." class="icon_tooltip">
 			<input type="radio" name="estatus_contacto" value="1" id="estatus_activo">
@@ -125,27 +189,15 @@
 			<input type="radio" name="estatus_contacto" value="0" id="estatus_inactivo">
 			<label for="estatus_inactivo">Inactivo</label>
 		</div>
-		<div id="contenedor_imagen">
-			<img src="<?= base_url('assets/img/avatar.jpg') ?>" id="contacto_imagen">
-			<input type="file" id="contacto_avatar" name="contacto_avatar" class="validate[checkFileType[jpg|jpeg|gif|JPG|JPEG|GIF]]" data-prompt-position="topLeft">
-			<br><span>Formatos permitidos .jpg y .gif</span>
-			<input type="hidden" id="contacto_avatar_old" name="contacto_avatar_old">
-		</div>
 		<div class="contenedor_seccion_formulario">
 			<label>* Tipo de contacto</label>
 			<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica el rol que tiene el contacto dentro de la instancia a la que pertenece.">
 			<br>
-			<input type="radio" name="tipo_contacto" value="1" id="tipo_web" class="validate[required]">
-			<label for="tipo_web">Webmaster</label>
-			<br>
-			<input type="radio" name="tipo_contacto" value="2" id="tipo_com" class="validate[required]">
-			<label for="tipo_com">Responsable de comunicaci&oacute;n</label>
-			<br>
-			<input type="radio" name="tipo_contacto" value="3" id="tipo_tec" class="validate[required]">
+			<input type="radio" name="tipo_contacto" value="0" id="tipo_tec" class="validate[required]">
 			<label for="tipo_tec">Responsable t&eacute;cnico</label>
 			<br>
-			<input type="radio" name="tipo_contacto" value="4" id="tipo_otr" class="validate[required]">
-			<label for="tipo_otr">Otros</label>
+			<input type="radio" name="tipo_contacto" value="1" id="tipo_com" class="validate[required]">
+			<label for="tipo_com">Responsable de comunicaci&oacute;n</label>
 			<br>
 		</div>
 		
@@ -155,16 +207,6 @@
 		<label for="instructor_si">S&iacute;</label>
 		<input type="radio" name="instructor_candidato" value="0" id="instructor_no">
 		<label for="instructor_no">No</label>
-		<br>
-		<p class="encabezado_form_nuevo_contacto">Datos Generales</p>
-		<label class="etiqueta_frm" for="contacto_nombre">* Nombre</label>
-		<input type="text" maxlength="50" id="contacto_nombre" name="contacto_nombre" class="validate[required]">
-		<br>
-		<label class="etiqueta_frm" for="contacto_paterno">* Apellido paterno</label>
-		<input type="text" maxlength="50" id="contacto_paterno" name="contacto_apaterno" class="input_frm_nuevo validate[required]">
-		<br>
-		<label class="etiqueta_frm" for="contacto_materno">* Apellido materno</label>
-		<input type="text" maxlength="50" id="contacto_materno" name="contacto_amaterno" class="validate[required]">
 		<br>
 		<p class="encabezado_form_nuevo_contacto">Datos Institucionales</p>
 		<label for="contacto_instancias">* Instancia</label>

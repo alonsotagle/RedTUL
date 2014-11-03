@@ -181,21 +181,23 @@ class contactos extends CI_Controller {
 
             if ($respuesta_avatar != "error_imagen") {
                 $editar_contacto = array(
-                    'contacto_estatus' => $this->input->post('estatus_contacto'),
-                    'contacto_tipo' => $this->input->post('tipo_contacto'),
-                    'contacto_instructor' => $this->input->post('instructor_candidato'),
-                    'contacto_nombre' => $this->input->post('contacto_nombre'),
-                    'contacto_ap_paterno' => $this->input->post('contacto_apaterno'),
-                    'contacto_ap_materno' => $this->input->post('contacto_amaterno'),
-                    'contacto_instancia' => $this->input->post('contacto_instancia'),
-                    'contacto_adscripcion' => $this->input->post('contacto_adscripcion'),
-                    'contacto_funciones' => $this->input->post('contacto_funciones'),
-                    'contacto_telefono' => $this->input->post('contacto_telefono'),
-                    'contacto_extension' => $this->input->post('contacto_extension'),
-                    'contacto_correo_inst' => $this->input->post('contacto_correoinst'),
-                    'contacto_correo_per' => $this->input->post('contacto_correopers'),
-                    'contacto_avatar' => $respuesta_avatar,
+                    'contacto_estatus'      => $this->input->post('estatus_contacto'),
+                    'contacto_tipo'         => $this->input->post('tipo_contacto'),
+                    'contacto_instructor'   => $this->input->post('instructor_candidato'),
+                    'contacto_nombre'       => $this->input->post('contacto_nombre'),
+                    'contacto_ap_paterno'   => $this->input->post('contacto_apaterno'),
+                    'contacto_ap_materno'   => $this->input->post('contacto_amaterno'),
+                    'contacto_instancia'    => $this->input->post('contacto_instancia'),
+                    'contacto_adscripcion'  => $this->input->post('contacto_adscripcion'),
+                    'contacto_funciones'    => $this->input->post('contacto_funciones'),
+                    'contacto_telefono'     => $this->input->post('contacto_telefono'),
+                    'contacto_extension'    => $this->input->post('contacto_extension'),
+                    'contacto_correo_inst'  => $this->input->post('contacto_correoinst'),
+                    'contacto_correo_per'   => $this->input->post('contacto_correopers'),
+                    'contacto_avatar'       => $respuesta_avatar,
                     'contacto_comunicacion' => $this->input->post('comunicacion_contacto'),
+                    'contacto_rol'          => $this->input->post('rol_contacto'),
+                    'contacto_IDU'          => $this->input->post('contacto_idu')
                 );
                 $editar_contacto['id_contacto'] = $id_contacto;
 

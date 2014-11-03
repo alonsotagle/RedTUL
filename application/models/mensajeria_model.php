@@ -463,4 +463,37 @@ class mensajeria_model extends CI_Model{
     {
         $this->db->insert('curso_invitado_contacto', array('curso_id' => $curso_id, 'invitado_id' => $contacto_id));
     }
+
+    public function constancia_contacto($contacto_id)
+    {
+        $this->db->select('contacto_nombre,
+                            contacto_ap_paterno,
+                            contacto_ap_materno');
+
+        $this->db->from('contacto');
+
+        $this->db->where('id_contacto', $contacto_id);
+
+        $query = $this->db->get();
+
+        return $query->row_array();
+    }
+
+    public function constancia_curso($curso_id)
+    {
+        $this->db->select('curso_titulo,
+                            curso_fecha_inicio,
+                            curso_fecha_fin,
+                            curso_hora_inicio,
+                            curso_hora_fin,
+                            curso_ubicacion');
+
+        $this->db->from('curso');
+
+        $this->db->where('id_curso', $curso_id);
+
+        $query = $this->db->get();
+
+        return $query->row_array();
+    }
 }

@@ -460,8 +460,24 @@ class mensajeria extends CI_Controller {
     }
 
     function constancia($id_curso, $id_contacto){
-        echo $id_curso;
-        echo "<br>";
-        echo $id_contacto;
+        $datos_constancia = array();
+        $meses = array("enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre");
+
+        $contacto = $this->mensajeria_model->constancia_contacto($id_contacto);
+        $contacto = $contacto['contacto_nombre']." ".$contacto['contacto_ap_paterno']." ".$contacto['contacto_ap_materno'];
+        $datos_constancia['nombre_completo'] = $contacto;
+        
+        $datos_constancia['curso'] = $this->mensajeria_model->constancia_curso($id_curso);
+        $fecha_curso = explode("-", $datos_constancia['curso']['curso_fecha_inicio']);
+        $datos_constancia['curso']['curso_fecha_inicio'] = $fecha_curso[2]." de ".$meses[$fecha_curso[1]-1]." de ".$fecha_curso[0];
+
+        $datos_constancia['fecha_actual'] = date("j")." de ".$meses[date('n')-1]. " de ".date('Y') ;
+        $this->constancia_pdf($datos_constancia);
+    }
+
+    function constancia_pdf($datos_constancia){
+        $this->load->helper(array('dompdf', 'file'));
+        $html = $this->load->view('constancia', $datos_constancia, true);
+        pdf_constancia($html, 'filename');
     }
 }

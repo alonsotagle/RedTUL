@@ -9,10 +9,10 @@ class Cron extends CI_Controller {
 
 	public function index()
 	{
-		//if ($this->input->is_cli_request()) {
-		$this->consulta_estatus_cursos();
-		$this->correos_pendientes();
-		//}
+		if ($this->input->is_cli_request()) {
+			$this->consulta_estatus_cursos();
+			$this->correos_pendientes();
+		}
 	}
 
 	function consulta_estatus_cursos()
@@ -56,20 +56,22 @@ class Cron extends CI_Controller {
 				$fecha_envio->setTime($hora_envio[0], $hora_envio[1]);
 
 				if ($fecha_envio <= $hoy) {
-					$this->mandar_correo($value['id_correo']);
+					$destinatarios = $this->cron_model->consulta_id_destinatario($id_correo);
+					if (!is_null($destinatarios)) {
+						$this->mandar_correo($value['id_correo'], $destinatarios);
+					}
 				}
 			}
 		}
 	}
 
-	function mandar_correo($id_correo)
+	function mandar_correo($id_correo, $destinatarios)
     {
         $this->load->library('class_email');
         $correo = $this->cron_model->consulta_correo($id_correo);
         
         extract($correo);
 
-        $destinatarios = $this->cron_model->consulta_id_destinatario($id_correo);
         $id_destinatarios = array();
 
         foreach ($destinatarios as $key => $value) {

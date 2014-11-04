@@ -2,7 +2,7 @@
 <div id="contenido_confirmacion">
 
 	<div id="bloque_confirmacion">
-		<h1>Usuario no registrado.</h1>
+		<h1>Redireccionar a la página principal del micrositio.</h1>
 	</div>
 
 <!-- termina contenido -->

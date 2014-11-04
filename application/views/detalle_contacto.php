@@ -25,7 +25,7 @@
 		<?= $contacto_tipo; ?>
 	</span>
 	<br><br>
-	<span class="conf_contacto_campos">Instructor asignado</span>
+	<span class="conf_contacto_campos">Instructor candidato</span>
 	<span class="conf_contacto_valores">
 		<?= $contacto_instructor; ?>
 	</span>

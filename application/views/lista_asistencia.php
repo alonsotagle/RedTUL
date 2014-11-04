@@ -28,20 +28,6 @@
 				}
 			}
 		});
-
-		function print() {
-			var $print = $("#seccion_imprimir")
-				.clone()
-				.addClass('print')
-				.prependTo('body');
-				console.log("hoola");
-			//window.print() stops JS execution
-			window.print();
-
-			//Remove div once printed
-			$print.remove();
-			alert("hoola");
-		}
     });
 </script>
 <!-- inicia contenido -->
@@ -105,7 +91,9 @@
 		<?php endif; ?>
 		</div>
 		<br>
-		<strong id="observaciones_lista">Observaciones:</strong>
+		<div id="cuadro_observaciones">
+			<strong id="observaciones_lista">Observaciones:</strong>
+		</div>
 		<br><br><br>
 	</div>
 

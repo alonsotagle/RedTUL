@@ -478,6 +478,6 @@ class mensajeria extends CI_Controller {
     function constancia_pdf($datos_constancia){
         $this->load->helper(array('dompdf', 'file'));
         $html = $this->load->view('constancia', $datos_constancia, true);
-        pdf_constancia($html, 'filename');
+        pdf_constancia($html, 'Constancia');
     }
 }

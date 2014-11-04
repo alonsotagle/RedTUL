@@ -380,10 +380,19 @@ class contactos extends CI_Controller {
             $datos_ws = $this->Idu->consultaPorIdu($idu);
 
             if (count($datos_ws)>1) {
+                $correo_contacto = "";
+                if (isset($datos_ws["lstContactosElectronicos"][0]["ceDirecElec"])) {
+                    $correo_contacto = $datos_ws["lstContactosElectronicos"][0]["ceDirecElec"];
+                }elseif (isset($datos_ws["lstIdentificadores"][0]["idIdSecundario"])) {
+                    $correo_contacto = $datos_ws["lstIdentificadores"][0]["idIdSecundario"];
+                }else{
+                    $correo_contacto = "-";
+                }
+                
                 $contacto = array('contacto_nombre'     => ucwords(strtolower($datos_ws["dgNombre"])),
                                 'contacto_ap_paterno'   => ucwords(strtolower($datos_ws["dgPrimerApellido"])),
                                 'contacto_ap_materno'   => ucwords(strtolower($datos_ws["dgSegundoApellido"])),
-                                'contacto_correo_inst'  => $datos_ws["lstIdentificadores"][0]["idIdSecundario"],
+                                'contacto_correo_inst'  => $correo_contacto,
                                 );
                 $datos_ws = $contacto;
             }else{

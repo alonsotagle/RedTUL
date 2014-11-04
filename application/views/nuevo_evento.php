@@ -171,8 +171,10 @@
 				<label class="label_nuevo_curso">* Costo
 				<!-- <img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica el lugar exacto en el que se llevará a cabo el curso, por ejemplo entidad, edificio, salón, etc."> -->
 				</label>
-				<input type="radio" name="curso_costo" value="1" class="validate[required]">Si
-				<input type="radio" name="curso_costo" value="0" class="validate[required]">No
+				<input type="radio" name="curso_costo" value="1" class="validate[required]" id="costo_si">
+				<label for="costo_si">Sí</label>
+				<input type="radio" name="curso_costo" value="0" class="validate[required]" id="costo_no">
+				<label for="costo_no">No</label>
 				<input type="hidden" name="curso_evento" value="1">
 				<br>
 				<div id="botones_envio">

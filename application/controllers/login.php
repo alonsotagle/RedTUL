@@ -68,13 +68,10 @@ class login extends CI_Controller {
         $contacto = $this->login_model->consulta_identificador($identificador);
 
         if (is_null($contacto)) {
-            /*
             $this->session->sess_destroy();
             $this->load->view('template/header');
-            $this->load->view('usuario_invalido');
+            $this->load->view('micrositio');
             $this->load->view('template/footer');
-            */
-            $this->logout();
         }else{
             redirect('inicio');
         }

@@ -12,7 +12,7 @@ class home
  
     public function check_login()
     {
-        if($this->ci->uri->segment(1) != "login")
+        if($this->ci->uri->segment(1) != "login" && $this->ci->uri->segment(1) != "cron")
         {
             if($this->ci->session->userdata('logged') == FALSE)
             {

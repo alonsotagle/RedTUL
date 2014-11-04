@@ -18,7 +18,6 @@
 							label : value['instancia_nombre'],
 							value : value['id_instancia']
 						});
-
 					});
 
 					$('#contacto_instancias').autocomplete({

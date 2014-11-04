@@ -60,7 +60,7 @@ $(document).ready(function(){
 
 				$('#despliega_contactos table tbody').append('<tr>\
 					<td>'+value['contacto_IDU']+'</td>\
-					<td><a href="'+url_detalle+'" class="link_detalle">'+value['contacto_nombre']+' '+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+'</a></td>\
+					<td><a href="'+url_detalle+'" class="link_detalle">'+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+' '+value['contacto_nombre']+'</a></td>\
 					<td>'+value['rol_contacto_descripcion']+'</td>\
 					<td>'+value['tipo_contacto_descripcion']+'</td>\
 					<td>'+value['contacto_estatus']+'</td>\
@@ -126,7 +126,7 @@ $(document).ready(function(){
 
 						$('#despliega_contactos table tbody').append('<tr>\
 							<td>'+value['contacto_IDU']+'</td>\
-							<td><a href="'+url_detalle+'" class="link_detalle">'+value['contacto_nombre']+' '+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+'</a></td>\
+							<td><a href="'+url_detalle+'" class="link_detalle">'+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+' '+value['contacto_nombre']+'</a></td>\
 							<td>'+value['rol_contacto_descripcion']+'</td>\
 							<td>'+value['tipo_contacto_descripcion']+'</td>\
 							<td>'+value['contacto_estatus']+'</td>\

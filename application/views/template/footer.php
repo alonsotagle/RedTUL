@@ -2,19 +2,19 @@
  </div>
 <!--inicia pie banners y pie derechos-->
 
-<div class="pie-banners">
+<!-- <div class="pie-banners">
 	<img src="<?= base_url('assets/img/bg-pie.jpg')?>">
-</div>
+</div> -->
 
 <div class="pie-derechos">
 
-	<div>
-		Hecho en México, todos los derechos reservados  2013. Esta página puede ser reproducida con fines no lucrativos, siempre y cuando no se mutile, se cite la fuente completa y su dirección electrónica. De otra forma requiere permiso previo por escrito de la institución. <a id="mostrarCreditos" href="javascript:;">Créditos</a>
+	<div id="pie_derechos">
+		Hecho en México, todos los derechos reservados  2014. Esta página puede ser reproducida con fines no lucrativos, siempre y cuando no se mutile, se cite la fuente completa y su dirección electrónica. De otra forma requiere permiso previo por escrito de la institución.
 	</div>
-	<div class="administrado">Sitio web administrado por:<br/>
+	<div id="pie_creditos">
+		<a id="mostrarCreditos" href="javascript:;">Créditos</a>
 		Dirección General de Cómputo y Tecnologías de la Información y Comunicación.
 	</div>
-
 </div>
 
 <script type="text/javascript">
@@ -45,9 +45,7 @@
 	</div>
 </div>
 
-
 <!--termina pie banners y pie derechos-->
-
 
 </div>
 

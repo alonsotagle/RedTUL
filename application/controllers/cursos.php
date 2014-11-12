@@ -188,7 +188,7 @@ class cursos extends CI_Controller {
                 'estatus_curso'     => $this->input->post('estatus_curso'),
                 'inicio_curso'      => $this->input->post('inicio_curso'),
                 'fin_curso'         => $this->input->post('fin_curso'),
-                'modalidad_curso'   => $this->input->post('tipo_curso')
+                'modalidad_curso'   => $this->input->post('modalidad_curso')
             );
 
             $nombre_completo = $this->input->post('instructor_curso');
@@ -244,6 +244,7 @@ class cursos extends CI_Controller {
                     }else{
                         $curso['curso_tipo'] = 'Externo';
                     }
+
                     $curso['curso_instructor'] = $this->curso_model->consulta_instructores_nombre_curso($curso['id_curso']);
 
                     if ($curso['curso_cupo'] == '0') {
@@ -480,7 +481,7 @@ class cursos extends CI_Controller {
         $curso = $this->curso_model->consulta_detalle_curso($id_curso);
 
         if (($curso['curso_flyer']) != "") {
-            $tag_img = "<img src=".base_url('assets/flyers_cursos/')."/".$curso['curso_flyer']." width='200px' height='200px'>";
+            $tag_img = "<img src=".base_url('assets/flyers_cursos/')."/".$curso['curso_flyer']." width='200px'>";
             $curso['curso_flyer'] = $tag_img;
         }
 
@@ -534,9 +535,7 @@ class cursos extends CI_Controller {
 
         $curso['registro'] = $this->curso_model->consulta_registro_curso($curso['id_curso']);
 
-        if (is_null($curso['registro'])) {
-            $curso['registro'] = array();
-        }else{
+        if (!is_null($curso['registro'])) {
             foreach ($curso['registro'] as $campo => $valor) {
                 if ($valor == "1") {
                     $curso['registro'][$campo] = "Visible";
@@ -639,5 +638,19 @@ class cursos extends CI_Controller {
         $usuarios = $this->curso_model->consulta_inscritos_lista($id_curso);
 
         print_r(json_encode($usuarios));
+    }
+
+    function agregar_material($id_curso)
+    {
+        $this->load->helper(array('form', 'url'));
+
+        $this->load->view('template/header');
+        $this->load->view('template/menu');
+        $this->load->view('curso_material', array('id_curso' => $id_curso));
+        $this->load->view('template/footer');
+    }
+
+    function guardar_material(){
+        var_dump($_POST);
     }
 }

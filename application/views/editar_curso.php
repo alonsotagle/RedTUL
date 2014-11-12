@@ -7,7 +7,7 @@ $(document).ready(function(){
     $("#frm_buscar_invitados").validationEngine({promptPosition: "centerRight"});
     $("#frm_configuracion_linea").validationEngine({promptPosition: "centerRight"});
 
-    $( "#tabs" ).tabs();
+	$( "#tabs" ).tabs();
 
 	$(document).tooltip();
 
@@ -30,8 +30,7 @@ $(document).ready(function(){
 		dataType: 'json',
 		type: 'post',
 		success: function(resultado) {
-			if (resultado != null) {		
-				console.log(resultado);
+			if (resultado != null) {
 				$('#curso_titulo').val(resultado['curso_titulo']);
 				$('#configuracion_titulo_curso').text(resultado['curso_titulo']);
 				$("#curso_tipo option[value="+resultado['curso_tipo']+"]").prop('selected', true);
@@ -50,6 +49,10 @@ $(document).ready(function(){
 				$('#curso_entidad').val(resultado['curso_entidad']);
 				$('#curso_evento').val(resultado['curso_evento']);
 				$("input:radio[name=curso_costo][value="+resultado['curso_costo']+"]").prop('checked', true);
+
+				if (resultado['curso_tipo'] == 1) {
+					$("#tabs").tabs({ disabled: [ 1 ] });
+				}
 
 				if (resultado['curso_evento'] == "0") {
 					$(".tipo_curso_evento").html("curso");

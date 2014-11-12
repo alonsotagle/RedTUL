@@ -87,8 +87,6 @@ class curso_model extends CI_Model{
     						curso.curso_cupo');
 		$this->db->from('curso');
 		$this->db->join('estatus_curso', 'curso.curso_estatus = estatus_curso.id_estatus_curso');
-        $this->db->join('curso_instructor', 'curso.id_curso = curso_instructor.curso_id');
-        $this->db->join('contacto', 'curso_instructor.instructor_id = contacto.id_contacto');
 
         if ($parametros_busqueda['nombre_curso'] != "") {
             $this->db->like('curso.curso_titulo', $parametros_busqueda['nombre_curso']);
@@ -126,6 +124,8 @@ class curso_model extends CI_Model{
         $this->db->distinct();
 
         $query = $this->db->get();
+
+        //return $this->db->last_query();
 
         if ($query -> num_rows() > 0)
         {

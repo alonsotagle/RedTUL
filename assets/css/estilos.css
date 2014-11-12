@@ -14,9 +14,69 @@ body {
 	width: 980px;
 }
 
-/* Acople imagenes de encabezado */
-.encabezado img{
+.encabezado{
+	background: url('../img/fondo_encabezado.png') no-repeat;
+	background-size: 980px 170px;
+	background-color: #636363;
+	height: 200px;
+}
+
+#seccion_unam{
+	margin-left: 25px;
 	float: left;
+	width: 40%;
+}
+
+#enlace_unam{
+	text-decoration: none;
+}
+
+#enlace_unam img{
+	display: block;
+}
+
+#txt_unam{
+	color: #ffffff;
+	font-family: Helvetica;
+	font-size: 30px;
+	font-weight: bold;
+	margin-left: 2px;
+}
+
+#txt_universidad{
+	color: #ffffff;
+	font-family: Helvetica;
+	font-size: 17px;
+	margin-left: 120px;
+	margin-top: -97px;
+	position: absolute;
+	width: 162px;
+}
+
+#seccion_red{
+	float: left;
+	width: 55%;
+}
+
+#seccion_red a{
+	text-decoration: none;
+}
+
+@font-face {
+    font-family: Exo;
+    src: url('../font/Exo-Bold.otf');
+}
+
+#txt_RRT{
+	color: #ffffff;
+	display: inline-block;
+	font-family: Exo;
+	font-size: 20px;
+	margin-top: 50px;
+}
+
+#logo_RRT{
+	float: right;
 }
 
 /* Contenido principal */
@@ -35,22 +95,22 @@ body {
 }
 
 #lista_menu{
-	background: #fff;
+	background: #ffffff;
 	list-style: none;
 	padding: 0px;
 }
 
 .elemento_menu{
-	border-left: 3px solid #d7d8da;
+	border-left: 3px solid #82999f;
 }
 
 .elemento_menu:hover{
-	border-left: 3px solid #1b5799;
+	border-left: 3px solid #2bb496;
 	background: #d7d8da;
 }
 
 .elemento_menu:hover > a{
-	color: #1b5799;
+	color: #2bb496;
 }
 
 .elemento_menu a{
@@ -61,11 +121,11 @@ body {
 }
 
 .seleccion_menu{
-	border-left: 3px solid #1b5799;
+	border-left: 3px solid #2bb496;
 }
 
 .seleccion_menu a{
-	background: #1b5799;
+	background: #2bb496;
 }
 
 .seleccion_menu a span{
@@ -73,8 +133,8 @@ body {
 }
 
 .seleccion_menu:hover{
-	border-left: 3px solid #1b5799;
-	background: #1b5799;
+	border-left: 3px solid #2bb496;
+	background: #2bb496;
 }
 
 /* Migajas de pan */
@@ -98,37 +158,34 @@ body {
 }
 
 .pie-derechos {
-	background-image: url(../img/pie-bg.jpg);
-	background-repeat: no-repeat;
-	border-left-color: #CCCCCC;
-	border-left-style: solid;
-	border-left-width: 0px;
-	border-right-color: #CCCCCC;
-	border-right-style: solid;
-	border-right-width: 0px;
-	color: #333333;
+	background-color: #292929;
+	color: #ffffff;
 	float: left;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
-	height: 82px;
-	margin-left: 2px;
-	margin-top: 3px;
 	padding: 5px;
-	width: 978px;
 }
 
-.pie-derechos a,visited {
-	color: #034279;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 11px;
+#pie_derechos{
+	float: left;
+	padding: 8px 10px 8px 50px;
+	text-align: justify;
+	width: 53%;
 }
 
-.administrado{
-	color: #1b5799;
-	float: right;
-	margin-top: 9px;
+#pie_creditos{
+	float: left;
+	padding: 0px 45px;
 	text-align: center;
-	width: 978px;
+	width: 30%;
+}
+
+#mostrarCreditos{
+	color: #2bb496;
+	display: block;
+	font-size: large;
+	text-align: center;
+	text-decoration: none;
 }
 
 /* Créditos */
@@ -447,6 +504,16 @@ fieldset > legend{
 	margin-bottom: 25px;
 	padding-right: 20px;
 	text-align: justify;
+	width: 230px;
+	float: left;
+}
+
+.conf_registro_linea{
+	margin-bottom: 25px;
+	padding-right: 20px;
+	text-align: center;
+	width: 230px;
+	float: left;
 }
 
 .curso_acciones a{
@@ -492,9 +559,10 @@ fieldset > legend{
 }
 
 .encabezado_detalle_curso{
-	font-size: medium;
+	clear: both;
+	font-size: large;
 	font-weight: bold;
-
+	margin-top: 30px;
 }
 
 /* Vista editar_curso.php */
@@ -858,9 +926,9 @@ fieldset > legend{
 
 /* Inicia LOGIN */
 #login_form{
-	background-color: #1b5799;
+	background-color: #2bb496;
 	border-radius: 25px;
-	border: 1px solid black;
+	border: 1px solid #2bb496;
 	box-shadow: 0px 0px 15px black;
 	color: #fff;
 	margin: 40px auto;
@@ -966,13 +1034,13 @@ fieldset > legend{
 }
 
 #cuadro_observaciones{
-	width: 98%;
 	border: 1px solid #000;
 	clear: both;
-	margin-top: 30px;
 	display: inline-block;
 	height: 85px;
+	margin-top: 30px;
 	padding: 5px;
+	width: 98%;
 }
 
 @media print {
@@ -994,12 +1062,9 @@ fieldset > legend{
 
     #navegacion,
     .encabezado,
-    .topinterna,
-    .pie-banners,
     .pie-derechos,
     #migaDePan,
     #wrapper_btn {
        display:none;
     }
-
 }

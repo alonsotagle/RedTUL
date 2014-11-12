@@ -28,14 +28,24 @@
 
 <!-- inicia encabezado -->
 <div class="encabezado">
-	<a href="http://www.unam.mx">
-		<img src="<?= base_url('assets/img/img_unam.jpg')?>" alt="UNAM"/>
-	</a>
-	<img src="<?= base_url('assets/img/img_dgtic.jpg')?>"/>
-</div>
+	<div id="seccion_unam">
+		<a id="enlace_unam" href="http://www.unam.mx">
+			<img src="<?= base_url('assets/img/escudo_unam.png')?>" alt="UNAM" height="110"/>
+			<span id="txt_unam">UNAM</span>
+			<div id="txt_universidad">
+				<span>Universidad Nacional</span><br>
+				<span>Autónoma de México</span>
+			</div>
+		</a>
+	</div>
 
-<div class="topinterna">
-	<img src="<?= base_url('assets/img/titulo.jpg')?>">
+	<div id="seccion_red">
+		<a href="<?=base_url()?>">
+			<span id="txt_RRT">Red de Responsables Técnicos de la UNAM</span>
+			<img id="logo_RRT" src="<?= base_url('assets/img/logo_RRT.png')?>" alt="UNAM" height="120"/>
+		</a>
+	</div>
+
 </div>
 
 <!-- termina encabezado -->

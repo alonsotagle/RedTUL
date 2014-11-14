@@ -651,6 +651,41 @@ class cursos extends CI_Controller {
     }
 
     function guardar_material(){
-        var_dump($_POST);
+        if (!empty($_POST)) {
+
+            $nuevo_material = array('curso_id' => $this->input->post('id_curso'));
+
+            if ($_FILES) {
+                $respuesta_material = $this->subir_material();
+                if ($respuesta_material != "error_subida") {
+                    $nuevo_material['material_curso_url'] = $respuesta_material;
+                }
+            } else {
+                $nuevo_material['material_curso_url'] = $this->input->post('material_url');
+            }
+
+            $this->curso_model->registrar_material($nuevo_material);
+        }else{
+            redirect(site_url("error404"));
+        }
+        $this->index();
+    }
+
+    function subir_material()
+    {
+        $config['upload_path'] = './assets/material_cursos/';
+        $config['allowed_types'] = 'pdf';
+        $config['max_size'] = '5120';
+
+        $this->load->library('upload', $config);
+
+        if (!$this->upload->do_upload("material_file"))
+        {
+            echo $this->upload->display_errors();
+            return "error_subida";
+        }else{
+            $datos = $this->upload->data();
+            return $datos["file_name"];
+        }
     }
 }

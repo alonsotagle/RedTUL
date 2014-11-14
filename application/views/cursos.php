@@ -34,6 +34,24 @@
 
 						datos_curso_renglon += '</td>';
 
+						var etiqueta_material;
+						if (value['estatus_curso_descripcion'] == "Finalizado") {
+							etiqueta_material = '<a href="'+"<?= site_url('cursos/agregar_material')?>"+"/"+value['id_curso']+'">\
+									<img src="'+"<?= base_url('assets/img/icono_agregar_material.png')?>"+'" title="Añadir material">\
+								</a>';
+						}else{
+							etiqueta_material = '<img src="'+"<?= base_url('assets/img/icono_material_no_finalizado.png')?>"+'" title="El curso o evento no ha finalizado.">';
+						}
+
+						var etiqueta_lista;
+						if (value['curso_tipo'] == "Externo") {
+							etiqueta_lista = '<img src="'+"<?= base_url('assets/img/icono_no_lista_asistencia.png')?>"+'" title="El curso o evento es de tipo externo.">';
+						}else{
+							etiqueta_lista = '<a href="'+"<?= site_url('cursos/lista_asistencia')?>"+"/"+value['id_curso']+'">\
+								<img src="'+"<?= base_url('assets/img/icono_lista_asistencia.png')?>"+'" title="Generar lista de asistencia">\
+							</a>';
+						}
+
 						datos_curso_renglon += '<td>'+value['estatus_curso_descripcion']+'</td>\
 							<td>'+curso_fecha_inicio[2]+"/"+curso_fecha_inicio[1]+"/"+curso_fecha_inicio[0]+' a '+curso_fecha_fin[2]+"/"+curso_fecha_fin[1]+"/"+curso_fecha_fin[0]+'</td>\
 							<td>'+value['curso_hora_inicio']+' a '+value['curso_hora_fin']+'</td>\
@@ -44,13 +62,7 @@
 							</a><br>\
 							<a href="'+"<?= site_url('cursos/eliminar')?>"+"/"+value['id_curso']+'" class="eliminar_curso" >\
 								<img src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'" title="Eliminar">\
-							</a><br>\
-							<a href="'+"<?= site_url('cursos/agregar_material')?>"+"/"+value['id_curso']+'">\
-								<img src="'+"<?= base_url('assets/img/icono_agregar_material.png')?>"+'" title="Añadir material">\
-							</a><br>\
-							<a href="'+"<?= site_url('cursos/lista_asistencia')?>"+"/"+value['id_curso']+'">\
-								<img src="'+"<?= base_url('assets/img/icono_lista_asistencia.png')?>"+'" title="Generar lista de asistencia">\
-							</a></td>\
+							</a><br>'+etiqueta_material+'<br>'+etiqueta_lista+'</td>\
 						</tr>';
 
 						$('#despliega_cursos table tbody').append(datos_curso_renglon);

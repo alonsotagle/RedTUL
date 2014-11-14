@@ -26,6 +26,7 @@
 					$("input[name=instructor_candidato][value="+resultado['contacto_instructor']+"]").prop('checked', true);
 					$("input[name=comunicacion_contacto][value="+resultado['contacto_comunicacion']+"]").prop('checked', true);
 					$('#contacto_idu').val(resultado['contacto_IDU']);
+					$('#contacto_idu_hidden').val(resultado['contacto_IDU']);
 					$("input[name=rol_contacto][value="+resultado['contacto_rol']+"]").prop('checked', true);
 
 					$('#contacto_avatar_old').val(resultado['contacto_avatar']);
@@ -106,39 +107,6 @@
 	    $("#contacto_telefono").keypress(function(){
 	    	$("#contacto_telefono").validationEngine('validate');
 	    });
-
-	    $("#contacto_idu").change(function(){
-
-			$("#estado_idu").show();
-			$("#estado_idu").attr("src", "<?= base_url('assets/img/loading.gif') ?>");
-
-			var datos = {"idu" : $(this).val()}
-			
-			$.ajax("<?= site_url('contactos/verificar_idu')?>", {
-				dataType: 'json',
-				data: datos,
-				type: 'post',
-				success: function(resultado)
-				{
-					if (resultado) {
-						if (resultado == "EXISTE") {
-							$("#estado_idu").attr("src", "<?= base_url('assets/img/idu_warning.png') ?>");
-							alert("El usuario ya se encuentra registrado.");
-						}else{
-							$("#estado_idu").attr("src", "<?= base_url('assets/img/idu_true.png') ?>");
-							$('#contacto_nombre').val(resultado['contacto_nombre']);
-							$('#contacto_paterno').val(resultado['contacto_ap_paterno']);
-							$('#contacto_materno').val(resultado['contacto_ap_materno']);
-							$('#contacto_correoinst').val(resultado['contacto_correo_inst']);
-						}
-					}else{
-						$("#estado_idu").attr("src", "<?= base_url('assets/img/idu_false.png') ?>");
-						alert("No se encontraron coincidencias con el Identificador Universitario (IDU).");
-					}
-				}
-			});
-		});
-
     });
 </script>
 <!-- inicia contenido -->
@@ -155,7 +123,8 @@
 			<p>Los datos marcados con asterisco son obligatorios.</p>
 			<br>
 			<label class="etiqueta_frm" for="contacto_idu">Identificador Universitario (IDU)</label>
-			<input type="text" maxlength="50" id="contacto_idu" name="contacto_idu" class="validate[required]">
+			<input type="text" maxlength="50" id="contacto_idu" disabled>
+			<input type="hidden" maxlength="50" id="contacto_idu_hidden" name="contacto_idu">
 			<img src="<?= base_url('assets/img/loading.gif') ?>" width="20" height="20" id="estado_idu">
 			<br>
 			<div id="contenedor_imagen">
@@ -180,7 +149,7 @@
 			<label for="rol_adm">Administrador</label>
 			<br>
 			<input type="radio" name="rol_contacto" value="1" id="rol_tec" class="validate[required]">
-			<label for="rol_tec">Responsable t&eacute;cnico</label>
+			<label for="rol_tec">Responsable</label>
 			<br><br>
 			<label>Estatus</label>
 			<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica el estado en el que se encuentra la cuenta del usuario." class="icon_tooltip">
@@ -190,7 +159,7 @@
 			<label for="estatus_inactivo">Inactivo</label>
 		</div>
 		<div class="contenedor_seccion_formulario">
-			<label>* Tipo de contacto</label>
+			<label>* Tipo de usuario</label>
 			<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Indica el rol que tiene el contacto dentro de la instancia a la que pertenece.">
 			<br>
 			<input type="radio" name="tipo_contacto" value="0" id="tipo_tec" class="validate[required]">
@@ -228,11 +197,11 @@
 			<label for="contacto_ext" id="etiqueta_ext">ext.</label>
 			<input type="text" id="contacto_ext" name="contacto_extension" size="5" maxlength="5" class="validate[custom[numero]]">
 		</div>
-		<label for="contacto_correoinst">Correo institucional</label>
+		<label for="contacto_correoinst">Correo electr&oacute;nico institucional</label>
 		<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Correo electrónico institucional con la que cuenta el usuario.">
 		<input type="text" maxlength="100" id="contacto_correoinst" name="contacto_correoinst" class="validate[groupRequired[correo],custom[email],custom[email_unam]]">
 		<br><br>
-		<label for="contacto_correopers">Correo personal</label>
+		<label for="contacto_correopers">Correo electr&oacute;nico adicional</label>
 		<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Es un correo electrónico alterno al institucional.">
 		<input type="text" maxlength="100" id="contacto_correopers" name="contacto_correopers" class="validate[groupRequired[correo],custom[email]]">
 		<br><br>

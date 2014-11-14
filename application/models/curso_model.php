@@ -537,4 +537,9 @@ class curso_model extends CI_Model{
             return null;
         }
     }
+
+    public function registrar_material($nuevo_material)
+    {
+        $this->db->insert('material_curso', $nuevo_material);
+    }
 }

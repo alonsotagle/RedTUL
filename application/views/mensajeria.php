@@ -320,17 +320,6 @@
 			}
 		});
 
-		$("#btn_correo_obtener_url").click(function(event){
-			event.preventDefault();
-			if ($("#frm_curso_destinatarios").validationEngine('validate') && $("#lista_cursos").val() != "") {
-				valor_contenido_textarea = $("#nuevo_correo_contenido").val();
-				valor_contenido_textarea += "<br>Página para incribirse:<br><a href='<?= site_url('confirmacion') ?>/"+$("#lista_cursos").val()+"'>Inscribirse a evento</a>";
-
-				$("#nuevo_correo_contenido").jqteVal(valor_contenido_textarea);
-				$("#nuevo_correo_asunto").focus();
-			}
-		});
-
 		$("#btn_buscar_contacto").click(function(event){
 			event.preventDefault();
 			if ($("#frm_correo_destinatarios").validationEngine('validate')) {
@@ -663,7 +652,6 @@
 						<select id="lista_cursos" class="validate[required]">
 							<option selected value="">- Seleccione una opci&oacute;n -</option>
 						</select>
-						<input type="submit" id="btn_correo_obtener_url" value="Obtener URL de registro en l&iacute;nea">
 					</form>
 					<br>
 					<div id="invitados_curso">

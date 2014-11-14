@@ -67,15 +67,13 @@ $(document).ready(function(){
 					<td>'+instancia_nombre+'</td>\
 					<td>'+value['contacto_correo_inst']+'</td>\
 					<td>'+value['contacto_correo_per']+'</td>\
-					<td><a \
+					<td class="contacto_acciones"><a \
 					href="'+"<?= site_url('contactos/editar')?>"+"/"+value['id_contacto']+'">\
 					<img \
-					src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
-					</a></td>\
-					<td><a \
-					href="'+"<?= site_url('contactos/eliminar')?>"+"/"+value['id_contacto']+'" class="eliminar_contacto">\
-					<img \
-					src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
+					src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'" title="Editar">\
+					</a><br>\
+					<a href="'+"<?= site_url('contactos/eliminar')?>"+"/"+value['id_contacto']+'" class="eliminar_contacto">\
+					<img src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'" title="Eliminar">\
 					</a></td>\
 				</tr>');
 			});
@@ -133,15 +131,13 @@ $(document).ready(function(){
 							<td>'+instancia_nombre+'</td>\
 							<td>'+value['contacto_correo_inst']+'</td>\
 							<td>'+value['contacto_correo_per']+'</td>\
-							<td><a \
+							<td class="contacto_acciones"><a \
 							href="'+"<?= site_url('contactos/editar')?>"+"/"+value['id_contacto']+'">\
 							<img \
-							src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'">\
-							</a></td>\
-							<td><a \
-							href="'+"<?= site_url('contactos/eliminar')?>"+"/"+value['id_contacto']+'" class="eliminar_contacto">\
-							<img \
-							src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'">\
+							src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'" title="Editar">\
+							</a><br>\
+							<a href="'+"<?= site_url('contactos/eliminar')?>"+"/"+value['id_contacto']+'" class="eliminar_contacto">\
+							<img src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'" title="Eliminar">\
 							</a></td>\
 						</tr>');
 						});
@@ -195,8 +191,7 @@ $(document).ready(function(){
 				<td>Instancia</td>
 				<td>Correo institucional</td>
 				<td>Correo personal</td>
-				<td>Editar</td>
-				<td>Borrar</td>
+				<td>Acciones</td>
 			</tr>
 		</table>
 	</div>

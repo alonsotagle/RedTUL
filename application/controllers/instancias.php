@@ -41,6 +41,12 @@ class instancias extends CI_Controller {
 
         $resultado = $this->instancia_model->busqueda_instancias($parametros);
 
+        if ($resultado) {
+            foreach ($resultado as $llave => &$valor) {
+                $valor['instancia_eliminar'] = $this->instancia_model->verificar_relacion_eliminar($valor['id_instancia']);
+            }
+        }
+
         print_r(json_encode($resultado));
     }
 

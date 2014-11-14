@@ -358,6 +358,10 @@ body {
 	margin-bottom: 50px;
 }
 
+.contacto_acciones a{
+	text-decoration : none;
+}
+
 /* Vista nuevo_contacto.php */
 #frm_nuevo_contacto{
 	overflow: auto;

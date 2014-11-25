@@ -97,6 +97,15 @@
 				}
 			});
 		});
+
+		$("input[name='rol_contacto']").change(function(){
+			if ($(this).val() == 0) {
+				$("input[name='tipo_contacto']").prop('disabled', true);
+				$("input[name='tipo_contacto']").val("");
+			} else{
+				$("input[name='tipo_contacto']").prop('disabled', false);
+			}
+		});
     });
 </script>
 <!-- inicia contenido -->
@@ -117,7 +126,7 @@
 			<img src="<?= base_url('assets/img/loading.gif') ?>" width="20" height="20" id="estado_idu">
 			<br>
 			<div id="contenedor_imagen">
-				<img src="<?= base_url('assets/img/avatar.jpg') ?>" id="contacto_imagen">
+				<img src="<?= base_url('assets/img/avatar.png') ?>" id="contacto_imagen">
 				<input type="file" id="contacto_avatar" name="contacto_avatar" class="validate[checkFileType[jpg|jpeg|gif|JPG|JPEG|GIF]]" data-prompt-position="topLeft">
 				<br><span>Formatos permitidos .jpg y .gif</span>
 			</div>

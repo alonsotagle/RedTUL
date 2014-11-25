@@ -9,10 +9,8 @@ class Cron extends CI_Controller {
 
 	public function index()
 	{
-		if ($this->input->is_cli_request()) {
-			$this->consulta_estatus_cursos();
-			$this->correos_pendientes();
-		}
+		$this->consulta_estatus_cursos();
+		$this->correos_pendientes();
 	}
 
 	function consulta_estatus_cursos()

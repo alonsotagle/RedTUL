@@ -11,6 +11,7 @@
 <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/jquery-ui-1.10.3.custom.css')?>" />
 <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/estilos.css')?>" />
 <link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/validationEngine.jquery.css') ?>"/>
+<link type="text/css" rel="stylesheet" href="<?= base_url('assets/css/simplePagination.css') ?>"/>
 
 <!--Scripts-->
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
@@ -19,6 +20,8 @@
 <script type="text/javascript" src="<?= base_url('assets/js/jquery.validationEngine.js') ?>"></script>
 <script type="text/javascript" src="<?= base_url('assets/js/jquery.validationEngine-es.js') ?>" charset="utf-8"> </script>
 <script type="text/javascript" src="<?= base_url('assets/js/jquery.blockUI.js') ?>"></script>
+<script type="text/javascript" src="<?= base_url('assets/js/jquery.simplePagination.js') ?>"></script>
+
 </head>
 <body>
 

@@ -41,47 +41,7 @@ $(document).ready(function(){
 		}
 	});
 
-	$.ajax("<?= site_url('contactos/consulta_contactos')?>", {
-	dataType: 'json',
-	type: 'post',
-	success: function(resultado)
-	{
-		if (resultado) {
-
-			$.each(resultado, function( index, value ) {
-				var url_detalle = "<?= site_url('contactos/detalle_contacto') ?>";
-				url_detalle += "/" + value['id_contacto'];
-
-				if (value['instancia_nombre'].length > 25) {
-					instancia_nombre = '<span title="'+value['instancia_nombre']+'">'+value['instancia_nombre'].slice(0,25)+'...</span>';
-				}else{
-					instancia_nombre = value['instancia_nombre'];
-				}
-
-				$('#despliega_contactos table tbody').append('<tr>\
-					<td>'+value['contacto_IDU']+'</td>\
-					<td><a href="'+url_detalle+'" class="link_detalle">'+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+' '+value['contacto_nombre']+'</a></td>\
-					<td>'+value['rol_contacto_descripcion']+'</td>\
-					<td>'+value['tipo_contacto_descripcion']+'</td>\
-					<td>'+value['contacto_estatus']+'</td>\
-					<td>'+instancia_nombre+'</td>\
-					<td>'+value['contacto_correo_inst']+'</td>\
-					<td>'+value['contacto_correo_per']+'</td>\
-					<td class="contacto_acciones"><a \
-					href="'+"<?= site_url('contactos/editar')?>"+"/"+value['id_contacto']+'">\
-					<img \
-					src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'" title="Editar">\
-					</a><br>\
-					<a href="'+"<?= site_url('contactos/eliminar')?>"+"/"+value['id_contacto']+'" class="eliminar_contacto">\
-					<img src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'" title="Eliminar">\
-					</a></td>\
-				</tr>');
-			});
-		}else{
-			$('#despliega_contactos').html('No hay contactos registrados.');
-		}
-	}
-	});
+	contactos_paginacion(10, 1);
 
 	$("#despliega_contactos").on("click", "table tbody tr td .eliminar_contacto", function(){
 		var eliminar = confirm("¿Está seguro de eliminar el contacto?");
@@ -150,6 +110,65 @@ $(document).ready(function(){
 			});
 		}
 	});
+
+	$("#paginacion_contactos").pagination({
+        items: <?= $num_contactos ?>,
+        itemsOnPage: 10,
+        onPageClick : function(currentPageNumber, event){
+			contactos_paginacion(this.itemsOnPage, currentPageNumber)
+		}
+    });
+
+    function contactos_paginacion(items, pagina){
+		$.ajax("<?= site_url('contactos/paginacion')?>", {
+			dataType: 'json',
+			type: 'post',
+			data: {
+				'num_despliegue' : items,
+				'num_pagina': pagina
+			},
+			success: function(resultado)
+			{
+				if (resultado) {
+					$('#despliega_contactos table tbody').find("tr:gt(0)").remove();
+					$("#despliega_contactos").find("h2").remove();
+					$.each(resultado, function( index, value ) {
+						var url_detalle = "<?= site_url('contactos/detalle_contacto') ?>";
+						url_detalle += "/" + value['id_contacto'];
+
+						if (value['instancia_nombre'].length > 25) {
+							instancia_nombre = '<span title="'+value['instancia_nombre']+'">'+value['instancia_nombre'].slice(0,25)+'...</span>';
+						}else{
+							instancia_nombre = value['instancia_nombre'];
+						}
+
+						$('#despliega_contactos table tbody').append('<tr>\
+							<td>'+value['contacto_IDU']+'</td>\
+							<td><a href="'+url_detalle+'" class="link_detalle">'+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+' '+value['contacto_nombre']+'</a></td>\
+							<td>'+value['rol_contacto_descripcion']+'</td>\
+							<td>'+value['tipo_contacto_descripcion']+'</td>\
+							<td>'+value['contacto_estatus']+'</td>\
+							<td>'+instancia_nombre+'</td>\
+							<td>'+value['contacto_correo_inst']+'</td>\
+							<td>'+value['contacto_correo_per']+'</td>\
+							<td class="contacto_acciones"><a \
+							href="'+"<?= site_url('contactos/editar')?>"+"/"+value['id_contacto']+'">\
+							<img \
+							src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'" title="Editar">\
+							</a><br>\
+							<a href="'+"<?= site_url('contactos/eliminar')?>"+"/"+value['id_contacto']+'" class="eliminar_contacto">\
+							<img src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'" title="Eliminar">\
+							</a></td>\
+						</tr>');
+					});
+				}else{
+					$('#despliega_contactos table tbody').find("tr:gt(0)").remove();
+					$("#despliega_contactos").find("h2").remove();
+					$('#despliega_contactos').html('No hay contactos registrados.');
+				}
+			}
+		});
+	}
 });
 </script>
 <!-- inicia contenido -->
@@ -195,6 +214,8 @@ $(document).ready(function(){
 			</tr>
 		</table>
 	</div>
+
+	<div id="paginacion_contactos"></div>
 
 	<a href="<?= site_url('contactos/nuevo')?>">
 		<input type="button" id="btn_nuevo_contacto" value="Nuevo contacto"/>

@@ -23,6 +23,11 @@ $(document).ready(function(){
 		<?= $contacto_estatus; ?>
 	</span>
 	<br><br>
+	<span class="conf_contacto_campos">Rol del usuario</span>
+	<span class="conf_contacto_valores">
+		<?= $contacto_rol; ?>
+	</span>
+	<br><br>
 	<span class="conf_contacto_campos">Tipo de contacto</span>
 	<span class="conf_contacto_valores">
 		<?= $contacto_tipo; ?>

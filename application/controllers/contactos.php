@@ -14,9 +14,11 @@ class contactos extends CI_Controller {
     }
 
     public function index() {
+        $datos = array('num_contactos' => $this->contacto_model->paginacion_contar_contactos());
+
     	$this->load->view('template/header');
         $this->load->view('template/menu');
-        $this->load->view('contactos');
+        $this->load->view('contactos', $datos);
         $this->load->view('template/footer');
     }
 
@@ -35,10 +37,17 @@ class contactos extends CI_Controller {
                 $respuesta_avatar = $this->subir_avatar();
             }
 
+            if ($this->input->post('contacto_rol') == 0) {
+                $contacto_tipo = null;
+            } else {
+                $contacto_tipo = $this->input->post('contacto_tipo');
+            }
+            
+
             if ($respuesta_avatar != "error_imagen") {
                 $nuevo_contacto = array(
                     'contacto_estatus' => $this->input->post('estatus_contacto'),
-                    'contacto_tipo' => $this->input->post('tipo_contacto'),
+                    'contacto_tipo' => $contacto_tipo,
                     'contacto_instructor' => $this->input->post('instructor_candidato'),
                     'contacto_nombre' => $this->input->post('contacto_nombre'),
                     'contacto_ap_paterno' => $this->input->post('contacto_apaterno'),
@@ -74,20 +83,28 @@ class contactos extends CI_Controller {
                 $contacto['contacto_estatus'] = "Activo";
             }
 
-            switch ($contacto['contacto_tipo']) {
+            if (is_null($contacto['contacto_tipo'])) {
+                $contacto['contacto_tipo'] = "";
+            }else{
+                switch ($contacto['contacto_tipo']) {
+                    case 0:
+                        $contacto['contacto_tipo'] = "Responsable técnico";
+                        break;
+                    case 1:
+                        $contacto['contacto_tipo'] = "Responsable de comunicación";
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            switch ($contacto['contacto_rol']) {
+                case 0:
+                    $contacto['contacto_rol'] = "Administrador";
+                    break;
                 case 1:
-                    $contacto['contacto_tipo'] = "Webmaster";
+                    $contacto['contacto_rol'] = "Responsable técnico";
                     break;
-                case 2:
-                    $contacto['contacto_tipo'] = "Responsable de comunicación";
-                    break;
-                case 3:
-                    $contacto['contacto_tipo'] = "Responsable de técnico";
-                    break;
-                case 4:
-                    $contacto['contacto_tipo'] = "Otros";
-                    break;
-                
                 default:
                     break;
             }
@@ -115,25 +132,6 @@ class contactos extends CI_Controller {
             $this->load->view('template/menu');
             $this->load->view('confirmacion_contacto', $contacto);
             $this->load->view('template/footer');
-    }
-
-    function consulta_contactos()
-    {
-        $contactos = $this->contacto_model->consulta_contactos();
-
-        if (!is_null($contactos)) {
-            foreach($contactos as $llave => &$contacto)
-            {
-                if ($contacto['contacto_estatus'] == '1')
-                {
-                    $contacto['contacto_estatus'] = 'Activo';
-                }else{
-                    $contacto['contacto_estatus'] = 'Inactivo';
-                }
-            }
-        }
-
-        print_r(json_encode($contactos));
     }
 
     function consulta_instancias()
@@ -314,57 +312,41 @@ class contactos extends CI_Controller {
     {
         $contacto = $this->contacto_model->consulta_detalle_contacto($id_contacto);
 
-        if ($contacto['contacto_estatus'] == 0) {
-            $contacto['contacto_estatus'] = "Inactivo";
-        }else{
-            $contacto['contacto_estatus'] = "Activo";
-        }
-
-        switch ($contacto['contacto_tipo']) {
-            case 1:
-                $contacto['contacto_tipo'] = "Webmaster";
-                break;
-            case 2:
-                $contacto['contacto_tipo'] = "Responsable de comunicación";
-                break;
-            case 3:
-                $contacto['contacto_tipo'] = "Responsable de técnico";
-                break;
-            case 4:
-                $contacto['contacto_tipo'] = "Otros";
-                break;
-            
-            default:
-                break;
-        }
-
-        if ($contacto['contacto_comunicacion'] == 0) {
-            $contacto['contacto_comunicacion'] = "Vía telefónica";
-        }else{
-            $contacto['contacto_comunicacion'] = "Vía e-mail";
-        }
-
-        if (($contacto['contacto_avatar']) != "") {
-            $tag_img = "<img src=".base_url('assets/img_avatar/')."/".$contacto['contacto_avatar']." width='200px' height='200px'>";
-            $contacto['contacto_avatar'] = $tag_img;
-        }
-
-        if ($contacto['contacto_instructor'] == 0) {
-            $contacto['contacto_instructor'] = "No";
-        }else{
-            $contacto['contacto_instructor'] = "Sí";
-        }
-
-        foreach ($contacto as $campo => $valor) {
-            if ($contacto[$campo] == "") {
-                $contacto[$campo] = "-";
+        if ($contacto) {
+            if ($contacto['contacto_estatus'] == 0) {
+                $contacto['contacto_estatus'] = "Inactivo";
+            }else{
+                $contacto['contacto_estatus'] = "Activo";
             }
-        }
 
-        $this->load->view('template/header');
-        $this->load->view('template/menu');
-        $this->load->view('detalle_contacto', $contacto);
-        $this->load->view('template/footer');
+            if ($contacto['contacto_comunicacion'] == 0) {
+                $contacto['contacto_comunicacion'] = "Vía telefónica";
+            }else{
+                $contacto['contacto_comunicacion'] = "Vía e-mail";
+            }
+
+            if (($contacto['contacto_avatar']) != "") {
+                $tag_img = "<img src=".base_url('assets/img_avatar/')."/".$contacto['contacto_avatar']." width='200px' height='200px'>";
+                $contacto['contacto_avatar'] = $tag_img;
+            }
+
+            if ($contacto['contacto_instructor'] == 0) {
+                $contacto['contacto_instructor'] = "No";
+            }else{
+                $contacto['contacto_instructor'] = "Sí";
+            }
+
+            foreach ($contacto as $campo => $valor) {
+                if ($contacto[$campo] == "") {
+                    $contacto[$campo] = "-";
+                }
+            }
+
+            $this->load->view('template/header');
+            $this->load->view('template/menu');
+            $this->load->view('detalle_contacto', $contacto);
+            $this->load->view('template/footer');
+        }
     }
 
     function verificar_idu(){
@@ -401,5 +383,30 @@ class contactos extends CI_Controller {
         }
 
         print_r(json_encode($datos_ws));
+    }
+
+    function paginacion(){
+        $contactos = $this->contacto_model->contactos_paginacion($this->input->post('num_despliegue'), $this->input->post('num_pagina'));
+
+        if ($contactos) {
+
+            foreach($contactos as $campo => &$contacto)
+            {
+                if ($contacto['contacto_estatus'] == '1')
+                {
+                    $contacto['contacto_estatus'] = 'Activo';
+                }else{
+                    $contacto['contacto_estatus'] = 'Inactivo';
+                }
+
+                foreach ($contacto as $campo => $valor) {
+                    if ($contacto[$campo] == "") {
+                        $contacto[$campo] = "-";
+                    }
+                }
+            }
+        }
+
+        print_r(json_encode($contactos));
     }
 }

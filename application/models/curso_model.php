@@ -125,8 +125,6 @@ class curso_model extends CI_Model{
 
         $query = $this->db->get();
 
-        //return $this->db->last_query();
-
         if ($query -> num_rows() > 0)
         {
             return $query->result_array();
@@ -237,13 +235,16 @@ class curso_model extends CI_Model{
             'invitado_id'   => $invitado_id
         );
 
-        $this->db->delete('curso_invitado_contacto', $datos);
-        
-        $this->db->insert('curso_invitado_contacto', $datos);
+        $this->db->delete('contacto_estado_curso', $datos);
+
+        $datos["estado_id"] = 1;
+
+        $this->db->insert('contacto_estado_curso', $datos);
     }
 
     public function consulta_invitado_tipo($id_curso)
     {
+        $this->db->select('tipo_contacto_id');
         $this->db->where('curso_id', $id_curso);
         $this->db->from('curso_invitado_tipo');
 
@@ -264,9 +265,10 @@ class curso_model extends CI_Model{
                             contacto.contacto_ap_paterno,
                             contacto.contacto_ap_materno');
         $this->db->from('contacto');
-        $this->db->join('curso_invitado_contacto', 'contacto.id_contacto = curso_invitado_contacto.invitado_id');
+        $this->db->join('contacto_estado_curso', 'contacto.id_contacto = contacto_estado_curso.contacto_id');
 
         $this->db->where('curso_id', $id_curso);
+        $this->db->where('contacto_estado_curso.estado_id', 1);
 
         $query = $this->db->get();
 
@@ -339,8 +341,10 @@ class curso_model extends CI_Model{
 
     public function contar_inscritos($id_curso)
     {
-        $this->db->from('curso_inscrito');
-        $this->db->where('id_curso', $id_curso);
+        $this->db->from('contacto_estado_curso');
+        
+        $this->db->where('curso_id', $id_curso);
+        $this->db->where('estado_id', 3);
 
         $query = $this->db->count_all_results();
 
@@ -350,9 +354,9 @@ class curso_model extends CI_Model{
     public function borrar_invitado_contacto($id_curso, $id_contacto)
     {
         $datos = array('curso_id'       => $id_curso,
-                        'invitado_id'   => $id_contacto);
+                        'contacto_id'   => $id_contacto);
 
-        $this->db->delete('curso_invitado_contacto', $datos);
+        $this->db->delete('contacto_estado_curso', $datos);
     }
 
     public function consulta_detalle_curso($id_curso)
@@ -388,35 +392,26 @@ class curso_model extends CI_Model{
         }
     }
 
-    public function consulta_inscritos_detalle($id_curso)
+    public function consulta_contactos_detalle_curso($id_curso)
     {
-        $this->db->select('contacto.contacto_nombre,
+        $this->db->select('contacto.id_contacto,
+                            contacto.contacto_nombre,
                             contacto.contacto_ap_paterno,
-                            contacto.contacto_ap_materno');
-        $this->db->from('curso_inscrito');
-        $this->db->join('contacto', 'contacto.id_contacto = curso_inscrito.id_contacto');
+                            contacto.contacto_ap_materno,
+                            contacto_estado_curso.estado_id,
+                            estado_contacto_curso.estado_descripcion,
+                            tipo_contacto.tipo_contacto_descripcion');
 
-        $this->db->where('curso_inscrito.id_curso', $id_curso);
+        $this->db->from('contacto_estado_curso');
 
-        $query = $this->db->get();
+        $this->db->join('contacto', 'contacto.id_contacto = contacto_estado_curso.contacto_id');
+        $this->db->join('estado_contacto_curso', 'estado_contacto_curso.id_estado_contacto_curso = contacto_estado_curso.estado_id');
+        $this->db->join('tipo_contacto', 'tipo_contacto.id_tipo_contacto = contacto.contacto_tipo', 'left');
 
-        if ($query -> num_rows() > 0)
-        {
-            return $query->result_array();
-        } else {
-            return null;
-        }
-    }
+        $this->db->where('contacto_estado_curso.curso_id', $id_curso);
+        $this->db->where_in('contacto_estado_curso.estado_id', array(2, 3, 4, 5));
 
-    public function consulta_cancelados_detalle($id_curso)
-    {
-        $this->db->select('contacto.contacto_nombre,
-                            contacto.contacto_ap_paterno,
-                            contacto.contacto_ap_materno');
-        $this->db->from('curso_cancelado');
-        $this->db->join('contacto', 'contacto.id_contacto = curso_cancelado.id_contacto');
-
-        $this->db->where('curso_cancelado.id_curso', $id_curso);
+        $this->db->order_by('contacto_estado_curso.estado_id', 'asc');
 
         $query = $this->db->get();
 
@@ -430,9 +425,10 @@ class curso_model extends CI_Model{
 
     public function consulta_invitado_curso($id_curso)
     {
-        $this->db->select('invitado_id');
-        $this->db->from('curso_invitado_contacto');
+        $this->db->select('contacto_id');
+        $this->db->from('contacto_estado_curso');
         $this->db->where('curso_id', $id_curso);
+        $this->db->where('estado_id', 1);
 
         $query = $this->db->get();
 
@@ -475,7 +471,6 @@ class curso_model extends CI_Model{
         } else {
             $this->db->insert('registro', $configuracion_registro);
         }
-        echo($this->db->last_query());
     }
 
     public function consulta_registro_curso($id_curso)
@@ -514,17 +509,18 @@ class curso_model extends CI_Model{
         }
     }
 
-    public function consulta_inscritos_lista($id_curso)
+    public function consulta_autorizados_lista($id_curso)
     {
         $this->db->select('contacto.contacto_nombre,
                             contacto.contacto_ap_paterno,
                             contacto.contacto_ap_materno,
                             instancia.instancia_nombre');
-        $this->db->from('curso_inscrito');
-        $this->db->join('contacto', 'contacto.id_contacto = curso_inscrito.id_contacto');
+        $this->db->from('contacto_estado_curso');
+        $this->db->join('contacto', 'contacto.id_contacto = contacto_estado_curso.contacto_id');
         $this->db->join('instancia', 'instancia.id_instancia = contacto.contacto_instancia');
 
-        $this->db->where('curso_inscrito.id_curso', $id_curso);
+        $this->db->where('contacto_estado_curso.curso_id', $id_curso);
+        $this->db->where('contacto_estado_curso.estado_id', 3);
 
         $this->db->order_by('contacto.contacto_ap_paterno', 'asc');
 
@@ -541,5 +537,65 @@ class curso_model extends CI_Model{
     public function registrar_material($nuevo_material)
     {
         $this->db->insert('material_curso', $nuevo_material);
+    }
+
+    public function consultar_material($id_curso)
+    {
+        $this->db->select('material_curso_url');
+        $this->db->from('material_curso');
+        $this->db->where('curso_id', $id_curso);
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
+
+    public function autorizar_contacto($id_contacto)
+    {
+        $valores = array('estado_id' => 3);
+        $this->db->where('contacto_id', $id_contacto);
+        $this->db->update('contacto_estado_curso', $valores);
+    }
+
+    public function paginacion_contar_cursos()
+    {
+        $this->db->from('curso');
+
+        $query = $this->db->count_all_results();
+
+        return $query;
+    }
+
+    public function cursos_paginacion($limite, $inicio_resultado)
+    {
+        $this->db->select('curso.id_curso,
+                            curso.curso_titulo,
+                            curso.curso_tipo,
+                            estatus_curso.estatus_curso_descripcion,
+                            curso.curso_fecha_inicio,
+                            curso.curso_fecha_fin,
+                            curso.curso_hora_inicio,
+                            curso.curso_hora_fin,
+                            curso.curso_cupo');
+
+        $this->db->from('curso');
+
+        $this->db->join('estatus_curso', 'curso.curso_estatus = estatus_curso.id_estatus_curso');
+
+        $this->db->limit($limite, $inicio_resultado * $limite - $limite);
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
     }
 }

@@ -40,8 +40,10 @@ class inicio_model extends CI_Model{
 
     public function contar_inscritos($id_curso)
     {
-        $this->db->from('curso_inscrito');
-        $this->db->where('id_curso', $id_curso);
+        $this->db->from('contacto_estado_curso');
+        
+        $this->db->where('curso_id', $id_curso);
+        $this->db->where('estado_id', 3);
 
         $query = $this->db->count_all_results();
 

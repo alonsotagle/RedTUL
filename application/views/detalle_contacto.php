@@ -20,9 +20,14 @@
 		<?= $contacto_estatus; ?>
 	</span>
 	<br><br>
-	<span class="conf_contacto_campos">Tipo de contacto</span>
+	<span class="conf_contacto_campos">Rol del usuario</span>
 	<span class="conf_contacto_valores">
-		<?= $contacto_tipo; ?>
+		<?= $rol_contacto_descripcion; ?>
+	</span>
+	<br><br>
+	<span class="conf_contacto_campos">Tipo de usuario</span>
+	<span class="conf_contacto_valores">
+		<?= $tipo_contacto_descripcion; ?>
 	</span>
 	<br><br>
 	<span class="conf_contacto_campos">Instructor candidato</span>

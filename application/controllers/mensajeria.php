@@ -277,7 +277,7 @@ class mensajeria extends CI_Controller {
         
         if (!is_null($resultado_contacto)) {
             foreach ($resultado_contacto as $key => $value) {
-                array_push($id_invitados_curso, $value['id_contacto']);
+                array_push($id_invitados_curso, $value['contacto_id']);
             }
         }
 
@@ -432,6 +432,13 @@ class mensajeria extends CI_Controller {
 
         if (!empty($id_invitados_curso)) {
             $invitados = $this->mensajeria_model->consulta_invitados_detalles_curso($id_invitados_curso);
+            if ($invitados) {
+                foreach ($invitados as $campo => $valor) {
+                    if ($invitados[$campo] == "") {
+                        $invitados[$campo] = "-";
+                    }
+                }
+            }
         }else{
             $invitados = null;
         }
@@ -479,5 +486,31 @@ class mensajeria extends CI_Controller {
         $this->load->helper(array('dompdf', 'file'));
         $html = $this->load->view('constancia', $datos_constancia, true);
         pdf_constancia($html, 'Constancia');
+    }
+
+    function consulta_estatus(){
+        $estatus = $this->mensajeria_model->consulta_estatus();
+
+        print_r(json_encode($estatus));
+    }
+
+    function consulta_invitados_estado_contacto(){
+
+        $id_invitados_curso = $this->consulta_invitados_curso($this->input->post('curso_id'));
+
+        if (!empty($id_invitados_curso)) {
+            $invitados = $this->mensajeria_model->consulta_invitados_estado_contacto($id_invitados_curso, $this->input->post('estado_id'));
+            if ($invitados) {
+                foreach ($invitados as $campo => &$invitado) {
+                    if ($invitado['tipo_contacto_descripcion'] == "") {
+                        $invitado['tipo_contacto_descripcion'] = "-";
+                    }
+                }
+            }
+        }else{
+            $invitados = null;
+        }
+
+        print_r(json_encode($invitados));
     }
 }

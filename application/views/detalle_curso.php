@@ -10,6 +10,18 @@
         }else{
         	$("#info_registro").hide();
         }
+
+        $(".autorizar_contacto").change(function(){
+        	var datos = {'id_contacto' : $(this).attr('id')};
+        	if (this.checked) {
+        		$.ajax("<?= site_url('cursos/autorizar_contacto')?>", {
+					dataType: 'json',
+					data: datos,
+					type: 'post'
+				});
+				location.reload();
+        	}
+        });
     });
 </script>
 <!-- inicia contenido -->
@@ -191,7 +203,7 @@
 	<br><br>
 
 	<p class="encabezado_detalle_curso">Información de los contactos invitados al curso</p>
-	<span class="conf_contacto_campos"> - Tipo de contacto
+	<span class="conf_contacto_campos">Tipo de contacto
 		<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Grupo de contactos a quienes se les envió invitación al curso.">
 	</span>
 	<span class="conf_contacto_valores">
@@ -209,53 +221,38 @@
 
 	<br><br>
 
-	<span class="conf_contacto_campos"> - Contactos</span>
+	<span class="conf_contacto_campos"> Información de los contactos</span>
+	<?php if($contactos_estado_curso != "-") : ?>
+		<div id="despliega_cursos">
+			<br><br><br>
+			<table class='tables'>
+				<tr>
+					<td>Tipo de usuario</td>
+					<td>Nombre</td>
+					<td>Estatus</td>
+					<td>Autorizar inscripcion</td>
+				</tr>
+				<?php foreach($contactos_estado_curso as $key=>$value): ?>
+					<tr>
+					<td><?= $value['tipo_contacto_descripcion'] ?></td>
+					<td><?= $value['contacto_nombre']." ".$value['contacto_ap_paterno']." ".$value['contacto_ap_materno'] ?></td>
+					<td><?= $value['estado_descripcion'] ?></td>
+					<?php if($value['estado_id'] == 2) : ?>
+						<td>
+							<input type="checkbox" class="autorizar_contacto" id="<?= $value['id_contacto'] ?>" />
+						</td>
+					<?php else : ?>
+						<td></td>
+					<?php endif; ?>
+					</tr>
+				<?php endforeach; ?>
+			</table>
+		</div>
+	<?php else : ?>
 	<span class="conf_contacto_valores">
-	<?php
-		if($invitados_contacto != "-"){
-			foreach ($invitados_contacto as $key => $value) {
-				echo $value['contacto_nombre']." ".$value['contacto_ap_paterno']." ".$value['contacto_ap_materno'];
-				echo "<br>";
-			}
-		}else{
-			echo $invitados_contacto;
-		}
-	?>
+		<?= $contactos_estado_curso ?>
 	</span>
+	<?php endif; ?>
 	<br><br>
-
-	<span class="conf_contacto_campos">Participantes
-		<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Contactos confirmados.">
-	</span>
-	<span class="conf_contacto_valores">
-	<?php
-		if($inscritos != "-"){
-			foreach ($inscritos as $key => $value) {
-				echo $value['contacto_nombre']." ".$value['contacto_ap_paterno']." ".$value['contacto_ap_materno'];
-				echo "<br>";
-			}
-		}else{
-			echo $inscritos;
-		}
-	?>
-	</span>
-	<br><br>
-
-	<span class="conf_contacto_campos">Contactos cancelados</span>
-	<span class="conf_contacto_valores">
-	<?php
-		if($cancelados != "-"){
-			foreach ($cancelados as $key => $value) {
-				echo $value['contacto_nombre']." ".$value['contacto_ap_paterno']." ".$value['contacto_ap_materno'];
-				echo "<br>";
-			}
-		}else{
-			echo $cancelados;
-		}
-	?>
-	</span>
-	<br><br>
-	<br>
-
 </div>
 <!-- termina contenido -->

@@ -119,10 +119,15 @@ $(document).ready(function(){
 		dataType: 'json',
 		type: 'post',
 		success: function(resultado) {
-			if (resultado) {
-				$.each(resultado, function(index, value) {
-					$('input[value='+value['tipo_contacto_id']+'][class="checkbox_tipo_invitado"]').attr('checked', true);
-				});
+			if (resultado.length == 1) {
+				if (resultado[0]["tipo_contacto_id"] == 0) {
+					$('#tipo_invitado_tecnico').prop('checked', true);
+				}else{
+					$('#tipo_invitado_comunicacion').prop('checked', true);
+				}
+			}else if (resultado.length == 2) {
+				$('#tipo_invitado_tecnico').prop('checked', true);
+				$('#tipo_invitado_comunicacion').prop('checked', true);
 			}
 		}
 	});
@@ -203,7 +208,7 @@ $(document).ready(function(){
 			} 
 		}); 
 
-    	setTimeout($.unblockUI, 2000);
+		setTimeout($.unblockUI, 2000);
 	}
 
 	$("#btn_buscar_invitados").click(function(event){
@@ -560,10 +565,10 @@ $(document).ready(function(){
 				<legend>Añadir participantes por tipo de contacto
 					<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Se enviará invitación al grupo de contactos seleccionado.">
 				</legend>
-				<input type="checkbox" name="tipo_invitado_tecnico" id="tipo_invitado_tecnico" class="checkbox_tipo_invitado" value="0">
+				<input type="checkbox" name="tipo_invitado_tecnico" id="tipo_invitado_tecnico" class="checkbox_tipo_invitado" value="1">
 				<label for="tipo_invitado_tecnico">Responsable Técnico</label>
 				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Responsable técnico.">
-				<input type="checkbox" name="tipo_invitado_comunicacion" id="tipo_invitado_comunicacion" class="checkbox_tipo_invitado" value="1">
+				<input type="checkbox" name="tipo_invitado_comunicacion" id="tipo_invitado_comunicacion" class="checkbox_tipo_invitado" value="2">
 				<label for="tipo_invitado_comunicacion">Responsable de comunicación</label>
 				<img src="<?= base_url('assets/img/icono_tooltip.gif')?>" title="Elegir a todos los contactos de tipo Responsable de comunicación.">
 			</fieldset>

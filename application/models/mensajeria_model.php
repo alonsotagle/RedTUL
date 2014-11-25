@@ -118,6 +118,8 @@ class mensajeria_model extends CI_Model{
 
         $this->db->from('curso');
 
+        $this->db->where('curso_tipo', 0);
+
         $query = $this->db->get();
 
         if ($query -> num_rows() > 0)
@@ -254,12 +256,11 @@ class mensajeria_model extends CI_Model{
 
     public function consulta_invitados_curso_contacto($curso_id)
     {
-        $this->db->select('contacto.id_contacto');
+        $this->db->select('contacto_id');
 
-        $this->db->from('curso_invitado_contacto');
-        $this->db->join('contacto', 'curso_invitado_contacto.invitado_id = contacto.id_contacto');
+        $this->db->from('contacto_estado_curso');
 
-        $this->db->where('curso_invitado_contacto.curso_id', $curso_id);
+        $this->db->where('curso_id', $curso_id);
 
         $query = $this->db->get();
 
@@ -413,11 +414,13 @@ class mensajeria_model extends CI_Model{
                             contacto.contacto_correo_per,
                             contacto.contacto_telefono,
                             tipo_contacto.tipo_contacto_descripcion,
-                            instancia.instancia_nombre');
+                            instancia.instancia_nombre,
+                            contacto_estado_curso.estado_id');
 
         $this->db->from('contacto');
-        $this->db->join('tipo_contacto', 'contacto.contacto_tipo = tipo_contacto.id_tipo_contacto');
+        $this->db->join('tipo_contacto', 'contacto.contacto_tipo = tipo_contacto.id_tipo_contacto', 'left');
         $this->db->join('instancia', 'contacto.contacto_instancia = instancia.id_instancia');
+        $this->db->join('contacto_estado_curso', 'contacto.id_contacto = contacto_estado_curso.contacto_id');
 
         $this->db->where_in('id_contacto', $ids_contacto_correo);
 
@@ -495,5 +498,43 @@ class mensajeria_model extends CI_Model{
         $query = $this->db->get();
 
         return $query->row_array();
+    }
+
+    public function consulta_estatus()
+    {
+        $query = $this->db->get('estado_contacto_curso');
+
+        return $query->result_array();
+    }
+
+    public function consulta_invitados_estado_contacto($ids_contacto_correo, $estado_id)
+    {
+        $this->db->select('contacto.id_contacto,
+                            contacto.contacto_nombre,
+                            contacto.contacto_ap_paterno,
+                            contacto.contacto_ap_materno,
+                            contacto.contacto_correo_inst,
+                            contacto.contacto_correo_per,
+                            contacto.contacto_telefono,
+                            tipo_contacto.tipo_contacto_descripcion,
+                            instancia.instancia_nombre,
+                            contacto_estado_curso.estado_id');
+
+        $this->db->from('contacto');
+        $this->db->join('tipo_contacto', 'contacto.contacto_tipo = tipo_contacto.id_tipo_contacto', 'left');
+        $this->db->join('instancia', 'contacto.contacto_instancia = instancia.id_instancia');
+        $this->db->join('contacto_estado_curso', 'contacto.id_contacto = contacto_estado_curso.contacto_id');
+
+        $this->db->where_in('contacto.id_contacto', $ids_contacto_correo);
+        $this->db->where('contacto_estado_curso.estado_id', $estado_id);
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
     }
 }

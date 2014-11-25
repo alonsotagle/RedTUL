@@ -5,73 +5,7 @@
 
         $("#menu_cursos").addClass("seleccion_menu");
 
-    	$.ajax("<?= site_url('cursos/consulta_cursos')?>", {
-			dataType: 'json',
-			type: 'post',
-			success: function(resultado){
-				if (resultado) {
-					$.each(resultado, function( index, value ) {
-						var url_detalle = "<?= site_url('cursos/detalle_curso') ?>";
-						url_detalle += "/" + value['id_curso'];
-
-						var curso_fecha_inicio = value['curso_fecha_inicio'].split("-");
-						var curso_fecha_fin = value['curso_fecha_fin'].split("-");
-
-						var datos_curso_renglon = "";
-						datos_curso_renglon += '<tr>\
-							<td><a href="'+url_detalle+'" class="link_detalle">'+value['curso_titulo']+'</a></td>\
-							<td>'+value['curso_tipo']+'</td>';
-
-						datos_curso_renglon += '<td>';
-
-						if (value['curso_instructor'] != null) {
-							$.each(value['curso_instructor'], function(index, value){
-								datos_curso_renglon += value['contacto_nombre']+" "+value['contacto_ap_paterno']+" "+value['contacto_ap_materno']+"<br><br>";
-							});
-						}else{
-							datos_curso_renglon += "¡Instructor eliminado! Asignar instructor";
-						}
-
-						datos_curso_renglon += '</td>';
-
-						var etiqueta_material;
-						if (value['estatus_curso_descripcion'] == "Finalizado") {
-							etiqueta_material = '<a href="'+"<?= site_url('cursos/agregar_material')?>"+"/"+value['id_curso']+'">\
-									<img src="'+"<?= base_url('assets/img/icono_agregar_material.png')?>"+'" title="Añadir material">\
-								</a>';
-						}else{
-							etiqueta_material = '<img src="'+"<?= base_url('assets/img/icono_material_no_finalizado.png')?>"+'" title="El curso o evento no ha finalizado.">';
-						}
-
-						var etiqueta_lista;
-						if (value['curso_tipo'] == "Externo") {
-							etiqueta_lista = '<img src="'+"<?= base_url('assets/img/icono_no_lista_asistencia.png')?>"+'" title="El curso o evento es de tipo externo.">';
-						}else{
-							etiqueta_lista = '<a href="'+"<?= site_url('cursos/lista_asistencia')?>"+"/"+value['id_curso']+'">\
-								<img src="'+"<?= base_url('assets/img/icono_lista_asistencia.png')?>"+'" title="Generar lista de asistencia">\
-							</a>';
-						}
-
-						datos_curso_renglon += '<td>'+value['estatus_curso_descripcion']+'</td>\
-							<td>'+curso_fecha_inicio[2]+"/"+curso_fecha_inicio[1]+"/"+curso_fecha_inicio[0]+' a '+curso_fecha_fin[2]+"/"+curso_fecha_fin[1]+"/"+curso_fecha_fin[0]+'</td>\
-							<td>'+value['curso_hora_inicio']+' a '+value['curso_hora_fin']+'</td>\
-							<td>'+value['curso_cupo']+'</td>\
-							<td>'+value['curso_cupo_disponible']+'</td>\
-							<td class="curso_acciones"><a href="'+"<?= site_url('cursos/editar')?>"+"/"+value['id_curso']+'">\
-								<img src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'" title="Editar">\
-							</a><br>\
-							<a href="'+"<?= site_url('cursos/eliminar')?>"+"/"+value['id_curso']+'" class="eliminar_curso" >\
-								<img src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'" title="Eliminar">\
-							</a><br>'+etiqueta_material+'<br>'+etiqueta_lista+'</td>\
-						</tr>';
-
-						$('#despliega_cursos table tbody').append(datos_curso_renglon);
-					});
-				}else{
-					$('#despliega_cursos').html('No hay cursos registrados');
-				}
-			}
-		});
+		cursos_paginacion(10, 1);
 
         $( "#inicio_curso" ).datepicker({
 			changeMonth: true,
@@ -178,7 +112,89 @@
 				});
 			}
 		});
-    }); 
+
+		$("#paginacion_cursos").pagination({
+	        items: <?= $num_cursos ?>,
+	        itemsOnPage: 10,
+	        onPageClick : function(currentPageNumber, event){
+				cursos_paginacion(this.itemsOnPage, currentPageNumber)
+			}
+	    });
+
+	    function cursos_paginacion(items, pagina){
+	    	$.ajax("<?= site_url('cursos/paginacion')?>", {
+				dataType: 'json',
+				type: 'post',
+				data: {
+					'num_despliegue' : items,
+					'num_pagina': pagina
+				},
+				success: function(resultado){
+					if (resultado) {
+						$.each(resultado, function( index, value ) {
+							var url_detalle = "<?= site_url('cursos/detalle_curso') ?>";
+							url_detalle += "/" + value['id_curso'];
+
+							var curso_fecha_inicio = value['curso_fecha_inicio'].split("-");
+							var curso_fecha_fin = value['curso_fecha_fin'].split("-");
+
+							var datos_curso_renglon = "";
+							datos_curso_renglon += '<tr>\
+								<td><a href="'+url_detalle+'" class="link_detalle">'+value['curso_titulo']+'</a></td>\
+								<td>'+value['curso_tipo']+'</td>';
+
+							datos_curso_renglon += '<td>';
+
+							if (value['curso_instructor'] != null) {
+								$.each(value['curso_instructor'], function(index, value){
+									datos_curso_renglon += value['contacto_nombre']+" "+value['contacto_ap_paterno']+" "+value['contacto_ap_materno']+"<br><br>";
+								});
+							}else{
+								datos_curso_renglon += "¡Instructor eliminado! Asignar instructor";
+							}
+
+							datos_curso_renglon += '</td>';
+
+							var etiqueta_material;
+							if (value['estatus_curso_descripcion'] == "Finalizado") {
+								etiqueta_material = '<a href="'+"<?= site_url('cursos/agregar_material')?>"+"/"+value['id_curso']+'">\
+										<img src="'+"<?= base_url('assets/img/icono_agregar_material.png')?>"+'" title="Añadir material">\
+									</a>';
+							}else{
+								etiqueta_material = '<img src="'+"<?= base_url('assets/img/icono_material_no_finalizado.png')?>"+'" title="El curso o evento no ha finalizado.">';
+							}
+
+							var etiqueta_lista;
+							if (value['curso_tipo'] == "Externo") {
+								etiqueta_lista = '<img src="'+"<?= base_url('assets/img/icono_no_lista_asistencia.png')?>"+'" title="No se puede generar lista de asistencia porque el curso o evento es de tipo externo.">';
+							}else{
+								etiqueta_lista = '<a href="'+"<?= site_url('cursos/lista_asistencia')?>"+"/"+value['id_curso']+'">\
+									<img src="'+"<?= base_url('assets/img/icono_lista_asistencia.png')?>"+'" title="Generar lista de asistencia">\
+								</a>';
+							}
+
+							datos_curso_renglon += '<td>'+value['estatus_curso_descripcion']+'</td>\
+								<td>'+curso_fecha_inicio[2]+"/"+curso_fecha_inicio[1]+"/"+curso_fecha_inicio[0]+' a '+curso_fecha_fin[2]+"/"+curso_fecha_fin[1]+"/"+curso_fecha_fin[0]+'</td>\
+								<td>'+value['curso_hora_inicio']+' a '+value['curso_hora_fin']+'</td>\
+								<td>'+value['curso_cupo']+'</td>\
+								<td>'+value['curso_cupo_disponible']+'</td>\
+								<td class="curso_acciones"><a href="'+"<?= site_url('cursos/editar')?>"+"/"+value['id_curso']+'">\
+									<img src="'+"<?= base_url('assets/img/icono_editar.png')?>"+'" title="Editar">\
+								</a><br>\
+								<a href="'+"<?= site_url('cursos/eliminar')?>"+"/"+value['id_curso']+'" class="eliminar_curso" >\
+									<img src="'+"<?= base_url('assets/img/icono_borrar.png')?>"+'" title="Eliminar">\
+								</a><br>'+etiqueta_material+'<br>'+etiqueta_lista+'</td>\
+							</tr>';
+
+							$('#despliega_cursos table tbody').append(datos_curso_renglon);
+						});
+					}else{
+						$('#despliega_cursos').html('No hay cursos registrados');
+					}
+				}
+	    	});
+    	}
+	});
 </script>
 <!-- inicia contenido -->
 <div class="contenido_dinamico">
@@ -233,6 +249,9 @@
 			</tr>
 		</table>
 	</div>
+
+	<div id="paginacion_cursos"></div>
+
 	<a href="<?= site_url('cursos/nuevo_evento')?>">
 		<input type="button" class="btn_nuevo_curso" value="Nuevo evento"/>
 	</a>

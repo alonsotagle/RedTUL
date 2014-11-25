@@ -19,6 +19,20 @@ $(document).ready(function(){
 			$("#material_file").prop('disabled', true);
 		}
 	});
+
+	if (<?= $mensaje_confirmacion ?>) {
+		$.blockUI({ 
+			message: "<h3>La información se guardó satisfactoriamente.</h3>",
+			css: { 
+				backgroundColor: '#54DF0E',
+				color: '#fff',
+				padding: 3,
+				border: 'none'
+			} 
+		}); 
+
+    	setTimeout($.unblockUI, 2000);
+	}
 });
 </script>
 <!-- inicia contenido -->
@@ -29,6 +43,13 @@ $(document).ready(function(){
 	</div>
 	<?= form_open_multipart('cursos/guardar_material', array("id" => "frm_material"), array('id_curso' => $id_curso)); ?>
 	<h2>Material</h2>
+	<?php if($material) : ?>
+	    <ol>
+		<?php foreach ($material as $item): ?>
+		<li><?=$item ?></li>
+		<?php endforeach; ?>
+		</ol>
+	<?php endif; ?>
 	<br>
 	<input type="file" id="material_file" name="material_file" class="validate[checkFileType[pdf], groupRequired[material]]"/>
 	<br>

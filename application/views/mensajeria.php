@@ -586,16 +586,25 @@
 		$("#lista_cursos").change(function(){
 			if ($("#lista_cursos").val() != "") {
 				var datos = { 'curso_id' : $("#lista_cursos").val() };
+				$("#estatus_registro option[value='']").attr("selected","selected") ;
+
 				$.ajax("<?= site_url('mensajeria/consulta_invitados_detalles_curso') ?>", {
 					dataType: 'json',
 					type: 'post',
 					data: datos,
 					success: function(resultado){
 						if (resultado) {
+							$('#estatus_registro').prop('disabled', false);
 							$('#tabla_invitados_curso tbody').find("tr:gt(0)").remove();
 							$("#invitados_curso").find("h2").remove();
 							$.each(resultado, function(index, value) {
-								var constancia = "<?= site_url('mensajeria/constancia') ?>"+"/"+$("#lista_cursos").val()+"/"+value['id_contacto'];
+								var constancia = "";
+								var url_constancia = "<?= site_url('mensajeria/constancia') ?>"+"/"+$("#lista_cursos").val()+"/"+value['id_contacto'];
+								if (value['estado_id'] == 3) {
+									constancia = '<a href="'+url_constancia+'">\
+										<img src="'+"<?= base_url('assets/img/icono_constancia.png')?>"+'">\
+										</a>';
+								}
 								$('#tabla_invitados_curso tbody').append('<tr>\
 									<td>'+value['contacto_nombre']+' '+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+'</td>\
 									<td>'+value['contacto_correo_inst']+' '+value['contacto_correo_per']+'</td>\
@@ -605,10 +614,73 @@
 									<td>\
 										<input type="checkbox" name="curso_invitados[]" value="'+value['id_contacto']+'" checked>\
 									</td>\
-									<td><a href="'+constancia+'">\
-									<img \
-									src="'+"<?= base_url('assets/img/icono_constancia.png')?>"+'">\
-									</a></td>\
+									<td>'+constancia+'</td>\
+								</tr>');
+							});
+						} else {
+							$('#estatus_registro').prop('disabled', true);
+							$('#invitados_curso table tbody').find("tr:gt(0)").remove();
+							$("#invitados_curso").find("h2").remove();
+							$('#invitados_curso').append('<h2 class="leyenda_centrada">No ha elegido invitados para este curso<h2>');
+						}
+					}
+		   		});
+			}else{
+				$('#estatus_registro').prop('disabled', true);
+				$('#tabla_invitados_curso tbody').find("tr:gt(0)").remove();
+				$("#invitados_curso").find("h2").remove();
+
+			}
+		});
+
+		$('#estatus_registro').prop('disabled', true);
+
+		$.ajax("<?= site_url('mensajeria/consulta_estatus')?>", {
+			dataType: 'json',
+			type: 'post',
+			success: function(resultado)
+			{
+				if (resultado != null) {
+					$.each(resultado, function( index, value ) {
+						$("#estatus_registro").append('<option value="'+value['id_estado_contacto_curso']+'">'+value['estado_descripcion']+'</option>');
+					});
+				}
+			}
+		});
+
+		$("#estatus_registro").change(function(){
+			if ($("#estatus_registro").val() != "") {
+				var datos = {
+							'curso_id' : $("#lista_cursos").val(),
+							'estado_id' : $(this).val()
+						};
+
+				$.ajax("<?= site_url('mensajeria/consulta_invitados_estado_contacto') ?>", {
+					dataType: 'json',
+					type: 'post',
+					data: datos,
+					success: function(resultado){
+						if (resultado) {
+							$('#tabla_invitados_curso tbody').find("tr:gt(0)").remove();
+							$("#invitados_curso").find("h2").remove();
+							$.each(resultado, function(index, value) {
+								var constancia = "";
+								var url_constancia = "<?= site_url('mensajeria/constancia') ?>"+"/"+$("#lista_cursos").val()+"/"+value['id_contacto'];
+								if (value['estado_id'] == 3) {
+									constancia = '<a href="'+url_constancia+'">\
+										<img src="'+"<?= base_url('assets/img/icono_constancia.png')?>"+'">\
+										</a>';
+								}
+								$('#tabla_invitados_curso tbody').append('<tr>\
+									<td>'+value['contacto_nombre']+' '+value['contacto_ap_paterno']+' '+value['contacto_ap_materno']+'</td>\
+									<td>'+value['contacto_correo_inst']+' '+value['contacto_correo_per']+'</td>\
+									<td>'+value['contacto_telefono']+'</td>\
+									<td>'+value['tipo_contacto_descripcion']+'</td>\
+									<td>'+value['instancia_nombre']+'</td>\
+									<td>\
+										<input type="checkbox" name="curso_invitados[]" value="'+value['id_contacto']+'" checked>\
+									</td>\
+									<td>'+constancia+'</td>\
 								</tr>');
 							});
 						} else {
@@ -649,7 +721,12 @@
 					</p>
 					<form id="frm_curso_destinatarios">
 						<label for="lista_cursos">T&iacute;tulo de curso</label>
-						<select id="lista_cursos" class="validate[required]">
+						<select id="lista_cursos">
+							<option selected value="">- Seleccione una opci&oacute;n -</option>
+						</select>
+						<br>
+						<label for="estatus_registro">Estatus de registro</label>
+						<select id="estatus_registro">
 							<option selected value="">- Seleccione una opci&oacute;n -</option>
 						</select>
 					</form>

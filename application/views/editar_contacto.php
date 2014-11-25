@@ -10,6 +10,13 @@
 			success: function(resultado)
 			{
 				if (resultado != null) {
+
+					if (resultado['contacto_rol'] == 0) {
+						$("input[name='tipo_contacto']").prop('disabled', true);
+					}else{
+						$("input[name=tipo_contacto][value="+resultado['contacto_tipo']+"]").prop('checked', true);
+					}
+
 					$('#contacto_nombre').val(resultado['contacto_nombre']);
 					$('#contacto_paterno').val(resultado['contacto_ap_paterno']);
 					$('#contacto_materno').val(resultado['contacto_ap_materno']);
@@ -22,7 +29,6 @@
 					$('#contacto_instancias').val(resultado['instancia_nombre']);
 					$('#id_instancia').val(resultado['contacto_instancia']);
 					$("input[name=estatus_contacto][value="+resultado['contacto_estatus']+"]").prop('checked', true);
-					$("input[name=tipo_contacto][value="+resultado['contacto_tipo']+"]").prop('checked', true);
 					$("input[name=instructor_candidato][value="+resultado['contacto_instructor']+"]").prop('checked', true);
 					$("input[name=comunicacion_contacto][value="+resultado['contacto_comunicacion']+"]").prop('checked', true);
 					$('#contacto_idu').val(resultado['contacto_IDU']);
@@ -98,7 +104,7 @@
 	    });
 
 	    $("#contenedor_imagen").on("click", "#borrar_imagen", function(){
-	    	url = "<?= base_url('assets/img/avatar.jpg') ?>";
+	    	url = "<?= base_url('assets/img/avatar.png') ?>";
 			$('#contacto_imagen').attr('src', url);
 			$("#borrar_imagen").hide();
 			$("#contacto_avatar_old").val("");
@@ -107,6 +113,15 @@
 	    $("#contacto_telefono").keypress(function(){
 	    	$("#contacto_telefono").validationEngine('validate');
 	    });
+
+	    $("input[name='rol_contacto']").change(function(){
+			if ($(this).val() == 0) {
+				$("input[name='tipo_contacto']").prop('disabled', true);
+				$("input[name='tipo_contacto']").val("");
+			} else{
+				$("input[name='tipo_contacto']").prop('disabled', false);
+			}
+		});
     });
 </script>
 <!-- inicia contenido -->
@@ -128,7 +143,7 @@
 			<img src="<?= base_url('assets/img/loading.gif') ?>" width="20" height="20" id="estado_idu">
 			<br>
 			<div id="contenedor_imagen">
-				<img src="<?= base_url('assets/img/avatar.jpg') ?>" id="contacto_imagen">
+				<img src="<?= base_url('assets/img/avatar.png') ?>" id="contacto_imagen">
 				<input type="file" id="contacto_avatar" name="contacto_avatar" class="validate[checkFileType[jpg|jpeg|gif|JPG|JPEG|GIF]]" data-prompt-position="topLeft">
 				<br><span>Formatos permitidos .jpg y .gif</span>
 				<input type="hidden" id="contacto_avatar_old" name="contacto_avatar_old">

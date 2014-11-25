@@ -25,22 +25,24 @@ class inicio extends CI_Controller {
     {
         $cursos = $this->inicio_model->consulta_cursos();
 
-        foreach($cursos as $llave => &$curso)
-        {
-            if ($curso['curso_tipo'] == '0')
+        if ($cursos) {
+            foreach($cursos as $llave => &$curso)
             {
-                $curso['curso_tipo'] = 'Presencial';
-            }else{
-                $curso['curso_tipo'] = 'En línea';
-            }
+                if ($curso['curso_tipo'] == '0')
+                {
+                    $curso['curso_tipo'] = 'Presencial';
+                }else{
+                    $curso['curso_tipo'] = 'En línea';
+                }
 
-            if ($curso['curso_cupo'] != '0') {
-                $curso_inscritos = $this->inicio_model->contar_inscritos($curso['id_curso']);
-                $curso['curso_cupo_disponible'] = $curso['curso_cupo'] - $curso_inscritos;
-                $curso['curso_inscritos'] = $curso_inscritos;
-            }else{
-                $curso['curso_cupo_disponible'] = "No se registró cupo";
-                $curso['curso_inscritos'] = "No se registró cupo";
+                if ($curso['curso_cupo'] != '0') {
+                    $curso_inscritos = $this->inicio_model->contar_inscritos($curso['id_curso']);
+                    $curso['curso_cupo_disponible'] = $curso['curso_cupo'] - $curso_inscritos;
+                    $curso['curso_inscritos'] = $curso_inscritos;
+                }else{
+                    $curso['curso_cupo_disponible'] = "No se registró cupo";
+                    $curso['curso_inscritos'] = "No se registró cupo";
+                }
             }
         }
 

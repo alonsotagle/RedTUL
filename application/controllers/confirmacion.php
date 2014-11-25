@@ -38,7 +38,12 @@ class confirmacion extends CI_Controller {
 
         if (!is_null($datos_contacto)) {
             $datos_contacto["invitado"] = $this->confirmacion_model->invitado_curso($datos_contacto["id_contacto"], $this->input->post('id_curso'));
-            $datos_contacto["contacto_estatus"] = $this->confirmacion_model->estatus_contacto($datos_contacto["id_contacto"], $this->input->post('id_curso'));
+            $estado_contacto = $this->confirmacion_model->estatus_contacto($datos_contacto["id_contacto"], $this->input->post('id_curso'));
+
+            if ($estado_contacto) {
+                $datos_contacto["contacto_estatus"] = $estado_contacto["estado_descripcion"];
+            }
+            
         }
 
         print_r(json_encode($datos_contacto));

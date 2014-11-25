@@ -15,9 +15,11 @@ class cursos extends CI_Controller {
     }
 
     public function index() {
+        $datos = array('num_cursos' => $this->curso_model->paginacion_contar_cursos());
+
     	$this->load->view('template/header');
         $this->load->view('template/menu');
-        $this->load->view('cursos');
+        $this->load->view('cursos', $datos);
         $this->load->view('template/footer');
     }
 
@@ -423,27 +425,22 @@ class cursos extends CI_Controller {
 
     function agrega_invitados()
     {
-        $this->curso_model->borrar_invitado_tipo($this->input->post('id_curso'));
+        var_dump($_POST);
+        $id_curso = $this->input->post('id_curso');
 
-        if ($this->input->post('webmaster')) {
-            $this->curso_model->registrar_invitado_tipo($this->input->post('id_curso'), 1);
+        $this->curso_model->borrar_invitado_tipo($id_curso);
+
+        if ($this->input->post('tecnico')) {
+            $this->curso_model->registrar_invitado_tipo($id_curso, 0);
         }
 
         if ($this->input->post('comunicacion')) {
-            $this->curso_model->registrar_invitado_tipo($this->input->post('id_curso'), 2);
-        }
-
-        if ($this->input->post('tecnico')) {
-            $this->curso_model->registrar_invitado_tipo($this->input->post('id_curso'), 3);
-        }
-
-        if ($this->input->post('otros')) {
-            $this->curso_model->registrar_invitado_tipo($this->input->post('id_curso'), 4);
+            $this->curso_model->registrar_invitado_tipo($id_curso, 1);
         }
 
         if ($this->input->post('invitados')) {
             foreach ($this->input->post('invitados') as $key => $value) {
-                $this->curso_model->registrar_invitado_contacto($this->input->post('id_curso'), $value);
+                $this->curso_model->registrar_invitado_contacto($id_curso, $value);
             }
         }
     }
@@ -519,13 +516,9 @@ class cursos extends CI_Controller {
 
         $curso['profesor'] = $this->curso_model->consulta_instructores_nombre_curso($curso['id_curso']);
 
-        $curso['invitados_contacto'] = $this->curso_model->consulta_invitado_contacto($curso['id_curso']);
-
         $curso['invitados_tipo'] = $this->curso_model->consulta_invitado_tipo_detalle($curso['id_curso']);
 
-        $curso['inscritos'] = $this->curso_model->consulta_inscritos_detalle($curso['id_curso']);
-
-        $curso['cancelados'] = $this->curso_model->consulta_cancelados_detalle($curso['id_curso']);
+        $curso['contactos_estado_curso'] = $this->curso_model->consulta_contactos_detalle_curso($curso['id_curso']);
 
         foreach ($curso as $campo => $valor) {
             if ($curso[$campo] == "") {
@@ -635,18 +628,38 @@ class cursos extends CI_Controller {
 
     function usuarios_lista($id_curso)
     {
-        $usuarios = $this->curso_model->consulta_inscritos_lista($id_curso);
+        $usuarios = $this->curso_model->consulta_autorizados_lista($id_curso);
 
         print_r(json_encode($usuarios));
     }
 
-    function agregar_material($id_curso)
+    function agregar_material($id_curso, $mensaje_confirmacion = 0)
     {
         $this->load->helper(array('form', 'url'));
 
+        $consulta_material = $this->curso_model->consultar_material($id_curso);
+        $material = array();
+
+        if ($consulta_material) {
+            foreach ($consulta_material as $llave => $valor) {
+                $liga_material = $valor["material_curso_url"];
+                if (preg_match('#^https?://#i', $liga_material) === 1) {
+                    $liga_material = "<a href='".$liga_material."' target='_blank'>".$liga_material."</a>";
+                }else{
+                    $liga_material = "<a href='".base_url('assets/material_cursos/')."/".$liga_material."' target='_blank'>".$liga_material."</a>";
+                }
+                array_push($material, $liga_material);
+            }
+        }
+        
+
+        $datos_material = array('id_curso' => $id_curso,
+                            'material' => $material,
+                            'mensaje_confirmacion' => $mensaje_confirmacion);
+
         $this->load->view('template/header');
         $this->load->view('template/menu');
-        $this->load->view('curso_material', array('id_curso' => $id_curso));
+        $this->load->view('curso_material', $datos_material);
         $this->load->view('template/footer');
     }
 
@@ -668,7 +681,8 @@ class cursos extends CI_Controller {
         }else{
             redirect(site_url("error404"));
         }
-        $this->index();
+
+        $this->agregar_material($nuevo_material["curso_id"], 1);
     }
 
     function subir_material()
@@ -687,5 +701,37 @@ class cursos extends CI_Controller {
             $datos = $this->upload->data();
             return $datos["file_name"];
         }
+    }
+
+    function autorizar_contacto(){
+        $id_contacto = $this->input->post('id_contacto');
+        $this->curso_model->autorizar_contacto($id_contacto);
+    }
+
+    function paginacion(){
+        $cursos = $this->curso_model->cursos_paginacion($this->input->post('num_despliegue'), $this->input->post('num_pagina'));
+
+        if ($cursos) {
+            foreach($cursos as $llave => &$curso)
+            {
+                if ($curso['curso_tipo'] == '0')
+                {
+                    $curso['curso_tipo'] = 'Interno';
+                }else{
+                    $curso['curso_tipo'] = 'Externo';
+                }
+
+                if ($curso['curso_cupo'] == '0') {
+                    $curso['curso_cupo'] = "No se registró cupo";
+                    $curso['curso_cupo_disponible'] = "No se registró cupo";
+                }else{
+                    $curso_inscritos = $this->curso_model->contar_inscritos($curso['id_curso']);
+                    $curso['curso_cupo_disponible'] = $curso['curso_cupo'] - $curso_inscritos;
+                }
+
+                $curso['curso_instructor'] = $this->curso_model->consulta_instructores_nombre_curso($curso['id_curso']);
+            }
+        }
+        print_r(json_encode($cursos));
     }
 }

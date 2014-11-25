@@ -305,9 +305,9 @@ body {
 }
 
 .tables tr:hover:not(.fondo_instancia_editable) td {
-	background: #f2f2f2;
-	background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);	
-	background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
+	background: #d2d2d2;
+	background: -moz-linear-gradient(top,  #d2d2d2,  #f0f0f0);	
+	background: -webkit-gradient(linear, left top, left bottom, from(#d2d2d2), to(#f0f0f0));
 }
 
 .tables img{
@@ -360,6 +360,11 @@ body {
 
 .contacto_acciones a{
 	text-decoration : none;
+}
+
+#paginacion_contactos{
+	display: table;
+	margin: 0 auto;
 }
 
 /* Vista nuevo_contacto.php */
@@ -486,6 +491,11 @@ fieldset > legend{
 	float: right;
 }
 
+#paginacion_cursos{
+	display: table;
+	margin: 0 auto;
+}
+
 /* Vista curso.php */
 #conf_contacto_leyenda{
 	background: url('../img/icono_info.png') no-repeat;
@@ -564,7 +574,7 @@ fieldset > legend{
 
 .encabezado_detalle_curso{
 	clear: both;
-	font-size: large;
+	font-size: 30px;
 	font-weight: bold;
 	margin-top: 30px;
 }
@@ -911,6 +921,11 @@ fieldset > legend{
 
 .fondo_instancia_editable td{
 	color: white !important;
+}
+
+#paginacion_instancias{
+	display: table;
+	margin: 0 auto;
 }
 
 /* Inicia error404 */

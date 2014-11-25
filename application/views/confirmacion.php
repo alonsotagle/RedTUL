@@ -365,15 +365,15 @@ $(document).ready(function(){
 	<div id="botones_asistencia">
 		<input id="cancelar_asistencia" type="submit" value="Cancelar Asistencia">
 		<form id="frm_confirmar_asistencia" method="post" action="<?= site_url('confirmacion/confirmar_inscripcion')?>">
-			<input type="hidden" id="confirmacion_id_contacto" name="id_contacto">
-			<input type="hidden" id="confirmacion_id_curso" name="id_curso" value="<?= $id_curso ?>">
+			<input type="hidden" id="confirmacion_id_contacto" name="contacto_id">
+			<input type="hidden" id="confirmacion_id_curso" name="curso_id" value="<?= $id_curso ?>">
 			<input id="confirmar_asistencia" type="submit" value="Confirmar Asistencia">
 		</form>
 	</div>
 	<div id="form_cancelar" style="display: none;">
 		<form action="<?= site_url('confirmacion/cancelar_inscripcion')?>" method="post">
-			<input type="hidden" id="cancelacion_id_contacto" name="id_contacto">
-			<input type="hidden" id="cancelacion_id_curso" name="id_curso" value="<?= $id_curso ?>">
+			<input type="hidden" id="cancelacion_id_contacto" name="contacto_id">
+			<input type="hidden" id="cancelacion_id_curso" name="curso_id" value="<?= $id_curso ?>">
 			<label>Motivos por el cual cancela su asistencia.</label>
 			<textarea id="textarea_motivos"name="motivos" maxlength="250"></textarea>
 			<br>

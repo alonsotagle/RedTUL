@@ -86,4 +86,34 @@ class instancia_model extends CI_Model{
             return TRUE;
         }
     }
+
+    public function paginacion_contar_instancias()
+    {
+        $this->db->from('instancia');
+
+        $query = $this->db->count_all_results();
+
+        return $query;
+    }
+
+    public function instancias_paginacion($limite, $inicio_resultado)
+    {
+        $this->db->select('id_instancia, instancia_nombre');
+
+        $this->db->from('instancia');
+
+        $this->db->order_by('instancia_fecha', 'desc');
+        $this->db->order_by("id_instancia", "asc");
+
+        $this->db->limit($limite, $inicio_resultado * $limite - $limite);
+        
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
 }

@@ -50,4 +50,30 @@ class inicio_model extends CI_Model{
         return $query;
     }
 
+    public function consulta_contactos()
+    {
+        $this->db->select('contacto.id_contacto,
+                            contacto.contacto_nombre,
+                            contacto.contacto_ap_paterno,
+                            contacto.contacto_ap_materno,
+                            contacto.contacto_correo_inst,
+                            contacto.contacto_correo_per,
+                            instancia.instancia_nombre');
+
+        $this->db->from('contacto');
+        $this->db->join('instancia', 'contacto.contacto_instancia = instancia.id_instancia');
+
+        $this->db->order_by("contacto.id_contacto", "desc");
+
+        $this->db->limit(5);
+
+        $query = $this->db->get();
+
+        if ($query -> num_rows() > 0)
+        {
+            return $query->result_array();
+        } else {
+            return null;
+        }
+    }
 }

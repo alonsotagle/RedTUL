@@ -49,4 +49,10 @@ class inicio extends CI_Controller {
         print_r(json_encode($cursos));
     }
 
+    function consulta_contactos()
+    {
+        $contactos = $this->inicio_model->consulta_contactos();
+
+        print_r(json_encode($contactos));
+    }
 }

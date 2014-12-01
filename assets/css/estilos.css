@@ -965,8 +965,15 @@ fieldset > legend{
 
 /* Inicia INICIO */
 #despliega_cursos_inicio{
+	font-size: 25px;
 	margin-top: 25px;
 	min-height: 100px;
+	text-align: center;
+}
+
+.titulo_inicio{
+	font-size: 25px;
+	font-weight: bold;
 }
 
 /* Inicia Lista de Asistencia */
